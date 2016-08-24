@@ -4,6 +4,7 @@
 import graphql      = require('graphql');
 import graphqlHTTP  = require('express-graphql');
 import express      = require('express');
+import path         = require('path');
 import {QL} from './ql';
 
 
@@ -32,16 +33,27 @@ class Server{
      */
     constructor() {
         this.app = express();
-        this.app.use('/graphql', graphqlHTTP({ schema: schema, pretty: true }));
         this.app.listen(3000);
-        console.log('GraphQL server running on http://localhost:3000/graphql');
+        this.configClientHtml();
+        this.configGraphQL();
+    }
 
-        // GraphQL schema
+    configClientHtml() {
+        this.app.get('/', function (req, res) {
+            res.sendFile(path.join(__dirname, '../../client/public/index.html'));
+        });
+        this.app.use(express.static(path.join(__dirname, '../../client/public')));
+    }
+
+    configGraphQL() {
         var userType = QL.createUser({
             id: { type: graphql.GraphQLString },
             name: { type: graphql.GraphQLString },
         });
         var schema = QL.createSchema(userType, data);
+        this.app.use('/graphql', graphqlHTTP({ schema: schema, pretty: true }));
+        console.log('GraphQL server running on http://localhost:3000/graphql');
+
     }
 
 }
