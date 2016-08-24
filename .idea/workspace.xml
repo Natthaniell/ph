@@ -2,31 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b3dcc2a-82b2-4023-947a-873a833354b3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/typescript-compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/package.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/public/app.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/public/app.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/public/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/server.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/server.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/server.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/app.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/app.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/app.tsx" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/index.html" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/tsconfig.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/tslint.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/index.d.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react-dom/index.d.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react-dom/typings.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react/index.d.ts" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react/typings.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/webpack.client.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/actions.tsx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/query.tsx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/src/app/reducer.tsx" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react-redux/index.d.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/react-redux/typings.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/redux-immutable/index.d.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/redux-immutable/typings.json" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/redux-thunk/index.d.ts" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/client/typings/modules/redux-thunk/typings.json" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client/src/app/app.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/client/src/app/app.js.map" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js" afterPath="$PROJECT_DIR$/server/server/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js.map" afterPath="$PROJECT_DIR$/server/server/server.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.ts" afterPath="$PROJECT_DIR$/server/server/server.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/public/app.js" afterPath="$PROJECT_DIR$/client/public/app.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/public/app.js.map" afterPath="$PROJECT_DIR$/client/public/app.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/app.tsx" afterPath="$PROJECT_DIR$/client/src/app/app.tsx" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/typings/index.d.ts" afterPath="$PROJECT_DIR$/client/typings/index.d.ts" />
     </list>
     <ignored path="PhoenixPrototype.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -49,11 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="app.tsx" pinned="false" current-in-tab="true">
+      <file leaf-file-name="app.tsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/app/app.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="13" column="5" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+            <state relative-caret-position="228">
+              <caret line="35" column="40" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="40" />
               <folding>
                 <element signature="e#50#81#0" expanded="true" />
               </folding>
@@ -61,31 +53,33 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="webpack.client.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/webpack.client.js">
+      <file leaf-file-name="query.tsx" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/src/app/query.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="286">
-              <caret line="16" column="27" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="27" />
+            <state relative-caret-position="418">
+              <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
+              <folding>
+                <element signature="e#50#81#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="reducer.tsx" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/src/app/reducer.tsx">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="308">
+              <caret line="14" column="70" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="70" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/src/index.html">
+      <file leaf-file-name="ql.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/server/ql.ts">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/package.json">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="352">
-              <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -97,8 +91,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
-        <option value="TypeScript File" />
         <option value="JavaScript File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
@@ -123,7 +117,14 @@
         <option value="$PROJECT_DIR$/client/webpack.client.js" />
         <option value="$PROJECT_DIR$/client/package.json" />
         <option value="$PROJECT_DIR$/client/src/index.html" />
+        <option value="$PROJECT_DIR$/client/src/app/reducer.ts" />
+        <option value="$PROJECT_DIR$/client/src/app/actions.ts" />
+        <option value="$PROJECT_DIR$/client/src/app/query.ts" />
+        <option value="$PROJECT_DIR$/client/typings/index.d.ts" />
+        <option value="$PROJECT_DIR$/client/typings.json" />
+        <option value="$PROJECT_DIR$/client/src/app/reducer.tsx" />
         <option value="$PROJECT_DIR$/client/src/app/app.tsx" />
+        <option value="$PROJECT_DIR$/client/src/app/query.tsx" />
       </list>
     </option>
   </component>
@@ -244,6 +245,24 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="typings" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -267,24 +286,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="public" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -374,7 +375,7 @@
       <option name="presentableId" value="Default" />
       <updated>1472027007173</updated>
       <workItem from="1472027008391" duration="1451000" />
-      <workItem from="1472029108975" duration="3501000" />
+      <workItem from="1472029108975" duration="5130000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1472029055268</created>
@@ -383,11 +384,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472029055268</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Initial commit">
+      <created>1472032677127</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1472032677127</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="4952000" />
+    <option name="totallyTimeSpent" value="6581000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -464,14 +472,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/server.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="47" selection-end-column="47" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/public/app/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="110">
@@ -544,10 +544,70 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/typings.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/actions.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="49" selection-start-line="0" selection-start-column="49" selection-end-line="0" selection-end-column="49" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/typings/index.d.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="n#!!doc" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="47" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/server/ql.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/reducer.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="14" column="70" selection-start-line="14" selection-start-column="29" selection-end-line="14" selection-end-column="70" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/client/src/app/app.tsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="286">
-          <caret line="13" column="5" selection-start-line="13" selection-start-column="5" selection-end-line="13" selection-end-column="5" />
+        <state relative-caret-position="228">
+          <caret line="35" column="40" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="40" />
+          <folding>
+            <element signature="e#50#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/query.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="418">
+          <caret line="19" column="14" selection-start-line="19" selection-start-column="14" selection-end-line="19" selection-end-column="14" />
           <folding>
             <element signature="e#50#81#0" expanded="true" />
           </folding>
