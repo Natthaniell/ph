@@ -8,10 +8,10 @@ import thunkMiddleware from "redux-thunk";
 import {QueryContainer} from "./query";
 
 
+class Main extends React.Component {
 
-interface HelloProps { compiler: string; framework: string; }
+    private number : number;
 
-class Main extends React.Component<HelloProps, {}> {
     render() {
         return (
             <div>

@@ -13,6 +13,9 @@ import data = require('./data.json');
 import {GraphQLInt} from "graphql";
 import {GraphQLString} from "graphql";
 
+// Import existing schemas
+
+
 class Server {
 
     private app;
@@ -49,6 +52,7 @@ class Server {
 
     configGraphQL() {
         var userType = QL.createModel({
+            // What name is doing ? not used at all ?!?!
             name: "Goldberg",
             description: "Member of The Goldbergs",
             fields: {

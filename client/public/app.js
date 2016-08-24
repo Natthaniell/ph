@@ -23599,17 +23599,20 @@
 	"use strict";
 	/// <reference path="../../typings/index.d.ts" />
 	
-	const Immutable = __webpack_require__(/*! Immutable */ 197);
-	const immutableState = Immutable.Map({
+	const Immutable_1 = __webpack_require__(/*! Immutable */ 197);
+	const immutableState = Immutable_1.Map({
 	    fetching: false,
-	    data: Immutable.Map({})
+	    data: Immutable_1.Map({})
 	});
 	exports.queryReducer = (state = immutableState, action) => {
 	    switch (action.type) {
 	        case "STARTING_REQUEST":
+	            console.error('--- start request ---');
 	            return state.set("fetching", true);
 	        case "FINISHED_REQUEST":
-	            return state.set("fetching", false).set("data", Immutable.Map(action.response.data.Goldberg));
+	            console.error('--- finish request ---');
+	            console.warn(action);
+	            return state.set("fetching", false).set("data", Immutable_1.Map(action.response.data.goldberg));
 	        default:
 	            return state;
 	    }
@@ -28655,6 +28658,7 @@
 	        let fetchInProgress = String(this.props.store.get('fetching'));
 	        let queryText;
 	        let goldberg = this.props.store.get('data').toObject();
+	        console.warn(goldberg);
 	        return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits), React.createElement("input", { ref: node => {
 	                queryText = node;
 	            } }), React.createElement("button", { onClick: () => {

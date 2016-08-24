@@ -8,6 +8,7 @@ var ql_1 = require('./ql');
 var data = require('./data.json');
 var graphql_1 = require("graphql");
 var graphql_2 = require("graphql");
+// Import existing schemas
 var Server = (function () {
     /**
      * Constructor.
@@ -38,6 +39,7 @@ var Server = (function () {
     };
     Server.prototype.configGraphQL = function () {
         var userType = ql_1.QL.createModel({
+            // What name is doing ? not used at all ?!?!
             name: "Goldberg",
             description: "Member of The Goldbergs",
             fields: {

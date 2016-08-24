@@ -12,6 +12,7 @@ let Query = React.createClass({
         let fetchInProgress = String(this.props.store.get('fetching'));
         let queryText;
         let goldberg = this.props.store.get('data').toObject();
+        console.warn(goldberg);
         return (
         <div>
             <p>Fetch in progress: {fetchInProgress}</p>
