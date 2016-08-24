@@ -4,53 +4,76 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/// <reference path="../../typings/index.d.ts" />
-var ql_1 = require('../ql');
 var graphql_1 = require("graphql");
 var graphql_2 = require("graphql");
-var SchemaQL = (function () {
-    function SchemaQL() {
-    }
-    return SchemaQL;
-}());
+var _schemas_abstract_1 = require("./_schemas-abstract");
+/**
+ * Goldberg Schema for GraphQL
+ * - extends SchemaQL for implementation
+ */
 var SchemaGoldberg = (function (_super) {
     __extends(SchemaGoldberg, _super);
-    function SchemaGoldberg() {
-        _super.call(this);
+    function SchemaGoldberg(data) {
+        _super.call(this, data);
     }
-    SchemaGoldberg.prototype.createSchema = function () {
+    /**
+     * Static create
+     * - creates new schema
+     * @param data
+     * @returns {SchemaGoldberg}
+     */
+    SchemaGoldberg.create = function (data) {
+        return new SchemaGoldberg(data);
     };
     SchemaGoldberg.prototype.createModel = function () {
-        var userType = ql_1.QL.createModel({
-            // What name is doing ? not used at all ?!?!
-            name: "Goldberg",
-            description: "Member of The Goldbergs",
+        return {
+            name: 'Goldberg',
+            description: 'asdasdsa',
             fields: {
                 character: {
-                    type: graphql_2.GraphQLString,
+                    type: graphql_1.GraphQLString,
                     description: "Name of the character"
                 },
                 actor: {
-                    type: graphql_2.GraphQLString,
+                    type: graphql_1.GraphQLString,
                     description: "Actor playing the character"
                 },
                 role: {
-                    type: graphql_2.GraphQLString,
+                    type: graphql_1.GraphQLString,
                     description: "Family role"
                 },
                 traits: {
-                    type: graphql_2.GraphQLString,
+                    type: graphql_1.GraphQLString,
                     description: "Traits this Goldberg is known for"
                 },
                 id: {
-                    type: graphql_1.GraphQLInt,
+                    type: graphql_2.GraphQLInt,
                     description: "ID of this Goldberg"
                 }
             }
-        });
+        };
+    };
+    SchemaGoldberg.prototype.createSchema = function (schemaDataType, data) {
+        return {
+            name: "query",
+            description: "Goldberg query",
+            fields: {
+                goldberg: {
+                    type: schemaDataType,
+                    args: {
+                        id: {
+                            type: graphql_2.GraphQLInt
+                        }
+                    },
+                    resolve: function (_, args) {
+                        return data[args.id];
+                    }
+                }
+            }
+        };
     };
     return SchemaGoldberg;
-}(SchemaQL));
+}(_schemas_abstract_1.SchemaQL));
 exports.__esModule = true;
 exports["default"] = SchemaGoldberg;
 //# sourceMappingURL=goldberg.js.map

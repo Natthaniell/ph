@@ -1,29 +1,34 @@
 /// <reference path="../../typings/index.d.ts" />
-import {QL} from '../ql';
-import {GraphQLInt} from "graphql";
+///<reference path="../../typings/modules/graphql/index.d.ts"/>
+import graphql  = require('graphql');
 import {GraphQLString} from "graphql";
+import {GraphQLInt} from "graphql";
+import {SchemaQL, SchemaQLModel, SchemaQLQuery} from "./_schemas-abstract";
 
-abstract class SchemaQL {
-    constructor(){}
-    abstract createModel();
-    abstract createSchema();
-}
-
+/**
+ * Goldberg Schema for GraphQL
+ * - extends SchemaQL for implementation
+ */
 export default class SchemaGoldberg extends SchemaQL {
-    
-    constructor() {
-        super();
+
+    protected constructor(data) {
+        super(data);
     }
 
-    createSchema() {
-
+    /**
+     * Static create
+     * - creates new schema
+     * @param data
+     * @returns {SchemaGoldberg}
+     */
+    static create(data){
+        return new SchemaGoldberg(data);
     }
 
-    createModel() {
-        var userType = QL.createModel({
-            // What name is doing ? not used at all ?!?!
-            name: "Goldberg",
-            description: "Member of The Goldbergs",
+    protected createModel() : SchemaQLModel {
+        return {
+            name: 'Goldberg',
+            description: 'asdasdsa',
             fields: {
                 character: {
                     type: GraphQLString,
@@ -46,6 +51,27 @@ export default class SchemaGoldberg extends SchemaQL {
                     description: "ID of this Goldberg"
                 }
             }
-        });
+        }
     }
+
+    protected createSchema(schemaDataType, data) : SchemaQLQuery {
+        return {
+            name: "query",
+            description: "Goldberg query",
+            fields: {
+                goldberg: {
+                    type: schemaDataType,
+                    args: {
+                        id: {
+                            type: GraphQLInt
+                        }
+                    },
+                    resolve: function (_, args: any) {
+                        return data[args.id];
+                    }
+                }
+            }
+        }
+    }
+
 }

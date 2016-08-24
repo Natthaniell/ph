@@ -5,15 +5,10 @@ import graphql      = require('graphql');
 import graphqlHTTP  = require('express-graphql');
 import express      = require('express');
 import path         = require('path');
-import {QL} from './ql';
 
-
-// Import the data you created above
-import data = require('./data.json');
-import {GraphQLInt} from "graphql";
-import {GraphQLString} from "graphql";
-
-// Import existing schemas
+// Import the data
+import data = require('./data/data.json');
+import SchemaGoldberg from "./schemas/goldberg";
 
 
 class Server {
@@ -43,6 +38,9 @@ class Server {
         this.configGraphQL();
     }
 
+    /**
+     * Configure web page
+     */
     configClientHtml() {
         this.app.get('/', function (req, res) {
             res.sendFile(path.join(__dirname, '../../client/public/index.html'));
@@ -50,38 +48,13 @@ class Server {
         this.app.use(express.static(path.join(__dirname, '../../client/public')));
     }
 
+    /**
+     * Configure GraphQL schemas
+     */
     configGraphQL() {
-        var userType = QL.createModel({
-            // What name is doing ? not used at all ?!?!
-            name: "Goldberg",
-            description: "Member of The Goldbergs",
-            fields: {
-                character: {
-                    type: GraphQLString,
-                    description: "Name of the character",
-                },
-                actor: {
-                    type: GraphQLString,
-                    description: "Actor playing the character",
-                },
-                role: {
-                    type: GraphQLString,
-                    description: "Family role"
-                },
-                traits: {
-                    type: GraphQLString,
-                    description: "Traits this Goldberg is known for"
-                },
-                id: {
-                    type: GraphQLInt,
-                    description: "ID of this Goldberg"
-                }
-            }
-        });
-        var schema = QL.createSchema(userType, data);
+        var schema = SchemaGoldberg.create(data);
         this.app.use('/graphql', graphqlHTTP({schema: schema, pretty: true}));
         console.log('GraphQL server running on http://localhost:3000/graphql');
-
     }
 
 }
