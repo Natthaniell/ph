@@ -23609,7 +23609,7 @@
 	        case "STARTING_REQUEST":
 	            return state.set("fetching", true);
 	        case "FINISHED_REQUEST":
-	            return state.set("fetching", false).set("data", Immutable.Map(action.response.data.Users));
+	            return state.set("fetching", false).set("data", Immutable.Map(action.response.data.Goldberg));
 	        default:
 	            return state;
 	    }
@@ -28648,15 +28648,14 @@
 	const actions_1 = __webpack_require__(/*! ./actions */ 200);
 	let Query = React.createClass({
 	    componentDidMount() {
-	        this.props.dispatch(actions_1.getGraph('{user(id:"1"){name}}'));
+	        this.props.dispatch(actions_1.getGraph("{goldberg(id: 2) {id, character, actor, role, traits}}"));
 	    },
 	    render() {
 	        let dispatch = this.props.dispatch;
 	        let fetchInProgress = String(this.props.store.get('fetching'));
 	        let queryText;
-	        let user = this.props.store.get('data').toObject();
-	        console.warn(user);
-	        return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, user.name), name, React.createElement("input", { ref: node => {
+	        let goldberg = this.props.store.get('data').toObject();
+	        return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits), React.createElement("input", { ref: node => {
 	                queryText = node;
 	            } }), React.createElement("button", { onClick: () => {
 	                dispatch(actions_1.getGraph(queryText.value));

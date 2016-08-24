@@ -12,7 +12,7 @@ export const queryReducer = (state = immutableState, action) => {
             return state.set("fetching", true);
         case "FINISHED_REQUEST":
             return state.set("fetching", false)
-                .set("data", Immutable.Map(action.response.data.Users));
+                .set("data", Immutable.Map(action.response.data.Goldberg));
         default:
             return state
     }

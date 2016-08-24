@@ -10,8 +10,10 @@ import {QL} from './ql';
 
 // Import the data you created above
 import data = require('./data.json');
+import {GraphQLInt} from "graphql";
+import {GraphQLString} from "graphql";
 
-class Server{
+class Server {
 
     private app;
 
@@ -22,7 +24,7 @@ class Server{
      * @static
      * @return {ng.auto.IInjectorService} Returns the newly created injector for this app.
      */
-    public static bootstrap(): Server {
+    public static bootstrap():Server {
         return new Server();
     }
 
@@ -46,19 +48,39 @@ class Server{
     }
 
     configGraphQL() {
-        var userType = QL.createUser({
-            id: { type: graphql.GraphQLString },
-            name: { type: graphql.GraphQLString },
+        var userType = QL.createModel({
+            name: "Goldberg",
+            description: "Member of The Goldbergs",
+            fields: {
+                character: {
+                    type: GraphQLString,
+                    description: "Name of the character",
+                },
+                actor: {
+                    type: GraphQLString,
+                    description: "Actor playing the character",
+                },
+                role: {
+                    type: GraphQLString,
+                    description: "Family role"
+                },
+                traits: {
+                    type: GraphQLString,
+                    description: "Traits this Goldberg is known for"
+                },
+                id: {
+                    type: GraphQLInt,
+                    description: "ID of this Goldberg"
+                }
+            }
         });
         var schema = QL.createSchema(userType, data);
-        this.app.use('/graphql', graphqlHTTP({ schema: schema, pretty: true }));
+        this.app.use('/graphql', graphqlHTTP({schema: schema, pretty: true}));
         console.log('GraphQL server running on http://localhost:3000/graphql');
 
     }
 
 }
-
-
 
 
 Server.bootstrap();
