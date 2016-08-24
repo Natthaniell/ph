@@ -52,7 +52,7 @@ class Server {
      * Configure GraphQL schemas
      */
     configGraphQL() {
-        var schema = SchemaGoldberg.create(data);
+        var schema = SchemaGoldberg.create(data).get();
         this.app.use('/graphql', graphqlHTTP({schema: schema, pretty: true}));
         console.log('GraphQL server running on http://localhost:3000/graphql');
     }

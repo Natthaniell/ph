@@ -2,12 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b3dcc2a-82b2-4023-947a-873a833354b3" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/client/server.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/client/server.js.map" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/client/server.ts" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/typescript-compiler.xml" afterPath="$PROJECT_DIR$/.idea/typescript-compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/public/index.html" afterPath="$PROJECT_DIR$/client/public/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/index.html" afterPath="$PROJECT_DIR$/client/src/index.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/.idea/workspace.xml" afterPath="$PROJECT_DIR$/server/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js.map" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.ts" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.ts" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js" afterPath="$PROJECT_DIR$/server/server/server.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js.map" afterPath="$PROJECT_DIR$/server/server/server.js.map" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.ts" afterPath="$PROJECT_DIR$/server/server/server.ts" />
     </list>
     <ignored path="PhoenixPrototype.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -30,15 +34,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="goldberg.ts" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/server/server/schemas/goldberg.ts">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/client/src/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="154">
-              <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
-              <folding>
-                <element signature="n#!!doc" expanded="true" />
-                <element signature="e#152#190#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="198">
+              <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -73,7 +74,6 @@
         <option value="$PROJECT_DIR$/client/tslint.json" />
         <option value="$PROJECT_DIR$/client/webpack.client.js" />
         <option value="$PROJECT_DIR$/client/package.json" />
-        <option value="$PROJECT_DIR$/client/src/index.html" />
         <option value="$PROJECT_DIR$/client/src/app/reducer.ts" />
         <option value="$PROJECT_DIR$/client/src/app/actions.ts" />
         <option value="$PROJECT_DIR$/client/src/app/query.ts" />
@@ -86,6 +86,7 @@
         <option value="$PROJECT_DIR$/client/src/app/reducer.tsx" />
         <option value="$PROJECT_DIR$/client/src/app/app.tsx" />
         <option value="$PROJECT_DIR$/server/server/schemas/goldberg.ts" />
+        <option value="$PROJECT_DIR$/client/src/index.html" />
       </list>
     </option>
   </component>
@@ -160,60 +161,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="schemas" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="PhoenixPrototype" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
               <option name="myItemId" value="client" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -233,6 +180,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="public" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -326,7 +291,7 @@
       <workItem from="1472027008391" duration="1451000" />
       <workItem from="1472029108975" duration="7549000" />
       <workItem from="1472048017106" duration="530000" />
-      <workItem from="1472055001211" duration="889000" />
+      <workItem from="1472055001211" duration="1550000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1472029055268</created>
@@ -370,11 +335,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472057975523</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Removing client server">
+      <created>1472058113850</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1472058113850</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="10419000" />
+    <option name="totallyTimeSpent" value="11080000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -414,7 +386,8 @@
     <MESSAGE value="Initial commit" />
     <MESSAGE value="Redux initial commit" />
     <MESSAGE value="Schemas can now be extended, abstract schema implemented" />
-    <option name="LAST_COMMIT_MESSAGE" value="Schemas can now be extended, abstract schema implemented" />
+    <MESSAGE value="Removing client server" />
+    <option name="LAST_COMMIT_MESSAGE" value="Removing client server" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -426,7 +399,7 @@
         <state relative-caret-position="132">
           <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -436,7 +409,7 @@
         <state relative-caret-position="264">
           <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -481,7 +454,7 @@
         <state relative-caret-position="638">
           <caret line="35" column="40" selection-start-line="35" selection-start-column="20" selection-end-line="35" selection-end-column="40" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -491,7 +464,7 @@
         <state relative-caret-position="264">
           <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -536,13 +509,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/public/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="5" column="62" selection-start-line="5" selection-start-column="62" selection-end-line="5" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/public/app/app.js" />
     <entry file="file://$PROJECT_DIR$/client/public/app/app.tsx" />
     <entry file="file://$PROJECT_DIR$/client/tslint.json">
@@ -582,13 +548,6 @@
         <state relative-caret-position="352">
           <caret line="16" column="32" selection-start-line="16" selection-start-column="32" selection-end-line="16" selection-end-column="32" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="16" selection-start-line="10" selection-start-column="16" selection-end-line="10" selection-end-column="16" />
         </state>
       </provider>
     </entry>
@@ -635,7 +594,7 @@
         <state relative-caret-position="264">
           <caret line="14" column="31" selection-start-line="14" selection-start-column="31" selection-end-line="14" selection-end-column="31" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -645,7 +604,7 @@
         <state relative-caret-position="132">
           <caret line="12" column="28" selection-start-line="12" selection-start-column="28" selection-end-line="12" selection-end-column="28" />
           <folding>
-            <element signature="e#50#81#0" expanded="true" />
+            <element signature="e#50#81#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -666,6 +625,14 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/client/server.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="536">
+          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="47" selection-end-column="47" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/server/server/schemas/goldberg.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="154">
@@ -677,10 +644,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/server.ts">
+    <entry file="file://$PROJECT_DIR$/client/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="44" column="0" selection-start-line="44" selection-start-column="0" selection-end-line="47" selection-end-column="47" />
+        <state relative-caret-position="110">
+          <caret line="5" column="62" selection-start-line="5" selection-start-column="62" selection-end-line="5" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="198">
+          <caret line="9" column="10" selection-start-line="9" selection-start-column="10" selection-end-line="9" selection-end-column="10" />
           <folding />
         </state>
       </provider>

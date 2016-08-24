@@ -7,8 +7,10 @@ var SchemaQL = (function () {
     }
     SchemaQL.prototype.get = function () {
         var model = this.createModel();
-        this.createSchema(new graphql.GraphQLObjectType(model), this.data);
-        return;
+        var schema = this.createSchema(new graphql.GraphQLObjectType(model), this.data);
+        return new graphql.GraphQLSchema({
+            query: new graphql.GraphQLObjectType(schema)
+        });
     };
     return SchemaQL;
 }());

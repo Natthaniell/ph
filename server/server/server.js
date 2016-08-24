@@ -41,7 +41,7 @@ var Server = (function () {
      * Configure GraphQL schemas
      */
     Server.prototype.configGraphQL = function () {
-        var schema = goldberg_1["default"].create(data);
+        var schema = goldberg_1["default"].create(data).get();
         this.app.use('/graphql', graphqlHTTP({ schema: schema, pretty: true }));
         console.log('GraphQL server running on http://localhost:3000/graphql');
     };

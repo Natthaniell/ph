@@ -22,7 +22,9 @@ export abstract class SchemaQL {
     protected abstract createSchema(schemaDataType : any, data : any): SchemaQLQuery;
     get() {
         var model = this.createModel();
-        this.createSchema(new graphql.GraphQLObjectType(model), this.data);
-        return
+        var schema = this.createSchema(new graphql.GraphQLObjectType(model), this.data);
+        return new graphql.GraphQLSchema({
+            query: new graphql.GraphQLObjectType(schema)
+        });
     }
 }
