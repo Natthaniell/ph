@@ -36,7 +36,7 @@ export class Query extends CoreComponent {
     render() {
         let dispatch = this.props.dispatch;
         let fetchInProgress = String(this.props.store.get('fetching'));
-        var goldberg = {};
+        var goldberg : any = {};
         if(this.props.store.get('goldberg')){
             goldberg = this.props.store.get('goldberg').toObject();
         }

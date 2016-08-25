@@ -2,26 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8b3dcc2a-82b2-4023-947a-873a833354b3" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/server/data/movies.json" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/server/schemas/movies.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/server/schemas/movies.js.map" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/server/schemas/movies.ts" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/public/app.js" afterPath="$PROJECT_DIR$/client/public/app.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/public/app.js.map" afterPath="$PROJECT_DIR$/client/public/app.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/actions.tsx" afterPath="$PROJECT_DIR$/client/src/app/actions.tsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/app.tsx" afterPath="$PROJECT_DIR$/client/src/app/app.tsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/core/component.ts" afterPath="$PROJECT_DIR$/client/src/app/core/component.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/modules/movie-list.tsx" afterPath="$PROJECT_DIR$/client/src/app/modules/movie-list.tsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/modules/query.tsx" afterPath="$PROJECT_DIR$/client/src/app/modules/query.tsx" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/src/app/reducer.tsx" afterPath="$PROJECT_DIR$/client/src/app/reducer.tsx" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/.idea/workspace.xml" afterPath="$PROJECT_DIR$/server/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js.map" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.ts" afterPath="$PROJECT_DIR$/server/server/schemas/_schemas-abstract.ts" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js" afterPath="$PROJECT_DIR$/server/server/server.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.js.map" afterPath="$PROJECT_DIR$/server/server/server.js.map" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/server/server.ts" afterPath="$PROJECT_DIR$/server/server/server.ts" />
     </list>
     <ignored path="PhoenixPrototype.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -69,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="query.tsx" pinned="false" current-in-tab="false">
+      <file leaf-file-name="query.tsx" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/src/app/modules/query.tsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="595">
-              <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
+            <state relative-caret-position="110">
+              <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
               <folding>
                 <element signature="e#53#84#0" expanded="true" />
               </folding>
@@ -91,7 +74,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="reducer.tsx" pinned="false" current-in-tab="true">
+      <file leaf-file-name="reducer.tsx" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/src/app/reducer.tsx">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="286">
@@ -151,10 +134,10 @@
         <option value="$PROJECT_DIR$/server/server/server.ts" />
         <option value="$PROJECT_DIR$/server/server/schemas/movies.ts" />
         <option value="$PROJECT_DIR$/client/src/app/app.tsx" />
-        <option value="$PROJECT_DIR$/client/src/app/modules/query.tsx" />
         <option value="$PROJECT_DIR$/client/src/app/modules/movie-list.tsx" />
         <option value="$PROJECT_DIR$/client/src/app/actions.tsx" />
         <option value="$PROJECT_DIR$/client/src/app/reducer.tsx" />
+        <option value="$PROJECT_DIR$/client/src/app/modules/query.tsx" />
       </list>
     </option>
   </component>
@@ -272,6 +255,32 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="PhoenixPrototype" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="client" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="modules" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scratches" />
@@ -364,7 +373,7 @@
       <workItem from="1472029108975" duration="7549000" />
       <workItem from="1472048017106" duration="530000" />
       <workItem from="1472055001211" duration="2181000" />
-      <workItem from="1472112047299" duration="10571000" />
+      <workItem from="1472112047299" duration="10666000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <created>1472029055268</created>
@@ -429,11 +438,18 @@
       <option name="project" value="LOCAL" />
       <updated>1472114723713</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Adding another schema">
+      <created>1472131777323</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1472131777323</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="22282000" />
+    <option name="totallyTimeSpent" value="22377000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -476,7 +492,8 @@
     <MESSAGE value="Removing client server" />
     <MESSAGE value="Schema fix, get() has to be called after create" />
     <MESSAGE value="Typescript refactoring" />
-    <option name="LAST_COMMIT_MESSAGE" value="Typescript refactoring" />
+    <MESSAGE value="Adding another schema" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding another schema" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -764,17 +781,7 @@
         <state relative-caret-position="66">
           <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding>
-            <element signature="e#53#84#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/app/modules/query.tsx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="595">
-          <caret line="43" column="16" selection-start-line="43" selection-start-column="16" selection-end-line="43" selection-end-column="16" />
-          <folding>
-            <element signature="e#53#84#0" expanded="true" />
+            <element signature="e#53#84#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -813,6 +820,16 @@
         <state relative-caret-position="286">
           <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/app/modules/query.tsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
+          <folding>
+            <element signature="e#53#84#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
