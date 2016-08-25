@@ -2,14 +2,14 @@
 
 // Import the required libraries
 import graphql      = require('graphql');
-import graphqlHTTP  = require('express-graphql');
 import express      = require('express');
 import path         = require('path');
 
 // Import the data
 import data = require('./data/data.json');
+import dataMovies = require('./data/movies.json');
 import SchemaGoldberg from "./schemas/goldberg";
-
+import SchemaMovies from "./schemas/movies";
 
 class Server {
 
@@ -52,9 +52,12 @@ class Server {
      * Configure GraphQL schemas
      */
     configGraphQL() {
-        var schema = SchemaGoldberg.create(data).get();
-        this.app.use('/graphql', graphqlHTTP({schema: schema, pretty: true}));
-        console.log('GraphQL server running on http://localhost:3000/graphql');
+
+        // Create goldberg schema
+        SchemaGoldberg.create(data).use(this.app, '/goldberg');
+        // Create movies schema
+        SchemaMovies.create(dataMovies).use(this.app, '/movies');
+
     }
 
 }

@@ -27,4 +27,5 @@ export abstract class CoreComponent extends React.Component<any, any> {
      */
     abstract render();
 
+
 }

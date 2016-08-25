@@ -1,5 +1,6 @@
 /// <reference path="../../typings/index.d.ts" />
 import graphql  = require('graphql');
+import graphqlHTTP  = require('express-graphql');
 
 export interface SchemaQLModel {
     name: string;
@@ -26,5 +27,10 @@ export abstract class SchemaQL {
         return new graphql.GraphQLSchema({
             query: new graphql.GraphQLObjectType(schema)
         });
+    }
+
+    use(app, name) {
+        console.log('Schema '+name+' running on http://localhost:3000/' + name);
+        app.use(name, graphqlHTTP({schema: this.get(), pretty: true}));
     }
 }

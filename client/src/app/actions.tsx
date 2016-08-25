@@ -1,23 +1,10 @@
 /// <reference path="../../typings/index.d.ts" />
-const startingRequest = () => {
-    return {
-        type: "STARTING_REQUEST"
-    }
-}
-
-const finishedRequest = (response) => {
-    return {
-        type: "FINISHED_REQUEST",
-        response: response
-    }
-}
-
-export const getGraph = (payload) => {
+export const getGraph = (target, payload) => {
     return dispatch => {
-        dispatch(startingRequest());
+        dispatch({type : "START_" + target});
         return new Promise(function(resolve, reject) {
             let request=new XMLHttpRequest();
-            request.open("POST", "/graphql", true);
+            request.open("POST", "/"+target, true);
             request.setRequestHeader("Content-Type", "application/graphql");
             request.send(payload);
             request.onreadystatechange = () => {
@@ -25,6 +12,6 @@ export const getGraph = (payload) => {
                     resolve(request.responseText)
                 }
             }
-        }).then(response => dispatch(finishedRequest(JSON.parse(response))))
+        }).then(response => dispatch({type: "DONE_" + target, response: JSON.parse(response)}))
     }
 }

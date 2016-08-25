@@ -66,14 +66,15 @@
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 187);
 	const reducer_1 = __webpack_require__(/*! ./reducer */ 196);
 	const redux_thunk_1 = __webpack_require__(/*! redux-thunk */ 198);
-	const query_1 = __webpack_require__(/*! ./modules/query */ 199);
-	var QueryStore = query_1.Query.connect();
 	// modules
-	const component_1 = __webpack_require__(/*! ./core/component */ 201);
-	const movie_list_1 = __webpack_require__(/*! ./modules/movie-list */ 202);
+	const component_1 = __webpack_require__(/*! ./core/component */ 199);
+	const movie_list_1 = __webpack_require__(/*! ./modules/movie-list */ 200);
+	var MovieStore = movie_list_1.MovieList.connect();
+	const query_1 = __webpack_require__(/*! ./modules/query */ 202);
+	var QueryStore = query_1.Query.connect();
 	class Main extends component_1.CoreComponent {
 	    render() {
-	        return React.createElement("div", null, React.createElement("h1", null, "Phoenix"), React.createElement(QueryStore, null), React.createElement(movie_list_1.MovieList, null));
+	        return React.createElement("div", null, React.createElement("h1", null, "Phoenix"), React.createElement(QueryStore, null), React.createElement(MovieStore, null));
 	    }
 	}
 	const store = redux_1.createStore(reducer_1.queryReducer, redux_1.applyMiddleware(redux_thunk_1.default));
@@ -23589,17 +23590,19 @@
 	const Immutable_1 = __webpack_require__(/*! Immutable */ 197);
 	const immutableState = Immutable_1.Map({
 	    fetching: false,
-	    data: Immutable_1.Map({})
+	    data: Immutable_1.Map({}),
+	    movies: Immutable_1.Map({})
 	});
 	exports.queryReducer = (state = immutableState, action) => {
 	    switch (action.type) {
-	        case "STARTING_REQUEST":
-	            console.error('--- start request ---');
+	        case "START_goldberg":
 	            return state.set("fetching", true);
-	        case "FINISHED_REQUEST":
-	            console.error('--- finish request ---');
-	            console.warn(action);
-	            return state.set("fetching", false).set("data", Immutable_1.Map(action.response.data.goldberg));
+	        case "DONE_goldberg":
+	            return state.set("fetching", false).set("goldberg", Immutable_1.Map(action.response.data.goldberg));
+	        case "START_movies":
+	            return state.set("fetching", true);
+	        case "DONE_movies":
+	            return state.set("fetching", false).set("movies", Immutable_1.Map(action.response.data.movies));
 	        default:
 	            return state;
 	    }
@@ -28626,99 +28629,6 @@
 /***/ },
 /* 199 */
 /*!***********************************!*\
-  !*** ./src/app/modules/query.tsx ***!
-  \***********************************/
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-	/// <reference path="../../../typings/index.d.ts" />
-	
-	const React = __webpack_require__(/*! react */ 2);
-	const actions_1 = __webpack_require__(/*! ../actions */ 200);
-	const component_1 = __webpack_require__(/*! ../core/component */ 201);
-	/**
-	 * @module
-	 * Query module
-	 */
-	class Query extends component_1.CoreComponent {
-	  /**
-	   * Connect Query Component with a store
-	   * @static
-	   * @example:
-	   * import {Query} from "./modules/query";
-	   * var QueryStore = Query.connect();
-	   * @returns React component
-	   */
-	  static connect() {
-	    return super.connect(Query);
-	  }
-	  /**
-	   * On component mount
-	   * @protected
-	   */
-	  componentDidMount() {
-	    this.props.dispatch(actions_1.getGraph("{goldberg(id: 2) {id, character, actor, role, traits}}"));
-	  }
-	  /**
-	   * Render
-	   * @public
-	   */
-	  render() {
-	    let dispatch = this.props.dispatch;
-	    let fetchInProgress = String(this.props.store.get('fetching'));
-	    let queryText;
-	    let goldberg = this.props.store.get('data').toObject();
-	    console.warn(goldberg);
-	    return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits), React.createElement("input", { ref: node => {
-	        queryText = node;
-	      } }), React.createElement("button", { onClick: () => {
-	        dispatch(actions_1.getGraph(queryText.value));
-	      } }, "query"));
-	  }
-	}
-	exports.Query = Query;
-
-/***/ },
-/* 200 */
-/*!*****************************!*\
-  !*** ./src/app/actions.tsx ***!
-  \*****************************/
-/***/ function(module, exports) {
-
-	"use strict";
-	/// <reference path="../../typings/index.d.ts" />
-	
-	const startingRequest = () => {
-	    return {
-	        type: "STARTING_REQUEST"
-	    };
-	};
-	const finishedRequest = response => {
-	    return {
-	        type: "FINISHED_REQUEST",
-	        response: response
-	    };
-	};
-	exports.getGraph = payload => {
-	    return dispatch => {
-	        dispatch(startingRequest());
-	        return new Promise(function (resolve, reject) {
-	            let request = new XMLHttpRequest();
-	            request.open("POST", "/graphql", true);
-	            request.setRequestHeader("Content-Type", "application/graphql");
-	            request.send(payload);
-	            request.onreadystatechange = () => {
-	                if (request.readyState === 4) {
-	                    resolve(request.responseText);
-	                }
-	            };
-	        }).then(response => dispatch(finishedRequest(JSON.parse(response))));
-	    };
-	};
-
-/***/ },
-/* 201 */
-/*!***********************************!*\
   !*** ./src/app/core/component.ts ***!
   \***********************************/
 /***/ function(module, exports, __webpack_require__) {
@@ -28748,7 +28658,7 @@
 	exports.CoreComponent = CoreComponent;
 
 /***/ },
-/* 202 */
+/* 200 */
 /*!****************************************!*\
   !*** ./src/app/modules/movie-list.tsx ***!
   \****************************************/
@@ -28758,16 +28668,118 @@
 	/// <reference path="../../../typings/index.d.ts" />
 	
 	const React = __webpack_require__(/*! react */ 2);
+	const actions_1 = __webpack_require__(/*! ../actions */ 201);
+	const component_1 = __webpack_require__(/*! ../core/component */ 199);
 	/**
 	 * @module
 	 * Movie list module
 	 */
-	class MovieList extends React.Component {
+	class MovieList extends component_1.CoreComponent {
+	    /**
+	     * Connect Query Component with a store
+	     * @static
+	     * @example:
+	     * import {Query} from "./modules/query";
+	     * var QueryStore = Query.connect();
+	     * @returns React component
+	     */
+	    static connect() {
+	        return super.connect(MovieList);
+	    }
+	    componentDidMount() {
+	        this.props.dispatch(actions_1.getGraph('movies', '{movies(id: 1) {id, title}}'));
+	    }
 	    render() {
-	        return React.createElement("div", null, React.createElement("h1", null, "Movie List"));
+	        var movie = {};
+	        if (this.props.store.get('movies')) {
+	            movie = this.props.store.get('movies').toObject();
+	        }
+	        console.error('-- movies ----');
+	        console.info(movie);
+	        return React.createElement("div", null, React.createElement("h1", null, "Movie List"), React.createElement("p", null, movie.title));
 	    }
 	}
 	exports.MovieList = MovieList;
+
+/***/ },
+/* 201 */
+/*!*****************************!*\
+  !*** ./src/app/actions.tsx ***!
+  \*****************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	/// <reference path="../../typings/index.d.ts" />
+	
+	exports.getGraph = (target, payload) => {
+	    return dispatch => {
+	        dispatch({ type: "START_" + target });
+	        return new Promise(function (resolve, reject) {
+	            let request = new XMLHttpRequest();
+	            request.open("POST", "/" + target, true);
+	            request.setRequestHeader("Content-Type", "application/graphql");
+	            request.send(payload);
+	            request.onreadystatechange = () => {
+	                if (request.readyState === 4) {
+	                    resolve(request.responseText);
+	                }
+	            };
+	        }).then(response => dispatch({ type: "DONE_" + target, response: JSON.parse(response) }));
+	    };
+	};
+
+/***/ },
+/* 202 */
+/*!***********************************!*\
+  !*** ./src/app/modules/query.tsx ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/// <reference path="../../../typings/index.d.ts" />
+	
+	const React = __webpack_require__(/*! react */ 2);
+	const actions_1 = __webpack_require__(/*! ../actions */ 201);
+	const component_1 = __webpack_require__(/*! ../core/component */ 199);
+	/**
+	 * @module
+	 * Query module
+	 */
+	class Query extends component_1.CoreComponent {
+	    /**
+	     * Connect Query Component with a store
+	     * @static
+	     * @example:
+	     * import {Query} from "./modules/query";
+	     * var QueryStore = Query.connect();
+	     * @returns React component
+	     */
+	    static connect() {
+	        return super.connect(Query);
+	    }
+	    /**
+	     * On component mount
+	     * @protected
+	     */
+	    componentDidMount() {
+	        this.props.dispatch(actions_1.getGraph('goldberg', '{goldberg(id: 2) {id, character, actor, role, traits}}'));
+	    }
+	    /**
+	     * Render
+	     * @public
+	     */
+	    render() {
+	        let dispatch = this.props.dispatch;
+	        let fetchInProgress = String(this.props.store.get('fetching'));
+	        var goldberg = {};
+	        if (this.props.store.get('goldberg')) {
+	            goldberg = this.props.store.get('goldberg').toObject();
+	        }
+	        // let goldberg = this.props.store.get('goldberg').toObject();
+	        return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits));
+	    }
+	}
+	exports.Query = Query;
 
 /***/ }
 /******/ ]);
