@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "es6-promise": "registry:npm/es6-promise#3.0.0+20160723033700",
     "react": "registry:npm/react#15.0.1+20160601175240",
     "react-dom": "registry:npm/react-dom#15.0.1+20160705210405",
     "react-redux": "registry:npm/react-redux#4.4.0+20160614222153",
@@ -7,5 +8,6 @@
     "redux-thunk": "registry:npm/redux-thunk#2.0.0+20160525185520"
   },
   "globalDependencies": {
+    "redux-promise": "registry:dt/redux-promise#0.5.3+20160703120921"
   }
 }

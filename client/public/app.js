@@ -66,31 +66,18 @@
 	const react_redux_1 = __webpack_require__(/*! react-redux */ 187);
 	const reducer_1 = __webpack_require__(/*! ./reducer */ 196);
 	const redux_thunk_1 = __webpack_require__(/*! redux-thunk */ 198);
-	const query_1 = __webpack_require__(/*! ./query */ 199);
-	class Main extends React.Component {
+	const query_1 = __webpack_require__(/*! ./modules/query */ 199);
+	var QueryStore = query_1.Query.connect();
+	// modules
+	const component_1 = __webpack_require__(/*! ./core/component */ 201);
+	const movie_list_1 = __webpack_require__(/*! ./modules/movie-list */ 202);
+	class Main extends component_1.CoreComponent {
 	    render() {
-	        return React.createElement("div", null, React.createElement("h1", null, "Phoenix"), React.createElement(query_1.QueryContainer, null));
+	        return React.createElement("div", null, React.createElement("h1", null, "Phoenix"), React.createElement(QueryStore, null), React.createElement(movie_list_1.MovieList, null));
 	    }
 	}
-	const createStoreWithMiddleware = redux_1.applyMiddleware(redux_thunk_1.default)(redux_1.createStore);
-	ReactDOM.render(React.createElement(react_redux_1.Provider, { store: createStoreWithMiddleware(reducer_1.queryReducer) }, React.createElement(Main, null)), document.getElementById('app'));
-	// $(document).ready(() => {
-	//
-	//     var query = '{user(id:"1"){name}}';
-	//     query = encodeURI(query);
-	//
-	//     $.ajax({
-	//         method : 'GET',
-	//         url : '/graphql?query=' + query,
-	//         dataType: 'json',
-	//         success: (data) => {
-	//             console.warn('success');
-	//             console.info(data);
-	//         }
-	//     });
-	//
-	//
-	// });
+	const store = redux_1.createStore(reducer_1.queryReducer, redux_1.applyMiddleware(redux_thunk_1.default));
+	ReactDOM.render(React.createElement(react_redux_1.Provider, { store: store }, React.createElement(Main, null)), document.getElementById('app'));
 
 /***/ },
 /* 2 */
@@ -28638,40 +28625,58 @@
 
 /***/ },
 /* 199 */
-/*!***************************!*\
-  !*** ./src/app/query.tsx ***!
-  \***************************/
+/*!***********************************!*\
+  !*** ./src/app/modules/query.tsx ***!
+  \***********************************/
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	/// <reference path="../../typings/index.d.ts" />
+	/// <reference path="../../../typings/index.d.ts" />
 	
 	const React = __webpack_require__(/*! react */ 2);
-	const react_redux_1 = __webpack_require__(/*! react-redux */ 187);
-	const actions_1 = __webpack_require__(/*! ./actions */ 200);
-	let Query = React.createClass({
-	    componentDidMount() {
-	        this.props.dispatch(actions_1.getGraph("{goldberg(id: 2) {id, character, actor, role, traits}}"));
-	    },
-	    render() {
-	        let dispatch = this.props.dispatch;
-	        let fetchInProgress = String(this.props.store.get('fetching'));
-	        let queryText;
-	        let goldberg = this.props.store.get('data').toObject();
-	        console.warn(goldberg);
-	        return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits), React.createElement("input", { ref: node => {
-	                queryText = node;
-	            } }), React.createElement("button", { onClick: () => {
-	                dispatch(actions_1.getGraph(queryText.value));
-	            } }, "query"));
-	    }
-	});
-	const mapStateToProps = state => {
-	    return {
-	        store: state
-	    };
-	};
-	exports.QueryContainer = react_redux_1.connect(mapStateToProps)(Query);
+	const actions_1 = __webpack_require__(/*! ../actions */ 200);
+	const component_1 = __webpack_require__(/*! ../core/component */ 201);
+	/**
+	 * @module
+	 * Query module
+	 */
+	class Query extends component_1.CoreComponent {
+	  /**
+	   * Connect Query Component with a store
+	   * @static
+	   * @example:
+	   * import {Query} from "./modules/query";
+	   * var QueryStore = Query.connect();
+	   * @returns React component
+	   */
+	  static connect() {
+	    return super.connect(Query);
+	  }
+	  /**
+	   * On component mount
+	   * @protected
+	   */
+	  componentDidMount() {
+	    this.props.dispatch(actions_1.getGraph("{goldberg(id: 2) {id, character, actor, role, traits}}"));
+	  }
+	  /**
+	   * Render
+	   * @public
+	   */
+	  render() {
+	    let dispatch = this.props.dispatch;
+	    let fetchInProgress = String(this.props.store.get('fetching'));
+	    let queryText;
+	    let goldberg = this.props.store.get('data').toObject();
+	    console.warn(goldberg);
+	    return React.createElement("div", null, React.createElement("p", null, "Fetch in progress: ", fetchInProgress), React.createElement("h3", null, goldberg.character), React.createElement("p", null, goldberg.actor), React.createElement("p", null, goldberg.role), React.createElement("p", null, goldberg.traits), React.createElement("input", { ref: node => {
+	        queryText = node;
+	      } }), React.createElement("button", { onClick: () => {
+	        dispatch(actions_1.getGraph(queryText.value));
+	      } }, "query"));
+	  }
+	}
+	exports.Query = Query;
 
 /***/ },
 /* 200 */
@@ -28710,6 +28715,59 @@
 	        }).then(response => dispatch(finishedRequest(JSON.parse(response))));
 	    };
 	};
+
+/***/ },
+/* 201 */
+/*!***********************************!*\
+  !*** ./src/app/core/component.ts ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/// <reference path="../../../typings/index.d.ts" />
+	
+	const React = __webpack_require__(/*! react */ 2);
+	const react_redux_1 = __webpack_require__(/*! react-redux */ 187);
+	class CoreComponent extends React.Component {
+	    /**
+	     * Connect Query Component with a store
+	     * @static
+	     * @example:
+	     * import {Query} from "./modules/query";
+	     * var QueryStore = Query.connect();
+	     * @returns React component
+	     */
+	    static connect(ChildClass) {
+	        return react_redux_1.connect(state => {
+	            return {
+	                store: state
+	            };
+	        })(ChildClass);
+	    }
+	}
+	exports.CoreComponent = CoreComponent;
+
+/***/ },
+/* 202 */
+/*!****************************************!*\
+  !*** ./src/app/modules/movie-list.tsx ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	/// <reference path="../../../typings/index.d.ts" />
+	
+	const React = __webpack_require__(/*! react */ 2);
+	/**
+	 * @module
+	 * Movie list module
+	 */
+	class MovieList extends React.Component {
+	    render() {
+	        return React.createElement("div", null, React.createElement("h1", null, "Movie List"));
+	    }
+	}
+	exports.MovieList = MovieList;
 
 /***/ }
 /******/ ]);

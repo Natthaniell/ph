@@ -4,47 +4,34 @@ import * as ReactDOM from "react-dom";
 import {createStore, applyMiddleware } from "redux";
 import {Provider} from "react-redux";
 import {queryReducer} from "./reducer";
-import thunkMiddleware from "redux-thunk";
-import {QueryContainer} from "./query";
+import thunk from "redux-thunk";
+import {Query} from "./modules/query";
+var QueryStore = Query.connect();
 
+// modules
+import {CoreComponent} from "./core/component";
+import {MovieList} from "./modules/movie-list";
 
-class Main extends React.Component {
-
-    private number : number;
-
+class Main extends CoreComponent {
     render() {
         return (
             <div>
                 <h1>Phoenix</h1>
-                <QueryContainer />
+                <QueryStore />
+                <MovieList />
             </div>
         );
     }
 }
 
-const createStoreWithMiddleware = applyMiddleware(thunkMiddleware)(createStore);
+const store = createStore(
+    queryReducer,
+    applyMiddleware(thunk)
+)
 
 ReactDOM.render(
-    <Provider store={createStoreWithMiddleware(queryReducer)}>
+    <Provider store={store}>
         <Main />
     </Provider>,
     document.getElementById('app')
 );
-
-// $(document).ready(() => {
-//
-//     var query = '{user(id:"1"){name}}';
-//     query = encodeURI(query);
-//
-//     $.ajax({
-//         method : 'GET',
-//         url : '/graphql?query=' + query,
-//         dataType: 'json',
-//         success: (data) => {
-//             console.warn('success');
-//             console.info(data);
-//         }
-//     });
-//
-//
-// });
