@@ -1,7 +1,7 @@
-/// <reference path="../../../typings/index.d.ts" />
+/// <reference path="../../../../typings/index.d.ts" />
 import * as React from "react";
 import {getGraph} from '../actions';
-import {CoreComponent} from "../core/component";
+import {CoreComponent} from "../../core/component";
 
 /**
  * @module

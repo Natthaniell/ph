@@ -30,6 +30,7 @@
     "express": "^4.14.0",
     "html-webpack-plugin": "^2.22.0",
     "immutable": "^3.8.1",
+    "node-uuid": "^1.4.7",
     "npm-watch": "^0.1.5",
     "q": "^1.4.1",
     "react": "^15.3.1",
