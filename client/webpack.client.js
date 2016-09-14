@@ -29,6 +29,10 @@ var config = {
     module: {
         loaders: [
             {
+                test: /\.js$/,
+                loader: 'babel'
+            },
+            {
                 test: /\.tsx?$/,
                 loader: "babel-loader!ts-loader"
             },

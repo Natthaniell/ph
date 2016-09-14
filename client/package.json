@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm-watch",
     "build": " webpack --config webpack.client.js -d",
-    "updateSchema": "cashay-schema src/app/_type-cashay/getSchema.tsx src/app/_type-cashay/clientSchema.json"
+    "updateSchema": "cashay-schema src/app/_type-cashay/getSchema.js src/app/_type-cashay/clientSchema.json"
   },
   "watch": {
     "build": {
@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-runtime": "^6.15.0",
     "babel-preset-stage-0": "^6.5.0",
     "chalk": "^1.1.3",
     "clean-webpack-plugin": "^0.1.10",
