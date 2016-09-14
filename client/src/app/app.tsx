@@ -1,7 +1,7 @@
 /// <reference path="../../typings/index.d.ts" />
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import {createStore, applyMiddleware } from "redux";
+import {createStore, applyMiddleware, compose, combineReducers } from "redux";
 import {Provider} from "react-redux";
 import {queryReducer} from "./reducer";
 import thunk from "redux-thunk";
@@ -14,7 +14,37 @@ import {Query} from "./modules/query";
 var QueryStore = Query.connect();
 
 
+/**
+ * Cashay main,
+ * - implements store as cashay
+ */
+import {cashayReducer} from 'cashay';
+const rootReducer = combineReducers({cashay: cashayReducer});
+
+class MainCashay extends CoreComponent {
+
+    static store = createStore(rootReducer, {});
+
+    render() {
+        return (
+            <div>
+                <h1>Phoenix Cashay</h1>
+            </div>
+        );
+    }
+}
+
+/**
+ * Redux main,
+ * - implements store as redux
+ */
 class Main extends CoreComponent {
+
+    static store = createStore(
+        queryReducer,
+        applyMiddleware(thunk)
+    )
+
     render() {
         return (
             <div>
@@ -26,14 +56,16 @@ class Main extends CoreComponent {
     }
 }
 
-const store = createStore(
-    queryReducer,
-    applyMiddleware(thunk)
-)
+
 
 ReactDOM.render(
-    <Provider store={store}>
-        <Main />
-    </Provider>,
+    <div>
+        <Provider store={Main.store}>
+            <Main />
+        </Provider>
+        <Provider store={MainCashay.store}>
+            <MainCashay />
+        </Provider>,
+    </div>,
     document.getElementById('app')
 );

@@ -7,7 +7,7 @@ import {CoreComponent} from "../core/component";
  * @module
  * Movie list module
  */
-export class MovieList extends CoreComponent {
+export class CashayList extends CoreComponent {
 
     /**
      * Connect Query Component with a store
@@ -18,7 +18,7 @@ export class MovieList extends CoreComponent {
      * @returns React component
      */
     static connect() {
-        return super.connect(MovieList);
+        return super.connect(CashayList);
     }
 
     protected componentDidMount() {
@@ -26,8 +26,8 @@ export class MovieList extends CoreComponent {
     }
 
     render() {
-        var movie: any = {};
-        if (this.props.store.get('movies')) {
+        var movie : any = {};
+        if(this.props.store.get('movies')){
             movie = this.props.store.get('movies').toObject();
         }
         console.error('-- movies ----');
