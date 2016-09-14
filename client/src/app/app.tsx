@@ -6,6 +6,7 @@ import {Provider} from "react-redux";
 // import app types ( cashay & redux )
 // import CashayApp from "./_type-cashay/app";
 import ReduxApp from "./_type-redux/app";
+import CashayApp from "./_type-cashay/app";
 
 /**
  * This project is a test case,
@@ -19,9 +20,9 @@ ReactDOM.render(
         <Provider store={ReduxApp.store}>
             <ReduxApp />
         </Provider>
-        {/*<Provider store={MainCashay.store}>*/}
-            {/*<MainCashay />*/}
-        {/*</Provider>*/}
+        <Provider store={CashayApp.store}>
+            <CashayApp />
+        </Provider>
     </div>,
     document.getElementById('app')
 );

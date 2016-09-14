@@ -66,6 +66,7 @@
 	// import app types ( cashay & redux )
 	// import CashayApp from "./_type-cashay/app";
 	const app_1 = __webpack_require__(/*! ./_type-redux/app */ 196);
+	const app_2 = __webpack_require__(/*! ./_type-cashay/app */ 204);
 	/**
 	 * This project is a test case,
 	 * main app is splited by 2 apps:
@@ -73,7 +74,7 @@
 	 * - cashay app
 	 * They are using ( at least now ) same server.js file
 	 */
-	ReactDOM.render(React.createElement("div", null, React.createElement(react_redux_1.Provider, { store: app_1.default.store }, React.createElement(app_1.default, null))), document.getElementById('app'));
+	ReactDOM.render(React.createElement("div", null, React.createElement(react_redux_1.Provider, { store: app_1.default.store }, React.createElement(app_1.default, null)), React.createElement(react_redux_1.Provider, { store: app_2.default.store }, React.createElement(app_2.default, null))), document.getElementById('app'));
 
 /***/ },
 /* 2 */
@@ -28724,8 +28725,6 @@
 	        if (this.props.store.get('movies')) {
 	            movie = this.props.store.get('movies').toObject();
 	        }
-	        console.error('-- movies ----');
-	        console.info(movie);
 	        return React.createElement("div", null, React.createElement("h1", null, "Movie List"), React.createElement("p", null, movie.title));
 	    }
 	}
@@ -28810,6 +28809,14462 @@
 	    }
 	}
 	exports.Query = Query;
+
+/***/ },
+/* 204 */
+/*!**************************************!*\
+  !*** ./src/app/_type-cashay/app.tsx ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	const react_1 = __webpack_require__(/*! react */ 2);
+	// import CashayBook from './CashayBook';
+	const redux_1 = __webpack_require__(/*! redux */ 180);
+	const cashay_1 = __webpack_require__(/*! cashay */ 205);
+	// import gqlSchema from './schema.js';
+	const clientSchema = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"cashay!./getCashaySchema.js\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	// import {graphql} from 'graphql';
+	const component_1 = __webpack_require__(/*! ../core/component */ 200);
+	const rootReducer = redux_1.combineReducers({
+	    cashay: cashay_1.cashayReducer
+	});
+	const transport = new cashay_1.HTTPTransport('/graphql');
+	// const store = createStore(rootReducer, {}, compose(
+	//     devtoolsExt || (f => f)
+	// ));
+	const store = redux_1.createStore(rootReducer, {});
+	console.error('-store-');
+	console.warn(store);
+	cashay_1.cashay.create({
+	    store: store,
+	    schema: clientSchema,
+	    idFieldName: '_id',
+	    paginationWords: { before: 'beforeCursor', after: 'afterCursor' },
+	    transport: transport
+	});
+	class CashayApp extends component_1.CoreComponent {
+	    render() {
+	        return react_1.default.createElement("div", null, react_1.default.createElement("hr", null), react_1.default.createElement("h1", null, "App Redux"));
+	    }
+	}
+	CashayApp.store = store;
+	Object.defineProperty(exports, "__esModule", { value: true });
+	exports.default = CashayApp;
+
+/***/ },
+/* 205 */
+/*!*******************************!*\
+  !*** ./~/cashay/lib/index.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.transformSchema = exports.Transport = exports.HTTPTransport = exports.cashay = exports.cashayReducer = undefined;
+	
+	var _duck = __webpack_require__(/*! ./normalize/duck */ 206);
+	
+	var _duck2 = _interopRequireDefault(_duck);
+	
+	var _Cashay = __webpack_require__(/*! ./Cashay */ 362);
+	
+	var _Cashay2 = _interopRequireDefault(_Cashay);
+	
+	var _HTTPTransport2 = __webpack_require__(/*! ./transports/HTTPTransport */ 401);
+	
+	var _HTTPTransport3 = _interopRequireDefault(_HTTPTransport2);
+	
+	var _Transport2 = __webpack_require__(/*! ./transports/Transport */ 405);
+	
+	var _Transport3 = _interopRequireDefault(_Transport2);
+	
+	var _transformSchema2 = __webpack_require__(/*! ./schema/transformSchema */ 406);
+	
+	var _transformSchema3 = _interopRequireDefault(_transformSchema2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.cashayReducer = _duck2.default;
+	exports.cashay = _Cashay2.default;
+	exports.HTTPTransport = _HTTPTransport3.default;
+	exports.Transport = _Transport3.default;
+	exports.transformSchema = _transformSchema3.default;
+
+/***/ },
+/* 206 */
+/*!****************************************!*\
+  !*** ./~/cashay/lib/normalize/duck.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.SET_STATUS = exports.SET_ERROR = exports.SET_VARIABLES = exports.INSERT_MUTATION = exports.INSERT_QUERY = exports.REMOVE_SUBSCRIPTION = exports.UPDATE_SUBSCRIPTION = exports.ADD_SUBSCRIPTION = undefined;
+	exports.default = reducer;
+	
+	var _mergeStores = __webpack_require__(/*! ./mergeStores */ 207);
+	
+	var _mergeStores2 = _interopRequireDefault(_mergeStores);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ADD_SUBSCRIPTION = exports.ADD_SUBSCRIPTION = '@@cashay/ADD_SUBSCRIPTION';
+	var UPDATE_SUBSCRIPTION = exports.UPDATE_SUBSCRIPTION = '@@cashay/UPDATE_SUBSCRIPTION';
+	var REMOVE_SUBSCRIPTION = exports.REMOVE_SUBSCRIPTION = '@@cashay/REMOVE_SUBSCRIPTION';
+	var INSERT_QUERY = exports.INSERT_QUERY = '@@cashay/INSERT_QUERY';
+	var INSERT_MUTATION = exports.INSERT_MUTATION = '@@cashay/INSERT_MUTATION';
+	var SET_VARIABLES = exports.SET_VARIABLES = '@@cashay/SET_VARIABLES';
+	var SET_ERROR = exports.SET_ERROR = '@@cashay/SET_ERROR';
+	var SET_STATUS = exports.SET_STATUS = '@@cashay/SET_STATUS';
+	
+	var initialState = {
+	  entities: {},
+	  error: null,
+	  ops: {
+	    // [op]: {
+	    //   [key]: {
+	    //     variables: {},
+	    //     status: '',
+	    //     error: {}
+	    //   }
+	    // }
+	  },
+	  result: {}
+	};
+	
+	function reducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+	
+	  if (action.type.startsWith('@@cashay')) {
+	    var isMutation = action.type === INSERT_MUTATION;
+	    return (0, _mergeStores2.default)(state, action.payload, isMutation);
+	  } else {
+	    return state;
+	  }
+	};
+
+/***/ },
+/* 207 */
+/*!***********************************************!*\
+  !*** ./~/cashay/lib/normalize/mergeStores.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _set = __webpack_require__(/*! babel-runtime/core-js/set */ 280);
+	
+	var _set2 = _interopRequireDefault(_set);
+	
+	exports.default = mergeStores;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var paginationArrayNames = new _set2.default([_utils.FRONT, _utils.BACK, _utils.FULL]);
+	
+	/**
+	 * check for overlap in docs, intelligently append keys
+	 * all the logic in here is to mitigate the problems with cursor-based pagination (duplicates, etc)
+	 * pagination should never have the same document twice
+	 * the question is, do we maintain the old order, or the new?
+	 * maintaining the old order ensures less jumping around & that the user won't have to scroll past the same thing twice
+	 * so if the new stuff has references to old stuff, delete em
+	 * then, stick em on the end
+	 */
+	var mergeSameArrays = function mergeSameArrays(targetArray, srcArray, isAppend) {
+	  var srcSet = new _set2.default(srcArray);
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = (0, _getIterator3.default)(targetArray), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var entry = _step.value;
+	
+	      srcSet.delete(entry);
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	
+	  var reducedSrcArr = [].concat((0, _toConsumableArray3.default)(srcSet));
+	  return isAppend ? targetArray.concat(reducedSrcArr) : reducedSrcArr.concat(targetArray);
+	};
+	
+	/**
+	 * merging front and back is a little volatile because per mergeSameArrays, we keep the original order
+	 * it's possible, for example, for a post to get downvoted to hell, causing it to first appear in the front
+	 * but then later in the back. such is a pitfall of cursor-based arrays
+	 */
+	var mergeDifferentArrays = function mergeDifferentArrays(front, back) {
+	  var frontSet = new _set2.default(front);
+	  var isComplete = false;
+	  for (var i = 0; i < back.length; i++) {
+	    var entry = back[i];
+	    if (frontSet.has(entry)) {
+	      isComplete = true;
+	      frontSet.delete(entry);
+	    }
+	  }
+	  if (isComplete) {
+	    var reducedFront = [].concat((0, _toConsumableArray3.default)(frontSet));
+	    return reducedFront.concat(back);
+	  }
+	};
+	
+	/**
+	 * An exercise in combinatorics.
+	 * Specific logic on how to merge arrays
+	 * Many of these are edge cases, like merging a paginated array with a full array
+	 * */
+	var handleArrays = function handleArrays(target, src) {
+	  // merge similar
+	  var pageTarget = {};
+	  var pageSrc = {};
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+	
+	  try {
+	    for (var _iterator2 = (0, _getIterator3.default)(paginationArrayNames), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var arrType = _step2.value;
+	
+	      pageTarget[arrType] = Array.isArray(target[arrType]);
+	      pageSrc[arrType] = Array.isArray(src[arrType]);
+	    }
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+	
+	  if (pageTarget[_utils.FULL]) {
+	    if (pageSrc[_utils.FULL]) {
+	      target[_utils.FULL] = mergeSameArrays(target[_utils.FULL], src[_utils.FULL], true);
+	    } else if (pageSrc[_utils.FRONT]) {
+	      target[_utils.FULL] = mergeSameArrays(target[_utils.FULL], src[_utils.FRONT], false);
+	    } else if (pageSrc[_utils.BACK]) {
+	      target[_utils.FULL] = mergeSameArrays(target[_utils.FULL], src[_utils.BACK], true);
+	    }
+	  } else {
+	    if (pageSrc[_utils.FULL]) {
+	      target[_utils.FULL] = src[_utils.FULL];
+	    } else {
+	      if (pageTarget[_utils.FRONT] && pageSrc[_utils.FRONT]) {
+	        var targetArr = src[_utils.FRONT].EOF ? _utils.FULL : _utils.FRONT;
+	        target[targetArr] = mergeSameArrays(target[_utils.FRONT], src[_utils.FRONT], true);
+	      }
+	      if (pageTarget[_utils.BACK] && pageSrc[_utils.BACK]) {
+	        var _targetArr = src[_utils.BACK].BOF ? _utils.FULL : _utils.BACK;
+	        target[_targetArr] = mergeSameArrays(target[_utils.BACK], src[_utils.BACK], false);
+	      }
+	    }
+	  }
+	
+	  if (!target[_utils.FRONT] && src[_utils.FRONT]) {
+	    target[_utils.FRONT] = src[_utils.FRONT];
+	  }
+	  if (!target[_utils.BACK] && src[_utils.BACK]) {
+	    target[_utils.BACK] = src[_utils.BACK];
+	  }
+	
+	  // check to see if target has all the docs (but only if we got something new recently)
+	  if (target[_utils.FRONT] && target[_utils.BACK] && (src[_utils.FRONT] || src[_utils.BACK])) {
+	    var full = mergeDifferentArrays(target[_utils.FRONT], target[_utils.BACK]);
+	    if (full) {
+	      target[_utils.FULL] = full;
+	    }
+	  }
+	  if (target[_utils.FULL]) {
+	    delete target[_utils.FRONT];
+	    delete target[_utils.BACK];
+	  }
+	};
+	
+	/**
+	 * A cashay array is an object that holds up to 2 arrays:
+	 * either full (not paginated) or front and/or back
+	 * */
+	var detectCashayArray = function detectCashayArray(src, allSrcKeys) {
+	  if (allSrcKeys.length < 1 || allSrcKeys.length > 2) return false;
+	  for (var i = 0; i < allSrcKeys.length; i++) {
+	    var srcKey = allSrcKeys[i];
+	    if (!paginationArrayNames.has(srcKey) || !Array.isArray(src[srcKey])) {
+	      return false;
+	    }
+	  }
+	  return true;
+	};
+	
+	/**
+	 * A deep merge that has exclusive logic for merging arrays suitable for pagination
+	 * */
+	function mergeStores(state, src, isMutation) {
+	  // first shallow copy the state as a simple way to get the primitives, we'll later overwrite the pointers
+	  if (!src) return state;
+	  var target = (0, _extends3.default)({}, state);
+	  var srcKeys = (0, _keys2.default)(src);
+	  var isCashayArray = detectCashayArray(src, srcKeys);
+	  if (isCashayArray && !isMutation) {
+	    handleArrays(target, src);
+	  } else {
+	    for (var i = 0; i < srcKeys.length; i++) {
+	      var key = srcKeys[i];
+	      var srcProp = src[key];
+	      var targetProp = target[key];
+	      if ((0, _utils.isObject)(srcProp) && (0, _utils.isObject)(targetProp)) {
+	        var srcIsArray = Array.isArray(srcProp);
+	        var stateIsArray = Array.isArray(targetProp);
+	        if (!srcIsArray && !stateIsArray) {
+	          // if both the state and src are objects, merge them
+	          target[key] = (0, _extends3.default)({}, mergeStores(targetProp, srcProp, isMutation));
+	        } else if (isCashayArray) {
+	          // this is a mutation, so the array length
+	          if (key === _utils.FRONT) {
+	            target[key] = [].concat((0, _toConsumableArray3.default)(targetProp.slice(0, srcProp.count)), (0, _toConsumableArray3.default)(srcProp.slice()));
+	          } else if (key === _utils.BACK) {
+	            var spliceStart = targetProp.length - srcProp.count;
+	            target[key] = [].concat((0, _toConsumableArray3.default)(targetProp.slice(spliceStart)), (0, _toConsumableArray3.default)(srcProp));
+	          }
+	        } else {
+	          // for 2 arrays that aren't cashay arrays, use a simple replace (can extend in the future)
+	          target[key] = srcProp;
+	        }
+	      } else {
+	        // if there is a disagreement on the type of value, default to using the src
+	        target[key] = srcProp;
+	      }
+	    }
+	  }
+	  return target;
+	};
+
+/***/ },
+/* 208 */
+/*!************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/keys.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/keys */ 209), __esModule: true };
+
+/***/ },
+/* 209 */
+/*!*************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/keys.js ***!
+  \*************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.keys */ 210);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Object.keys;
+
+/***/ },
+/* 210 */
+/*!**********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.keys.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 Object.keys(O)
+	var toObject = __webpack_require__(/*! ./_to-object */ 211)
+	  , $keys    = __webpack_require__(/*! ./_object-keys */ 213);
+	
+	__webpack_require__(/*! ./_object-sap */ 228)('keys', function(){
+	  return function keys(it){
+	    return $keys(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 211 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-object.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.13 ToObject(argument)
+	var defined = __webpack_require__(/*! ./_defined */ 212);
+	module.exports = function(it){
+	  return Object(defined(it));
+	};
+
+/***/ },
+/* 212 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_defined.js ***!
+  \***************************************************************/
+/***/ function(module, exports) {
+
+	// 7.2.1 RequireObjectCoercible(argument)
+	module.exports = function(it){
+	  if(it == undefined)throw TypeError("Can't call method on  " + it);
+	  return it;
+	};
+
+/***/ },
+/* 213 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-keys.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.14 / 15.2.3.14 Object.keys(O)
+	var $keys       = __webpack_require__(/*! ./_object-keys-internal */ 214)
+	  , enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ 227);
+	
+	module.exports = Object.keys || function keys(O){
+	  return $keys(O, enumBugKeys);
+	};
+
+/***/ },
+/* 214 */
+/*!****************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-keys-internal.js ***!
+  \****************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var has          = __webpack_require__(/*! ./_has */ 215)
+	  , toIObject    = __webpack_require__(/*! ./_to-iobject */ 216)
+	  , arrayIndexOf = __webpack_require__(/*! ./_array-includes */ 219)(false)
+	  , IE_PROTO     = __webpack_require__(/*! ./_shared-key */ 223)('IE_PROTO');
+	
+	module.exports = function(object, names){
+	  var O      = toIObject(object)
+	    , i      = 0
+	    , result = []
+	    , key;
+	  for(key in O)if(key != IE_PROTO)has(O, key) && result.push(key);
+	  // Don't enum bug & hidden keys
+	  while(names.length > i)if(has(O, key = names[i++])){
+	    ~arrayIndexOf(result, key) || result.push(key);
+	  }
+	  return result;
+	};
+
+/***/ },
+/* 215 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_has.js ***!
+  \***********************************************************/
+/***/ function(module, exports) {
+
+	var hasOwnProperty = {}.hasOwnProperty;
+	module.exports = function(it, key){
+	  return hasOwnProperty.call(it, key);
+	};
+
+/***/ },
+/* 216 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-iobject.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(/*! ./_iobject */ 217)
+	  , defined = __webpack_require__(/*! ./_defined */ 212);
+	module.exports = function(it){
+	  return IObject(defined(it));
+	};
+
+/***/ },
+/* 217 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iobject.js ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+	var cof = __webpack_require__(/*! ./_cof */ 218);
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	  return cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+/***/ },
+/* 218 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_cof.js ***!
+  \***********************************************************/
+/***/ function(module, exports) {
+
+	var toString = {}.toString;
+	
+	module.exports = function(it){
+	  return toString.call(it).slice(8, -1);
+	};
+
+/***/ },
+/* 219 */
+/*!**********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_array-includes.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// false -> Array#indexOf
+	// true  -> Array#includes
+	var toIObject = __webpack_require__(/*! ./_to-iobject */ 216)
+	  , toLength  = __webpack_require__(/*! ./_to-length */ 220)
+	  , toIndex   = __webpack_require__(/*! ./_to-index */ 222);
+	module.exports = function(IS_INCLUDES){
+	  return function($this, el, fromIndex){
+	    var O      = toIObject($this)
+	      , length = toLength(O.length)
+	      , index  = toIndex(fromIndex, length)
+	      , value;
+	    // Array#includes uses SameValueZero equality algorithm
+	    if(IS_INCLUDES && el != el)while(length > index){
+	      value = O[index++];
+	      if(value != value)return true;
+	    // Array#toIndex ignores holes, Array#includes - not
+	    } else for(;length > index; index++)if(IS_INCLUDES || index in O){
+	      if(O[index] === el)return IS_INCLUDES || index || 0;
+	    } return !IS_INCLUDES && -1;
+	  };
+	};
+
+/***/ },
+/* 220 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-length.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.15 ToLength
+	var toInteger = __webpack_require__(/*! ./_to-integer */ 221)
+	  , min       = Math.min;
+	module.exports = function(it){
+	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
+	};
+
+/***/ },
+/* 221 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-integer.js ***!
+  \******************************************************************/
+/***/ function(module, exports) {
+
+	// 7.1.4 ToInteger
+	var ceil  = Math.ceil
+	  , floor = Math.floor;
+	module.exports = function(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	};
+
+/***/ },
+/* 222 */
+/*!****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-index.js ***!
+  \****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(/*! ./_to-integer */ 221)
+	  , max       = Math.max
+	  , min       = Math.min;
+	module.exports = function(index, length){
+	  index = toInteger(index);
+	  return index < 0 ? max(index + length, 0) : min(index, length);
+	};
+
+/***/ },
+/* 223 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_shared-key.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var shared = __webpack_require__(/*! ./_shared */ 224)('keys')
+	  , uid    = __webpack_require__(/*! ./_uid */ 226);
+	module.exports = function(key){
+	  return shared[key] || (shared[key] = uid(key));
+	};
+
+/***/ },
+/* 224 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_shared.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var global = __webpack_require__(/*! ./_global */ 225)
+	  , SHARED = '__core-js_shared__'
+	  , store  = global[SHARED] || (global[SHARED] = {});
+	module.exports = function(key){
+	  return store[key] || (store[key] = {});
+	};
+
+/***/ },
+/* 225 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_global.js ***!
+  \**************************************************************/
+/***/ function(module, exports) {
+
+	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
+	var global = module.exports = typeof window != 'undefined' && window.Math == Math
+	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
+	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
+
+/***/ },
+/* 226 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_uid.js ***!
+  \***********************************************************/
+/***/ function(module, exports) {
+
+	var id = 0
+	  , px = Math.random();
+	module.exports = function(key){
+	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+	};
+
+/***/ },
+/* 227 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_enum-bug-keys.js ***!
+  \*********************************************************************/
+/***/ function(module, exports) {
+
+	// IE 8- don't enum bug keys
+	module.exports = (
+	  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
+	).split(',');
+
+/***/ },
+/* 228 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-sap.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// most Object methods by ES6 should accept primitives
+	var $export = __webpack_require__(/*! ./_export */ 229)
+	  , core    = __webpack_require__(/*! ./_core */ 230)
+	  , fails   = __webpack_require__(/*! ./_fails */ 239);
+	module.exports = function(KEY, exec){
+	  var fn  = (core.Object || {})[KEY] || Object[KEY]
+	    , exp = {};
+	  exp[KEY] = exec(fn);
+	  $export($export.S + $export.F * fails(function(){ fn(1); }), 'Object', exp);
+	};
+
+/***/ },
+/* 229 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_export.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var global    = __webpack_require__(/*! ./_global */ 225)
+	  , core      = __webpack_require__(/*! ./_core */ 230)
+	  , ctx       = __webpack_require__(/*! ./_ctx */ 231)
+	  , hide      = __webpack_require__(/*! ./_hide */ 233)
+	  , PROTOTYPE = 'prototype';
+	
+	var $export = function(type, name, source){
+	  var IS_FORCED = type & $export.F
+	    , IS_GLOBAL = type & $export.G
+	    , IS_STATIC = type & $export.S
+	    , IS_PROTO  = type & $export.P
+	    , IS_BIND   = type & $export.B
+	    , IS_WRAP   = type & $export.W
+	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
+	    , expProto  = exports[PROTOTYPE]
+	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
+	    , key, own, out;
+	  if(IS_GLOBAL)source = name;
+	  for(key in source){
+	    // contains in native
+	    own = !IS_FORCED && target && target[key] !== undefined;
+	    if(own && key in exports)continue;
+	    // export native or passed
+	    out = own ? target[key] : source[key];
+	    // prevent global pollution for namespaces
+	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
+	    // bind timers to global for call from export context
+	    : IS_BIND && own ? ctx(out, global)
+	    // wrap global constructors for prevent change them in library
+	    : IS_WRAP && target[key] == out ? (function(C){
+	      var F = function(a, b, c){
+	        if(this instanceof C){
+	          switch(arguments.length){
+	            case 0: return new C;
+	            case 1: return new C(a);
+	            case 2: return new C(a, b);
+	          } return new C(a, b, c);
+	        } return C.apply(this, arguments);
+	      };
+	      F[PROTOTYPE] = C[PROTOTYPE];
+	      return F;
+	    // make static versions for prototype methods
+	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
+	    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
+	    if(IS_PROTO){
+	      (exports.virtual || (exports.virtual = {}))[key] = out;
+	      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
+	      if(type & $export.R && expProto && !expProto[key])hide(expProto, key, out);
+	    }
+	  }
+	};
+	// type bitmap
+	$export.F = 1;   // forced
+	$export.G = 2;   // global
+	$export.S = 4;   // static
+	$export.P = 8;   // proto
+	$export.B = 16;  // bind
+	$export.W = 32;  // wrap
+	$export.U = 64;  // safe
+	$export.R = 128; // real proto method for `library` 
+	module.exports = $export;
+
+/***/ },
+/* 230 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_core.js ***!
+  \************************************************************/
+/***/ function(module, exports) {
+
+	var core = module.exports = {version: '2.4.0'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ },
+/* 231 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_ctx.js ***!
+  \***********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// optional / simple context binding
+	var aFunction = __webpack_require__(/*! ./_a-function */ 232);
+	module.exports = function(fn, that, length){
+	  aFunction(fn);
+	  if(that === undefined)return fn;
+	  switch(length){
+	    case 1: return function(a){
+	      return fn.call(that, a);
+	    };
+	    case 2: return function(a, b){
+	      return fn.call(that, a, b);
+	    };
+	    case 3: return function(a, b, c){
+	      return fn.call(that, a, b, c);
+	    };
+	  }
+	  return function(/* ...args */){
+	    return fn.apply(that, arguments);
+	  };
+	};
+
+/***/ },
+/* 232 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_a-function.js ***!
+  \******************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
+	  return it;
+	};
+
+/***/ },
+/* 233 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_hide.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var dP         = __webpack_require__(/*! ./_object-dp */ 234)
+	  , createDesc = __webpack_require__(/*! ./_property-desc */ 242);
+	module.exports = __webpack_require__(/*! ./_descriptors */ 238) ? function(object, key, value){
+	  return dP.f(object, key, createDesc(1, value));
+	} : function(object, key, value){
+	  object[key] = value;
+	  return object;
+	};
+
+/***/ },
+/* 234 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-dp.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject       = __webpack_require__(/*! ./_an-object */ 235)
+	  , IE8_DOM_DEFINE = __webpack_require__(/*! ./_ie8-dom-define */ 237)
+	  , toPrimitive    = __webpack_require__(/*! ./_to-primitive */ 241)
+	  , dP             = Object.defineProperty;
+	
+	exports.f = __webpack_require__(/*! ./_descriptors */ 238) ? Object.defineProperty : function defineProperty(O, P, Attributes){
+	  anObject(O);
+	  P = toPrimitive(P, true);
+	  anObject(Attributes);
+	  if(IE8_DOM_DEFINE)try {
+	    return dP(O, P, Attributes);
+	  } catch(e){ /* empty */ }
+	  if('get' in Attributes || 'set' in Attributes)throw TypeError('Accessors not supported!');
+	  if('value' in Attributes)O[P] = Attributes.value;
+	  return O;
+	};
+
+/***/ },
+/* 235 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_an-object.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(/*! ./_is-object */ 236);
+	module.exports = function(it){
+	  if(!isObject(it))throw TypeError(it + ' is not an object!');
+	  return it;
+	};
+
+/***/ },
+/* 236 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_is-object.js ***!
+  \*****************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(it){
+	  return typeof it === 'object' ? it !== null : typeof it === 'function';
+	};
+
+/***/ },
+/* 237 */
+/*!**********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_ie8-dom-define.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = !__webpack_require__(/*! ./_descriptors */ 238) && !__webpack_require__(/*! ./_fails */ 239)(function(){
+	  return Object.defineProperty(__webpack_require__(/*! ./_dom-create */ 240)('div'), 'a', {get: function(){ return 7; }}).a != 7;
+	});
+
+/***/ },
+/* 238 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_descriptors.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// Thank's IE8 for his funny defineProperty
+	module.exports = !__webpack_require__(/*! ./_fails */ 239)(function(){
+	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
+	});
+
+/***/ },
+/* 239 */
+/*!*************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_fails.js ***!
+  \*************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(exec){
+	  try {
+	    return !!exec();
+	  } catch(e){
+	    return true;
+	  }
+	};
+
+/***/ },
+/* 240 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_dom-create.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(/*! ./_is-object */ 236)
+	  , document = __webpack_require__(/*! ./_global */ 225).document
+	  // in old IE typeof document.createElement is 'object'
+	  , is = isObject(document) && isObject(document.createElement);
+	module.exports = function(it){
+	  return is ? document.createElement(it) : {};
+	};
+
+/***/ },
+/* 241 */
+/*!********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_to-primitive.js ***!
+  \********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.1.1 ToPrimitive(input [, PreferredType])
+	var isObject = __webpack_require__(/*! ./_is-object */ 236);
+	// instead of the ES6 spec version, we didn't implement @@toPrimitive case
+	// and the second argument - flag - preferred type is a string
+	module.exports = function(it, S){
+	  if(!isObject(it))return it;
+	  var fn, val;
+	  if(S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+	  if(typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it)))return val;
+	  if(!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it)))return val;
+	  throw TypeError("Can't convert object to primitive value");
+	};
+
+/***/ },
+/* 242 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_property-desc.js ***!
+  \*********************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(bitmap, value){
+	  return {
+	    enumerable  : !(bitmap & 1),
+	    configurable: !(bitmap & 2),
+	    writable    : !(bitmap & 4),
+	    value       : value
+	  };
+	};
+
+/***/ },
+/* 243 */
+/*!********************************************!*\
+  !*** ./~/babel-runtime/helpers/extends.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _assign = __webpack_require__(/*! ../core-js/object/assign */ 244);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = _assign2.default || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];
+	
+	    for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }
+	
+	  return target;
+	};
+
+/***/ },
+/* 244 */
+/*!**************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/assign.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/assign */ 245), __esModule: true };
+
+/***/ },
+/* 245 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/assign.js ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.assign */ 246);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Object.assign;
+
+/***/ },
+/* 246 */
+/*!************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.assign.js ***!
+  \************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.3.1 Object.assign(target, source)
+	var $export = __webpack_require__(/*! ./_export */ 229);
+	
+	$export($export.S + $export.F, 'Object', {assign: __webpack_require__(/*! ./_object-assign */ 247)});
+
+/***/ },
+/* 247 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-assign.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	// 19.1.2.1 Object.assign(target, source, ...)
+	var getKeys  = __webpack_require__(/*! ./_object-keys */ 213)
+	  , gOPS     = __webpack_require__(/*! ./_object-gops */ 248)
+	  , pIE      = __webpack_require__(/*! ./_object-pie */ 249)
+	  , toObject = __webpack_require__(/*! ./_to-object */ 211)
+	  , IObject  = __webpack_require__(/*! ./_iobject */ 217)
+	  , $assign  = Object.assign;
+	
+	// should work with symbols and should have deterministic property order (V8 bug)
+	module.exports = !$assign || __webpack_require__(/*! ./_fails */ 239)(function(){
+	  var A = {}
+	    , B = {}
+	    , S = Symbol()
+	    , K = 'abcdefghijklmnopqrst';
+	  A[S] = 7;
+	  K.split('').forEach(function(k){ B[k] = k; });
+	  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
+	}) ? function assign(target, source){ // eslint-disable-line no-unused-vars
+	  var T     = toObject(target)
+	    , aLen  = arguments.length
+	    , index = 1
+	    , getSymbols = gOPS.f
+	    , isEnum     = pIE.f;
+	  while(aLen > index){
+	    var S      = IObject(arguments[index++])
+	      , keys   = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S)
+	      , length = keys.length
+	      , j      = 0
+	      , key;
+	    while(length > j)if(isEnum.call(S, key = keys[j++]))T[key] = S[key];
+	  } return T;
+	} : $assign;
+
+/***/ },
+/* 248 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-gops.js ***!
+  \*******************************************************************/
+/***/ function(module, exports) {
+
+	exports.f = Object.getOwnPropertySymbols;
+
+/***/ },
+/* 249 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-pie.js ***!
+  \******************************************************************/
+/***/ function(module, exports) {
+
+	exports.f = {}.propertyIsEnumerable;
+
+/***/ },
+/* 250 */
+/*!*************************************************!*\
+  !*** ./~/babel-runtime/core-js/get-iterator.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/get-iterator */ 251), __esModule: true };
+
+/***/ },
+/* 251 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/get-iterator.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../modules/web.dom.iterable */ 252);
+	__webpack_require__(/*! ../modules/es6.string.iterator */ 267);
+	module.exports = __webpack_require__(/*! ../modules/core.get-iterator */ 269);
+
+/***/ },
+/* 252 */
+/*!***********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/web.dom.iterable.js ***!
+  \***********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ./es6.array.iterator */ 253);
+	var global        = __webpack_require__(/*! ./_global */ 225)
+	  , hide          = __webpack_require__(/*! ./_hide */ 233)
+	  , Iterators     = __webpack_require__(/*! ./_iterators */ 256)
+	  , TO_STRING_TAG = __webpack_require__(/*! ./_wks */ 265)('toStringTag');
+	
+	for(var collections = ['NodeList', 'DOMTokenList', 'MediaList', 'StyleSheetList', 'CSSRuleList'], i = 0; i < 5; i++){
+	  var NAME       = collections[i]
+	    , Collection = global[NAME]
+	    , proto      = Collection && Collection.prototype;
+	  if(proto && !proto[TO_STRING_TAG])hide(proto, TO_STRING_TAG, NAME);
+	  Iterators[NAME] = Iterators.Array;
+	}
+
+/***/ },
+/* 253 */
+/*!*************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.array.iterator.js ***!
+  \*************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var addToUnscopables = __webpack_require__(/*! ./_add-to-unscopables */ 254)
+	  , step             = __webpack_require__(/*! ./_iter-step */ 255)
+	  , Iterators        = __webpack_require__(/*! ./_iterators */ 256)
+	  , toIObject        = __webpack_require__(/*! ./_to-iobject */ 216);
+	
+	// 22.1.3.4 Array.prototype.entries()
+	// 22.1.3.13 Array.prototype.keys()
+	// 22.1.3.29 Array.prototype.values()
+	// 22.1.3.30 Array.prototype[@@iterator]()
+	module.exports = __webpack_require__(/*! ./_iter-define */ 257)(Array, 'Array', function(iterated, kind){
+	  this._t = toIObject(iterated); // target
+	  this._i = 0;                   // next index
+	  this._k = kind;                // kind
+	// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+	}, function(){
+	  var O     = this._t
+	    , kind  = this._k
+	    , index = this._i++;
+	  if(!O || index >= O.length){
+	    this._t = undefined;
+	    return step(1);
+	  }
+	  if(kind == 'keys'  )return step(0, index);
+	  if(kind == 'values')return step(0, O[index]);
+	  return step(0, [index, O[index]]);
+	}, 'values');
+	
+	// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+	Iterators.Arguments = Iterators.Array;
+	
+	addToUnscopables('keys');
+	addToUnscopables('values');
+	addToUnscopables('entries');
+
+/***/ },
+/* 254 */
+/*!**************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_add-to-unscopables.js ***!
+  \**************************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(){ /* empty */ };
+
+/***/ },
+/* 255 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iter-step.js ***!
+  \*****************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(done, value){
+	  return {value: value, done: !!done};
+	};
+
+/***/ },
+/* 256 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iterators.js ***!
+  \*****************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = {};
+
+/***/ },
+/* 257 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iter-define.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var LIBRARY        = __webpack_require__(/*! ./_library */ 258)
+	  , $export        = __webpack_require__(/*! ./_export */ 229)
+	  , redefine       = __webpack_require__(/*! ./_redefine */ 259)
+	  , hide           = __webpack_require__(/*! ./_hide */ 233)
+	  , has            = __webpack_require__(/*! ./_has */ 215)
+	  , Iterators      = __webpack_require__(/*! ./_iterators */ 256)
+	  , $iterCreate    = __webpack_require__(/*! ./_iter-create */ 260)
+	  , setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ 264)
+	  , getPrototypeOf = __webpack_require__(/*! ./_object-gpo */ 266)
+	  , ITERATOR       = __webpack_require__(/*! ./_wks */ 265)('iterator')
+	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+	  , FF_ITERATOR    = '@@iterator'
+	  , KEYS           = 'keys'
+	  , VALUES         = 'values';
+	
+	var returnThis = function(){ return this; };
+	
+	module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+	  $iterCreate(Constructor, NAME, next);
+	  var getMethod = function(kind){
+	    if(!BUGGY && kind in proto)return proto[kind];
+	    switch(kind){
+	      case KEYS: return function keys(){ return new Constructor(this, kind); };
+	      case VALUES: return function values(){ return new Constructor(this, kind); };
+	    } return function entries(){ return new Constructor(this, kind); };
+	  };
+	  var TAG        = NAME + ' Iterator'
+	    , DEF_VALUES = DEFAULT == VALUES
+	    , VALUES_BUG = false
+	    , proto      = Base.prototype
+	    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+	    , $default   = $native || getMethod(DEFAULT)
+	    , $entries   = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined
+	    , $anyNative = NAME == 'Array' ? proto.entries || $native : $native
+	    , methods, key, IteratorPrototype;
+	  // Fix native
+	  if($anyNative){
+	    IteratorPrototype = getPrototypeOf($anyNative.call(new Base));
+	    if(IteratorPrototype !== Object.prototype){
+	      // Set @@toStringTag to native iterators
+	      setToStringTag(IteratorPrototype, TAG, true);
+	      // fix for some old engines
+	      if(!LIBRARY && !has(IteratorPrototype, ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+	    }
+	  }
+	  // fix Array#{values, @@iterator}.name in V8 / FF
+	  if(DEF_VALUES && $native && $native.name !== VALUES){
+	    VALUES_BUG = true;
+	    $default = function values(){ return $native.call(this); };
+	  }
+	  // Define iterator
+	  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+	    hide(proto, ITERATOR, $default);
+	  }
+	  // Plug for library
+	  Iterators[NAME] = $default;
+	  Iterators[TAG]  = returnThis;
+	  if(DEFAULT){
+	    methods = {
+	      values:  DEF_VALUES ? $default : getMethod(VALUES),
+	      keys:    IS_SET     ? $default : getMethod(KEYS),
+	      entries: $entries
+	    };
+	    if(FORCED)for(key in methods){
+	      if(!(key in proto))redefine(proto, key, methods[key]);
+	    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+	  }
+	  return methods;
+	};
+
+/***/ },
+/* 258 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_library.js ***!
+  \***************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = true;
+
+/***/ },
+/* 259 */
+/*!****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_redefine.js ***!
+  \****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(/*! ./_hide */ 233);
+
+/***/ },
+/* 260 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iter-create.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var create         = __webpack_require__(/*! ./_object-create */ 261)
+	  , descriptor     = __webpack_require__(/*! ./_property-desc */ 242)
+	  , setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ 264)
+	  , IteratorPrototype = {};
+	
+	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+	__webpack_require__(/*! ./_hide */ 233)(IteratorPrototype, __webpack_require__(/*! ./_wks */ 265)('iterator'), function(){ return this; });
+	
+	module.exports = function(Constructor, NAME, next){
+	  Constructor.prototype = create(IteratorPrototype, {next: descriptor(1, next)});
+	  setToStringTag(Constructor, NAME + ' Iterator');
+	};
+
+/***/ },
+/* 261 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-create.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	var anObject    = __webpack_require__(/*! ./_an-object */ 235)
+	  , dPs         = __webpack_require__(/*! ./_object-dps */ 262)
+	  , enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ 227)
+	  , IE_PROTO    = __webpack_require__(/*! ./_shared-key */ 223)('IE_PROTO')
+	  , Empty       = function(){ /* empty */ }
+	  , PROTOTYPE   = 'prototype';
+	
+	// Create object with fake `null` prototype: use iframe Object with cleared prototype
+	var createDict = function(){
+	  // Thrash, waste and sodomy: IE GC bug
+	  var iframe = __webpack_require__(/*! ./_dom-create */ 240)('iframe')
+	    , i      = enumBugKeys.length
+	    , lt     = '<'
+	    , gt     = '>'
+	    , iframeDocument;
+	  iframe.style.display = 'none';
+	  __webpack_require__(/*! ./_html */ 263).appendChild(iframe);
+	  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
+	  // createDict = iframe.contentWindow.Object;
+	  // html.removeChild(iframe);
+	  iframeDocument = iframe.contentWindow.document;
+	  iframeDocument.open();
+	  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
+	  iframeDocument.close();
+	  createDict = iframeDocument.F;
+	  while(i--)delete createDict[PROTOTYPE][enumBugKeys[i]];
+	  return createDict();
+	};
+	
+	module.exports = Object.create || function create(O, Properties){
+	  var result;
+	  if(O !== null){
+	    Empty[PROTOTYPE] = anObject(O);
+	    result = new Empty;
+	    Empty[PROTOTYPE] = null;
+	    // add "__proto__" for Object.getPrototypeOf polyfill
+	    result[IE_PROTO] = O;
+	  } else result = createDict();
+	  return Properties === undefined ? result : dPs(result, Properties);
+	};
+
+
+/***/ },
+/* 262 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-dps.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var dP       = __webpack_require__(/*! ./_object-dp */ 234)
+	  , anObject = __webpack_require__(/*! ./_an-object */ 235)
+	  , getKeys  = __webpack_require__(/*! ./_object-keys */ 213);
+	
+	module.exports = __webpack_require__(/*! ./_descriptors */ 238) ? Object.defineProperties : function defineProperties(O, Properties){
+	  anObject(O);
+	  var keys   = getKeys(Properties)
+	    , length = keys.length
+	    , i = 0
+	    , P;
+	  while(length > i)dP.f(O, P = keys[i++], Properties[P]);
+	  return O;
+	};
+
+/***/ },
+/* 263 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_html.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(/*! ./_global */ 225).document && document.documentElement;
+
+/***/ },
+/* 264 */
+/*!*************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_set-to-string-tag.js ***!
+  \*************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var def = __webpack_require__(/*! ./_object-dp */ 234).f
+	  , has = __webpack_require__(/*! ./_has */ 215)
+	  , TAG = __webpack_require__(/*! ./_wks */ 265)('toStringTag');
+	
+	module.exports = function(it, tag, stat){
+	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
+	};
+
+/***/ },
+/* 265 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_wks.js ***!
+  \***********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var store      = __webpack_require__(/*! ./_shared */ 224)('wks')
+	  , uid        = __webpack_require__(/*! ./_uid */ 226)
+	  , Symbol     = __webpack_require__(/*! ./_global */ 225).Symbol
+	  , USE_SYMBOL = typeof Symbol == 'function';
+	
+	var $exports = module.exports = function(name){
+	  return store[name] || (store[name] =
+	    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
+	};
+	
+	$exports.store = store;
+
+/***/ },
+/* 266 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-gpo.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
+	var has         = __webpack_require__(/*! ./_has */ 215)
+	  , toObject    = __webpack_require__(/*! ./_to-object */ 211)
+	  , IE_PROTO    = __webpack_require__(/*! ./_shared-key */ 223)('IE_PROTO')
+	  , ObjectProto = Object.prototype;
+	
+	module.exports = Object.getPrototypeOf || function(O){
+	  O = toObject(O);
+	  if(has(O, IE_PROTO))return O[IE_PROTO];
+	  if(typeof O.constructor == 'function' && O instanceof O.constructor){
+	    return O.constructor.prototype;
+	  } return O instanceof Object ? ObjectProto : null;
+	};
+
+/***/ },
+/* 267 */
+/*!**************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.string.iterator.js ***!
+  \**************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var $at  = __webpack_require__(/*! ./_string-at */ 268)(true);
+	
+	// 21.1.3.27 String.prototype[@@iterator]()
+	__webpack_require__(/*! ./_iter-define */ 257)(String, 'String', function(iterated){
+	  this._t = String(iterated); // target
+	  this._i = 0;                // next index
+	// 21.1.5.2.1 %StringIteratorPrototype%.next()
+	}, function(){
+	  var O     = this._t
+	    , index = this._i
+	    , point;
+	  if(index >= O.length)return {value: undefined, done: true};
+	  point = $at(O, index);
+	  this._i += point.length;
+	  return {value: point, done: false};
+	});
+
+/***/ },
+/* 268 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_string-at.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(/*! ./_to-integer */ 221)
+	  , defined   = __webpack_require__(/*! ./_defined */ 212);
+	// true  -> String#at
+	// false -> String#codePointAt
+	module.exports = function(TO_STRING){
+	  return function(that, pos){
+	    var s = String(defined(that))
+	      , i = toInteger(pos)
+	      , l = s.length
+	      , a, b;
+	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+	    a = s.charCodeAt(i);
+	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+	      ? TO_STRING ? s.charAt(i) : a
+	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+	  };
+	};
+
+/***/ },
+/* 269 */
+/*!************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/core.get-iterator.js ***!
+  \************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject = __webpack_require__(/*! ./_an-object */ 235)
+	  , get      = __webpack_require__(/*! ./core.get-iterator-method */ 270);
+	module.exports = __webpack_require__(/*! ./_core */ 230).getIterator = function(it){
+	  var iterFn = get(it);
+	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+	  return anObject(iterFn.call(it));
+	};
+
+/***/ },
+/* 270 */
+/*!*******************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/core.get-iterator-method.js ***!
+  \*******************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(/*! ./_classof */ 271)
+	  , ITERATOR  = __webpack_require__(/*! ./_wks */ 265)('iterator')
+	  , Iterators = __webpack_require__(/*! ./_iterators */ 256);
+	module.exports = __webpack_require__(/*! ./_core */ 230).getIteratorMethod = function(it){
+	  if(it != undefined)return it[ITERATOR]
+	    || it['@@iterator']
+	    || Iterators[classof(it)];
+	};
+
+/***/ },
+/* 271 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_classof.js ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// getting tag from 19.1.3.6 Object.prototype.toString()
+	var cof = __webpack_require__(/*! ./_cof */ 218)
+	  , TAG = __webpack_require__(/*! ./_wks */ 265)('toStringTag')
+	  // ES3 wrong here
+	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+	
+	// fallback for IE11 Script Access Denied error
+	var tryGet = function(it, key){
+	  try {
+	    return it[key];
+	  } catch(e){ /* empty */ }
+	};
+	
+	module.exports = function(it){
+	  var O, T, B;
+	  return it === undefined ? 'Undefined' : it === null ? 'Null'
+	    // @@toStringTag case
+	    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
+	    // builtinTag case
+	    : ARG ? cof(O)
+	    // ES3 arguments fallback
+	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+	};
+
+/***/ },
+/* 272 */
+/*!******************************************************!*\
+  !*** ./~/babel-runtime/helpers/toConsumableArray.js ***!
+  \******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _from = __webpack_require__(/*! ../core-js/array/from */ 273);
+	
+	var _from2 = _interopRequireDefault(_from);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (arr) {
+	  if (Array.isArray(arr)) {
+	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	      arr2[i] = arr[i];
+	    }
+	
+	    return arr2;
+	  } else {
+	    return (0, _from2.default)(arr);
+	  }
+	};
+
+/***/ },
+/* 273 */
+/*!***********************************************!*\
+  !*** ./~/babel-runtime/core-js/array/from.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/array/from */ 274), __esModule: true };
+
+/***/ },
+/* 274 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/array/from.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.string.iterator */ 267);
+	__webpack_require__(/*! ../../modules/es6.array.from */ 275);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Array.from;
+
+/***/ },
+/* 275 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.array.from.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var ctx            = __webpack_require__(/*! ./_ctx */ 231)
+	  , $export        = __webpack_require__(/*! ./_export */ 229)
+	  , toObject       = __webpack_require__(/*! ./_to-object */ 211)
+	  , call           = __webpack_require__(/*! ./_iter-call */ 276)
+	  , isArrayIter    = __webpack_require__(/*! ./_is-array-iter */ 277)
+	  , toLength       = __webpack_require__(/*! ./_to-length */ 220)
+	  , createProperty = __webpack_require__(/*! ./_create-property */ 278)
+	  , getIterFn      = __webpack_require__(/*! ./core.get-iterator-method */ 270);
+	
+	$export($export.S + $export.F * !__webpack_require__(/*! ./_iter-detect */ 279)(function(iter){ Array.from(iter); }), 'Array', {
+	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
+	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
+	    var O       = toObject(arrayLike)
+	      , C       = typeof this == 'function' ? this : Array
+	      , aLen    = arguments.length
+	      , mapfn   = aLen > 1 ? arguments[1] : undefined
+	      , mapping = mapfn !== undefined
+	      , index   = 0
+	      , iterFn  = getIterFn(O)
+	      , length, result, step, iterator;
+	    if(mapping)mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
+	    // if object isn't iterable or it's array with default iterator - use simple case
+	    if(iterFn != undefined && !(C == Array && isArrayIter(iterFn))){
+	      for(iterator = iterFn.call(O), result = new C; !(step = iterator.next()).done; index++){
+	        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
+	      }
+	    } else {
+	      length = toLength(O.length);
+	      for(result = new C(length); length > index; index++){
+	        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
+	      }
+	    }
+	    result.length = index;
+	    return result;
+	  }
+	});
+
+
+/***/ },
+/* 276 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iter-call.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// call something on iterator step with safe closing on error
+	var anObject = __webpack_require__(/*! ./_an-object */ 235);
+	module.exports = function(iterator, fn, value, entries){
+	  try {
+	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
+	  // 7.4.6 IteratorClose(iterator, completion)
+	  } catch(e){
+	    var ret = iterator['return'];
+	    if(ret !== undefined)anObject(ret.call(iterator));
+	    throw e;
+	  }
+	};
+
+/***/ },
+/* 277 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_is-array-iter.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// check on default Array iterator
+	var Iterators  = __webpack_require__(/*! ./_iterators */ 256)
+	  , ITERATOR   = __webpack_require__(/*! ./_wks */ 265)('iterator')
+	  , ArrayProto = Array.prototype;
+	
+	module.exports = function(it){
+	  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
+	};
+
+/***/ },
+/* 278 */
+/*!***********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_create-property.js ***!
+  \***********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var $defineProperty = __webpack_require__(/*! ./_object-dp */ 234)
+	  , createDesc      = __webpack_require__(/*! ./_property-desc */ 242);
+	
+	module.exports = function(object, index, value){
+	  if(index in object)$defineProperty.f(object, index, createDesc(0, value));
+	  else object[index] = value;
+	};
+
+/***/ },
+/* 279 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_iter-detect.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var ITERATOR     = __webpack_require__(/*! ./_wks */ 265)('iterator')
+	  , SAFE_CLOSING = false;
+	
+	try {
+	  var riter = [7][ITERATOR]();
+	  riter['return'] = function(){ SAFE_CLOSING = true; };
+	  Array.from(riter, function(){ throw 2; });
+	} catch(e){ /* empty */ }
+	
+	module.exports = function(exec, skipClosing){
+	  if(!skipClosing && !SAFE_CLOSING)return false;
+	  var safe = false;
+	  try {
+	    var arr  = [7]
+	      , iter = arr[ITERATOR]();
+	    iter.next = function(){ return {done: safe = true}; };
+	    arr[ITERATOR] = function(){ return iter; };
+	    exec(arr);
+	  } catch(e){ /* empty */ }
+	  return safe;
+	};
+
+/***/ },
+/* 280 */
+/*!****************************************!*\
+  !*** ./~/babel-runtime/core-js/set.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/set */ 281), __esModule: true };
+
+/***/ },
+/* 281 */
+/*!*****************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/set.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../modules/es6.object.to-string */ 282);
+	__webpack_require__(/*! ../modules/es6.string.iterator */ 267);
+	__webpack_require__(/*! ../modules/web.dom.iterable */ 252);
+	__webpack_require__(/*! ../modules/es6.set */ 283);
+	__webpack_require__(/*! ../modules/es7.set.to-json */ 295);
+	module.exports = __webpack_require__(/*! ../modules/_core */ 230).Set;
+
+/***/ },
+/* 282 */
+/*!***************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.to-string.js ***!
+  \***************************************************************************/
+/***/ function(module, exports) {
+
+
+
+/***/ },
+/* 283 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.set.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var strong = __webpack_require__(/*! ./_collection-strong */ 284);
+	
+	// 23.2 Set Objects
+	module.exports = __webpack_require__(/*! ./_collection */ 290)('Set', function(get){
+	  return function Set(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+	}, {
+	  // 23.2.3.1 Set.prototype.add(value)
+	  add: function add(value){
+	    return strong.def(this, value = value === 0 ? 0 : value, value);
+	  }
+	}, strong);
+
+/***/ },
+/* 284 */
+/*!*************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_collection-strong.js ***!
+  \*************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var dP          = __webpack_require__(/*! ./_object-dp */ 234).f
+	  , create      = __webpack_require__(/*! ./_object-create */ 261)
+	  , redefineAll = __webpack_require__(/*! ./_redefine-all */ 285)
+	  , ctx         = __webpack_require__(/*! ./_ctx */ 231)
+	  , anInstance  = __webpack_require__(/*! ./_an-instance */ 286)
+	  , defined     = __webpack_require__(/*! ./_defined */ 212)
+	  , forOf       = __webpack_require__(/*! ./_for-of */ 287)
+	  , $iterDefine = __webpack_require__(/*! ./_iter-define */ 257)
+	  , step        = __webpack_require__(/*! ./_iter-step */ 255)
+	  , setSpecies  = __webpack_require__(/*! ./_set-species */ 288)
+	  , DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ 238)
+	  , fastKey     = __webpack_require__(/*! ./_meta */ 289).fastKey
+	  , SIZE        = DESCRIPTORS ? '_s' : 'size';
+	
+	var getEntry = function(that, key){
+	  // fast case
+	  var index = fastKey(key), entry;
+	  if(index !== 'F')return that._i[index];
+	  // frozen object case
+	  for(entry = that._f; entry; entry = entry.n){
+	    if(entry.k == key)return entry;
+	  }
+	};
+	
+	module.exports = {
+	  getConstructor: function(wrapper, NAME, IS_MAP, ADDER){
+	    var C = wrapper(function(that, iterable){
+	      anInstance(that, C, NAME, '_i');
+	      that._i = create(null); // index
+	      that._f = undefined;    // first entry
+	      that._l = undefined;    // last entry
+	      that[SIZE] = 0;         // size
+	      if(iterable != undefined)forOf(iterable, IS_MAP, that[ADDER], that);
+	    });
+	    redefineAll(C.prototype, {
+	      // 23.1.3.1 Map.prototype.clear()
+	      // 23.2.3.2 Set.prototype.clear()
+	      clear: function clear(){
+	        for(var that = this, data = that._i, entry = that._f; entry; entry = entry.n){
+	          entry.r = true;
+	          if(entry.p)entry.p = entry.p.n = undefined;
+	          delete data[entry.i];
+	        }
+	        that._f = that._l = undefined;
+	        that[SIZE] = 0;
+	      },
+	      // 23.1.3.3 Map.prototype.delete(key)
+	      // 23.2.3.4 Set.prototype.delete(value)
+	      'delete': function(key){
+	        var that  = this
+	          , entry = getEntry(that, key);
+	        if(entry){
+	          var next = entry.n
+	            , prev = entry.p;
+	          delete that._i[entry.i];
+	          entry.r = true;
+	          if(prev)prev.n = next;
+	          if(next)next.p = prev;
+	          if(that._f == entry)that._f = next;
+	          if(that._l == entry)that._l = prev;
+	          that[SIZE]--;
+	        } return !!entry;
+	      },
+	      // 23.2.3.6 Set.prototype.forEach(callbackfn, thisArg = undefined)
+	      // 23.1.3.5 Map.prototype.forEach(callbackfn, thisArg = undefined)
+	      forEach: function forEach(callbackfn /*, that = undefined */){
+	        anInstance(this, C, 'forEach');
+	        var f = ctx(callbackfn, arguments.length > 1 ? arguments[1] : undefined, 3)
+	          , entry;
+	        while(entry = entry ? entry.n : this._f){
+	          f(entry.v, entry.k, this);
+	          // revert to the last existing entry
+	          while(entry && entry.r)entry = entry.p;
+	        }
+	      },
+	      // 23.1.3.7 Map.prototype.has(key)
+	      // 23.2.3.7 Set.prototype.has(value)
+	      has: function has(key){
+	        return !!getEntry(this, key);
+	      }
+	    });
+	    if(DESCRIPTORS)dP(C.prototype, 'size', {
+	      get: function(){
+	        return defined(this[SIZE]);
+	      }
+	    });
+	    return C;
+	  },
+	  def: function(that, key, value){
+	    var entry = getEntry(that, key)
+	      , prev, index;
+	    // change existing entry
+	    if(entry){
+	      entry.v = value;
+	    // create new entry
+	    } else {
+	      that._l = entry = {
+	        i: index = fastKey(key, true), // <- index
+	        k: key,                        // <- key
+	        v: value,                      // <- value
+	        p: prev = that._l,             // <- previous entry
+	        n: undefined,                  // <- next entry
+	        r: false                       // <- removed
+	      };
+	      if(!that._f)that._f = entry;
+	      if(prev)prev.n = entry;
+	      that[SIZE]++;
+	      // add to index
+	      if(index !== 'F')that._i[index] = entry;
+	    } return that;
+	  },
+	  getEntry: getEntry,
+	  setStrong: function(C, NAME, IS_MAP){
+	    // add .keys, .values, .entries, [@@iterator]
+	    // 23.1.3.4, 23.1.3.8, 23.1.3.11, 23.1.3.12, 23.2.3.5, 23.2.3.8, 23.2.3.10, 23.2.3.11
+	    $iterDefine(C, NAME, function(iterated, kind){
+	      this._t = iterated;  // target
+	      this._k = kind;      // kind
+	      this._l = undefined; // previous
+	    }, function(){
+	      var that  = this
+	        , kind  = that._k
+	        , entry = that._l;
+	      // revert to the last existing entry
+	      while(entry && entry.r)entry = entry.p;
+	      // get next entry
+	      if(!that._t || !(that._l = entry = entry ? entry.n : that._t._f)){
+	        // or finish the iteration
+	        that._t = undefined;
+	        return step(1);
+	      }
+	      // return step by kind
+	      if(kind == 'keys'  )return step(0, entry.k);
+	      if(kind == 'values')return step(0, entry.v);
+	      return step(0, [entry.k, entry.v]);
+	    }, IS_MAP ? 'entries' : 'values' , !IS_MAP, true);
+	
+	    // add [@@species], 23.1.2.2, 23.2.2.2
+	    setSpecies(NAME);
+	  }
+	};
+
+/***/ },
+/* 285 */
+/*!********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_redefine-all.js ***!
+  \********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var hide = __webpack_require__(/*! ./_hide */ 233);
+	module.exports = function(target, src, safe){
+	  for(var key in src){
+	    if(safe && target[key])target[key] = src[key];
+	    else hide(target, key, src[key]);
+	  } return target;
+	};
+
+/***/ },
+/* 286 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_an-instance.js ***!
+  \*******************************************************************/
+/***/ function(module, exports) {
+
+	module.exports = function(it, Constructor, name, forbiddenField){
+	  if(!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)){
+	    throw TypeError(name + ': incorrect invocation!');
+	  } return it;
+	};
+
+/***/ },
+/* 287 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_for-of.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var ctx         = __webpack_require__(/*! ./_ctx */ 231)
+	  , call        = __webpack_require__(/*! ./_iter-call */ 276)
+	  , isArrayIter = __webpack_require__(/*! ./_is-array-iter */ 277)
+	  , anObject    = __webpack_require__(/*! ./_an-object */ 235)
+	  , toLength    = __webpack_require__(/*! ./_to-length */ 220)
+	  , getIterFn   = __webpack_require__(/*! ./core.get-iterator-method */ 270)
+	  , BREAK       = {}
+	  , RETURN      = {};
+	var exports = module.exports = function(iterable, entries, fn, that, ITERATOR){
+	  var iterFn = ITERATOR ? function(){ return iterable; } : getIterFn(iterable)
+	    , f      = ctx(fn, that, entries ? 2 : 1)
+	    , index  = 0
+	    , length, step, iterator, result;
+	  if(typeof iterFn != 'function')throw TypeError(iterable + ' is not iterable!');
+	  // fast case for arrays with default iterator
+	  if(isArrayIter(iterFn))for(length = toLength(iterable.length); length > index; index++){
+	    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
+	    if(result === BREAK || result === RETURN)return result;
+	  } else for(iterator = iterFn.call(iterable); !(step = iterator.next()).done; ){
+	    result = call(iterator, f, step.value, entries);
+	    if(result === BREAK || result === RETURN)return result;
+	  }
+	};
+	exports.BREAK  = BREAK;
+	exports.RETURN = RETURN;
+
+/***/ },
+/* 288 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_set-species.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var global      = __webpack_require__(/*! ./_global */ 225)
+	  , core        = __webpack_require__(/*! ./_core */ 230)
+	  , dP          = __webpack_require__(/*! ./_object-dp */ 234)
+	  , DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ 238)
+	  , SPECIES     = __webpack_require__(/*! ./_wks */ 265)('species');
+	
+	module.exports = function(KEY){
+	  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
+	  if(DESCRIPTORS && C && !C[SPECIES])dP.f(C, SPECIES, {
+	    configurable: true,
+	    get: function(){ return this; }
+	  });
+	};
+
+/***/ },
+/* 289 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_meta.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var META     = __webpack_require__(/*! ./_uid */ 226)('meta')
+	  , isObject = __webpack_require__(/*! ./_is-object */ 236)
+	  , has      = __webpack_require__(/*! ./_has */ 215)
+	  , setDesc  = __webpack_require__(/*! ./_object-dp */ 234).f
+	  , id       = 0;
+	var isExtensible = Object.isExtensible || function(){
+	  return true;
+	};
+	var FREEZE = !__webpack_require__(/*! ./_fails */ 239)(function(){
+	  return isExtensible(Object.preventExtensions({}));
+	});
+	var setMeta = function(it){
+	  setDesc(it, META, {value: {
+	    i: 'O' + ++id, // object ID
+	    w: {}          // weak collections IDs
+	  }});
+	};
+	var fastKey = function(it, create){
+	  // return primitive with prefix
+	  if(!isObject(it))return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
+	  if(!has(it, META)){
+	    // can't set metadata to uncaught frozen object
+	    if(!isExtensible(it))return 'F';
+	    // not necessary to add metadata
+	    if(!create)return 'E';
+	    // add missing metadata
+	    setMeta(it);
+	  // return object ID
+	  } return it[META].i;
+	};
+	var getWeak = function(it, create){
+	  if(!has(it, META)){
+	    // can't set metadata to uncaught frozen object
+	    if(!isExtensible(it))return true;
+	    // not necessary to add metadata
+	    if(!create)return false;
+	    // add missing metadata
+	    setMeta(it);
+	  // return hash weak collections IDs
+	  } return it[META].w;
+	};
+	// add metadata on freeze-family methods calling
+	var onFreeze = function(it){
+	  if(FREEZE && meta.NEED && isExtensible(it) && !has(it, META))setMeta(it);
+	  return it;
+	};
+	var meta = module.exports = {
+	  KEY:      META,
+	  NEED:     false,
+	  fastKey:  fastKey,
+	  getWeak:  getWeak,
+	  onFreeze: onFreeze
+	};
+
+/***/ },
+/* 290 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_collection.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var global         = __webpack_require__(/*! ./_global */ 225)
+	  , $export        = __webpack_require__(/*! ./_export */ 229)
+	  , meta           = __webpack_require__(/*! ./_meta */ 289)
+	  , fails          = __webpack_require__(/*! ./_fails */ 239)
+	  , hide           = __webpack_require__(/*! ./_hide */ 233)
+	  , redefineAll    = __webpack_require__(/*! ./_redefine-all */ 285)
+	  , forOf          = __webpack_require__(/*! ./_for-of */ 287)
+	  , anInstance     = __webpack_require__(/*! ./_an-instance */ 286)
+	  , isObject       = __webpack_require__(/*! ./_is-object */ 236)
+	  , setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ 264)
+	  , dP             = __webpack_require__(/*! ./_object-dp */ 234).f
+	  , each           = __webpack_require__(/*! ./_array-methods */ 291)(0)
+	  , DESCRIPTORS    = __webpack_require__(/*! ./_descriptors */ 238);
+	
+	module.exports = function(NAME, wrapper, methods, common, IS_MAP, IS_WEAK){
+	  var Base  = global[NAME]
+	    , C     = Base
+	    , ADDER = IS_MAP ? 'set' : 'add'
+	    , proto = C && C.prototype
+	    , O     = {};
+	  if(!DESCRIPTORS || typeof C != 'function' || !(IS_WEAK || proto.forEach && !fails(function(){
+	    new C().entries().next();
+	  }))){
+	    // create collection constructor
+	    C = common.getConstructor(wrapper, NAME, IS_MAP, ADDER);
+	    redefineAll(C.prototype, methods);
+	    meta.NEED = true;
+	  } else {
+	    C = wrapper(function(target, iterable){
+	      anInstance(target, C, NAME, '_c');
+	      target._c = new Base;
+	      if(iterable != undefined)forOf(iterable, IS_MAP, target[ADDER], target);
+	    });
+	    each('add,clear,delete,forEach,get,has,set,keys,values,entries,toJSON'.split(','),function(KEY){
+	      var IS_ADDER = KEY == 'add' || KEY == 'set';
+	      if(KEY in proto && !(IS_WEAK && KEY == 'clear'))hide(C.prototype, KEY, function(a, b){
+	        anInstance(this, C, KEY);
+	        if(!IS_ADDER && IS_WEAK && !isObject(a))return KEY == 'get' ? undefined : false;
+	        var result = this._c[KEY](a === 0 ? 0 : a, b);
+	        return IS_ADDER ? this : result;
+	      });
+	    });
+	    if('size' in proto)dP(C.prototype, 'size', {
+	      get: function(){
+	        return this._c.size;
+	      }
+	    });
+	  }
+	
+	  setToStringTag(C, NAME);
+	
+	  O[NAME] = C;
+	  $export($export.G + $export.W + $export.F, O);
+	
+	  if(!IS_WEAK)common.setStrong(C, NAME, IS_MAP);
+	
+	  return C;
+	};
+
+/***/ },
+/* 291 */
+/*!*********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_array-methods.js ***!
+  \*********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 0 -> Array#forEach
+	// 1 -> Array#map
+	// 2 -> Array#filter
+	// 3 -> Array#some
+	// 4 -> Array#every
+	// 5 -> Array#find
+	// 6 -> Array#findIndex
+	var ctx      = __webpack_require__(/*! ./_ctx */ 231)
+	  , IObject  = __webpack_require__(/*! ./_iobject */ 217)
+	  , toObject = __webpack_require__(/*! ./_to-object */ 211)
+	  , toLength = __webpack_require__(/*! ./_to-length */ 220)
+	  , asc      = __webpack_require__(/*! ./_array-species-create */ 292);
+	module.exports = function(TYPE, $create){
+	  var IS_MAP        = TYPE == 1
+	    , IS_FILTER     = TYPE == 2
+	    , IS_SOME       = TYPE == 3
+	    , IS_EVERY      = TYPE == 4
+	    , IS_FIND_INDEX = TYPE == 6
+	    , NO_HOLES      = TYPE == 5 || IS_FIND_INDEX
+	    , create        = $create || asc;
+	  return function($this, callbackfn, that){
+	    var O      = toObject($this)
+	      , self   = IObject(O)
+	      , f      = ctx(callbackfn, that, 3)
+	      , length = toLength(self.length)
+	      , index  = 0
+	      , result = IS_MAP ? create($this, length) : IS_FILTER ? create($this, 0) : undefined
+	      , val, res;
+	    for(;length > index; index++)if(NO_HOLES || index in self){
+	      val = self[index];
+	      res = f(val, index, O);
+	      if(TYPE){
+	        if(IS_MAP)result[index] = res;            // map
+	        else if(res)switch(TYPE){
+	          case 3: return true;                    // some
+	          case 5: return val;                     // find
+	          case 6: return index;                   // findIndex
+	          case 2: result.push(val);               // filter
+	        } else if(IS_EVERY)return false;          // every
+	      }
+	    }
+	    return IS_FIND_INDEX ? -1 : IS_SOME || IS_EVERY ? IS_EVERY : result;
+	  };
+	};
+
+/***/ },
+/* 292 */
+/*!****************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_array-species-create.js ***!
+  \****************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 9.4.2.3 ArraySpeciesCreate(originalArray, length)
+	var speciesConstructor = __webpack_require__(/*! ./_array-species-constructor */ 293);
+	
+	module.exports = function(original, length){
+	  return new (speciesConstructor(original))(length);
+	};
+
+/***/ },
+/* 293 */
+/*!*********************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_array-species-constructor.js ***!
+  \*********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var isObject = __webpack_require__(/*! ./_is-object */ 236)
+	  , isArray  = __webpack_require__(/*! ./_is-array */ 294)
+	  , SPECIES  = __webpack_require__(/*! ./_wks */ 265)('species');
+	
+	module.exports = function(original){
+	  var C;
+	  if(isArray(original)){
+	    C = original.constructor;
+	    // cross-realm fallback
+	    if(typeof C == 'function' && (C === Array || isArray(C.prototype)))C = undefined;
+	    if(isObject(C)){
+	      C = C[SPECIES];
+	      if(C === null)C = undefined;
+	    }
+	  } return C === undefined ? Array : C;
+	};
+
+/***/ },
+/* 294 */
+/*!****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_is-array.js ***!
+  \****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.2.2 IsArray(argument)
+	var cof = __webpack_require__(/*! ./_cof */ 218);
+	module.exports = Array.isArray || function isArray(arg){
+	  return cof(arg) == 'Array';
+	};
+
+/***/ },
+/* 295 */
+/*!**********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es7.set.to-json.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+	var $export  = __webpack_require__(/*! ./_export */ 229);
+	
+	$export($export.P + $export.R, 'Set', {toJSON: __webpack_require__(/*! ./_collection-to-json */ 296)('Set')});
+
+/***/ },
+/* 296 */
+/*!**************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_collection-to-json.js ***!
+  \**************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+	var classof = __webpack_require__(/*! ./_classof */ 271)
+	  , from    = __webpack_require__(/*! ./_array-from-iterable */ 297);
+	module.exports = function(NAME){
+	  return function toJSON(){
+	    if(classof(this) != NAME)throw TypeError(NAME + "#toJSON isn't generic");
+	    return from(this);
+	  };
+	};
+
+/***/ },
+/* 297 */
+/*!***************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_array-from-iterable.js ***!
+  \***************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var forOf = __webpack_require__(/*! ./_for-of */ 287);
+	
+	module.exports = function(iter, ITERATOR){
+	  var result = [];
+	  forOf(iter, false, result.push, result, ITERATOR);
+	  return result;
+	};
+
+
+/***/ },
+/* 298 */
+/*!*******************************!*\
+  !*** ./~/cashay/lib/utils.js ***!
+  \*******************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.without = exports.makeNamespaceString = exports.getVariables = exports.getStateVars = exports.teardownDocumentAST = exports.buildExecutionContext = exports.parse = exports.convertFragmentToInline = exports.checkMutationInSchema = exports.makeErrorFreeResponse = exports.shallowPlus1Clone = exports.clone = exports.isObject = exports.getRegularArgsKey = exports.ensureRootType = exports.ensureTypeFromNonNull = exports.UNSUBSCRIBED = exports.READY = exports.SUBSCRIBING = exports.COMPLETE = exports.LOADING = exports.AFTER = exports.BEFORE = exports.LAST = exports.FIRST = exports.REMOVE = exports.UPSERT = exports.UPDATE = exports.ADD = exports.FULL = exports.BACK = exports.FRONT = exports.NORM_DELIMITER = exports.DELIMITER = exports.CASHAY = exports.TYPENAME = undefined;
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _parser = __webpack_require__(/*! graphql/language/parser */ 353);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NON_NULL = _introspection.TypeKind.NON_NULL;
+	var TYPENAME = exports.TYPENAME = '__typename';
+	var CASHAY = exports.CASHAY = 'CASHAY';
+	var DELIMITER = exports.DELIMITER = '_';
+	var NORM_DELIMITER = exports.NORM_DELIMITER = '::';
+	
+	/* redux store array constants */
+	var FRONT = exports.FRONT = 'front';
+	var BACK = exports.BACK = 'back';
+	var FULL = exports.FULL = 'full';
+	
+	/* subscription handler names */
+	var ADD = exports.ADD = 'add';
+	var UPDATE = exports.UPDATE = 'update';
+	var UPSERT = exports.UPSERT = 'upsert';
+	var REMOVE = exports.REMOVE = 'remove';
+	
+	/* default pagination argsuments */
+	var FIRST = exports.FIRST = 'first';
+	var LAST = exports.LAST = 'last';
+	var BEFORE = exports.BEFORE = 'before';
+	var AFTER = exports.AFTER = 'after';
+	
+	/* status for queries */
+	var LOADING = exports.LOADING = 'loading';
+	var COMPLETE = exports.COMPLETE = 'complete';
+	
+	/* status for subscriptions */
+	var SUBSCRIBING = exports.SUBSCRIBING = 'subscribing';
+	var READY = exports.READY = 'ready';
+	var UNSUBSCRIBED = exports.UNSUBSCRIBED = 'unsubscribed';
+	
+	var ensureTypeFromNonNull = exports.ensureTypeFromNonNull = function ensureTypeFromNonNull(type) {
+	  return type.kind === NON_NULL ? type.ofType : type;
+	};
+	
+	var ensureRootType = exports.ensureRootType = function ensureRootType(type) {
+	  while (type.ofType) {
+	    type = type.ofType;
+	  }return type;
+	};
+	
+	var getRegularArgsKey = exports.getRegularArgsKey = function getRegularArgsKey(regularArgs) {
+	  return regularArgs && ((0, _keys2.default)(regularArgs).length ? (0, _stringify2.default)(regularArgs) : '');
+	};
+	
+	var isObject = exports.isObject = function isObject(val) {
+	  return val && (typeof val === 'undefined' ? 'undefined' : (0, _typeof3.default)(val)) === 'object';
+	};
+	
+	var clone = exports.clone = function clone(obj) {
+	  return JSON.parse((0, _stringify2.default)(obj));
+	};
+	
+	// export const scalarSafeClone = maybeObj => isObject(maybeObj) ? clone(maybeObj) : maybeObj;
+	
+	var shallowPlus1Clone = exports.shallowPlus1Clone = function shallowPlus1Clone(obj) {
+	  if (!isObject(obj)) return obj;
+	  var dataKeys = (0, _keys2.default)(obj);
+	  var newObj = {};
+	  for (var i = 0; i < dataKeys.length; i++) {
+	    var key = dataKeys[i];
+	    newObj[key] = (0, _extends3.default)({}, obj[key]);
+	  }
+	  return newObj;
+	};
+	
+	var makeErrorFreeResponse = exports.makeErrorFreeResponse = function makeErrorFreeResponse(cachedResponse) {
+	  var status = cachedResponse.status;
+	  var setVariables = cachedResponse.setVariables;
+	
+	  return {
+	    data: shallowPlus1Clone(cachedResponse.data),
+	    setVariables: setVariables,
+	    status: status
+	  };
+	};
+	
+	var checkMutationInSchema = exports.checkMutationInSchema = function checkMutationInSchema(rootMutation, mutationName) {
+	  var mutationSchema = rootMutation.fields[mutationName];
+	  if (!mutationSchema) {
+	    throw new Error('Invalid mutation: ' + mutationName + '.\n    Did you make a typo or forget to update your schema?');
+	  }
+	};
+	
+	var convertFragmentToInline = exports.convertFragmentToInline = function convertFragmentToInline(fragment) {
+	  delete fragment.name;
+	  fragment.kind = _kinds.INLINE_FRAGMENT;
+	  return fragment;
+	};
+	
+	var parse = exports.parse = function parse(graphQLString) {
+	  return (0, _parser.parse)(graphQLString, { noLocation: true, noSource: true });
+	};
+	
+	var buildExecutionContext = exports.buildExecutionContext = function buildExecutionContext(queryAST, params) {
+	  var clonedAST = clone(queryAST);
+	
+	  var _teardownDocumentAST = teardownDocumentAST(clonedAST.definitions);
+	
+	  var operation = _teardownDocumentAST.operation;
+	  var fragments = _teardownDocumentAST.fragments;
+	
+	  return (0, _extends3.default)({ operation: operation, fragments: fragments }, params);
+	};
+	
+	var teardownDocumentAST = exports.teardownDocumentAST = function teardownDocumentAST(astDefinitions) {
+	  var operation = void 0;
+	  var fragments = {};
+	  for (var i = 0; i < astDefinitions.length; i++) {
+	    var definition = astDefinitions[i];
+	    if (definition.kind === _kinds.OPERATION_DEFINITION) {
+	      if (operation) {
+	        throw new Error('Multiple operations not supported');
+	      }
+	      operation = definition;
+	    } else if (definition.kind === _kinds.FRAGMENT_DEFINITION) {
+	      fragments[definition.name.value] = definition;
+	    }
+	  }
+	  if (!operation) {
+	    throw new Error('Must provide an operation.');
+	  }
+	  return { operation: operation, fragments: fragments };
+	};
+	
+	/**
+	 * stateVars is the name for the variables stored in the redux state, which are the most current variables for an op.
+	 * @param {Object} cashayState the result of this.getState(), usually equivalent to store.getState().cashay
+	 * @param {Object} op the name of the container full of keys
+	 * @param {Object} key the key for the specified op, defaults to ''
+	 * */
+	var getStateVars = exports.getStateVars = function getStateVars(cashayState, op, key) {
+	  // explicitly return undefined so we can use default values in functions
+	  return cashayState.ops[op] && cashayState.ops[op][key] && cashayState.ops[op][key].variables || undefined;
+	};
+	
+	var getVariables = exports.getVariables = function getVariables() {
+	  var initialVariables = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var cashayState = arguments[1];
+	  var op = arguments[2];
+	  var key = arguments[3];
+	  var cachedResponse = arguments[4];
+	
+	  var stateVars = getStateVars(cashayState, op, key) || {};
+	  var newInitialVariables = resolveInitialVariables(cashayState, initialVariables, cachedResponse);
+	  // make the stateVars override the likely stale UD vars, but if the UD vars have something that used to be undefined, keep it
+	  return (0, _extends3.default)({}, newInitialVariables, stateVars);
+	};
+	
+	var resolveInitialVariables = function resolveInitialVariables(cashayState, initialVariables, cachedResponse) {
+	  var variableNames = (0, _keys2.default)(initialVariables);
+	  var newVariables = {};
+	  for (var i = 0; i < variableNames.length; i++) {
+	    var variableName = variableNames[i];
+	    var value = initialVariables[variableName];
+	    newVariables[variableName] = typeof value === 'function' ? safeValue(cachedResponse, value, cashayState) : value;
+	  }
+	  return newVariables;
+	};
+	
+	var safeValue = function safeValue(response, cb, cashayState) {
+	  return response && response.data && cb(response.data, cashayState);
+	};
+	
+	var makeNamespaceString = exports.makeNamespaceString = function makeNamespaceString(op, name) {
+	  var d = arguments.length <= 2 || arguments[2] === undefined ? DELIMITER : arguments[2];
+	  return '' + CASHAY + d + op + d + name;
+	};
+	
+	var without = exports.without = function without(obj, exclusions) {
+	  var objKeys = (0, _keys2.default)(obj);
+	  var newObj = {};
+	  for (var i = 0; i < objKeys.length; i++) {
+	    var key = objKeys[i];
+	    if (!exclusions.includes(key)) {
+	      newObj[key] = obj[key];
+	    }
+	  }
+	  return newObj;
+	};
+
+/***/ },
+/* 299 */
+/*!*******************************************!*\
+  !*** ./~/babel-runtime/helpers/typeof.js ***!
+  \*******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _iterator = __webpack_require__(/*! ../core-js/symbol/iterator */ 300);
+	
+	var _iterator2 = _interopRequireDefault(_iterator);
+	
+	var _symbol = __webpack_require__(/*! ../core-js/symbol */ 303);
+	
+	var _symbol2 = _interopRequireDefault(_symbol);
+	
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
+	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	} : function (obj) {
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	};
+
+/***/ },
+/* 300 */
+/*!****************************************************!*\
+  !*** ./~/babel-runtime/core-js/symbol/iterator.js ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol/iterator */ 301), __esModule: true };
+
+/***/ },
+/* 301 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/symbol/iterator.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.string.iterator */ 267);
+	__webpack_require__(/*! ../../modules/web.dom.iterable */ 252);
+	module.exports = __webpack_require__(/*! ../../modules/_wks-ext */ 302).f('iterator');
+
+/***/ },
+/* 302 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_wks-ext.js ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	exports.f = __webpack_require__(/*! ./_wks */ 265);
+
+/***/ },
+/* 303 */
+/*!*******************************************!*\
+  !*** ./~/babel-runtime/core-js/symbol.js ***!
+  \*******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol */ 304), __esModule: true };
+
+/***/ },
+/* 304 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/symbol/index.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.symbol */ 305);
+	__webpack_require__(/*! ../../modules/es6.object.to-string */ 282);
+	__webpack_require__(/*! ../../modules/es7.symbol.async-iterator */ 312);
+	__webpack_require__(/*! ../../modules/es7.symbol.observable */ 313);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Symbol;
+
+/***/ },
+/* 305 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.symbol.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	// ECMAScript 6 symbols shim
+	var global         = __webpack_require__(/*! ./_global */ 225)
+	  , has            = __webpack_require__(/*! ./_has */ 215)
+	  , DESCRIPTORS    = __webpack_require__(/*! ./_descriptors */ 238)
+	  , $export        = __webpack_require__(/*! ./_export */ 229)
+	  , redefine       = __webpack_require__(/*! ./_redefine */ 259)
+	  , META           = __webpack_require__(/*! ./_meta */ 289).KEY
+	  , $fails         = __webpack_require__(/*! ./_fails */ 239)
+	  , shared         = __webpack_require__(/*! ./_shared */ 224)
+	  , setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ 264)
+	  , uid            = __webpack_require__(/*! ./_uid */ 226)
+	  , wks            = __webpack_require__(/*! ./_wks */ 265)
+	  , wksExt         = __webpack_require__(/*! ./_wks-ext */ 302)
+	  , wksDefine      = __webpack_require__(/*! ./_wks-define */ 306)
+	  , keyOf          = __webpack_require__(/*! ./_keyof */ 307)
+	  , enumKeys       = __webpack_require__(/*! ./_enum-keys */ 308)
+	  , isArray        = __webpack_require__(/*! ./_is-array */ 294)
+	  , anObject       = __webpack_require__(/*! ./_an-object */ 235)
+	  , toIObject      = __webpack_require__(/*! ./_to-iobject */ 216)
+	  , toPrimitive    = __webpack_require__(/*! ./_to-primitive */ 241)
+	  , createDesc     = __webpack_require__(/*! ./_property-desc */ 242)
+	  , _create        = __webpack_require__(/*! ./_object-create */ 261)
+	  , gOPNExt        = __webpack_require__(/*! ./_object-gopn-ext */ 309)
+	  , $GOPD          = __webpack_require__(/*! ./_object-gopd */ 311)
+	  , $DP            = __webpack_require__(/*! ./_object-dp */ 234)
+	  , $keys          = __webpack_require__(/*! ./_object-keys */ 213)
+	  , gOPD           = $GOPD.f
+	  , dP             = $DP.f
+	  , gOPN           = gOPNExt.f
+	  , $Symbol        = global.Symbol
+	  , $JSON          = global.JSON
+	  , _stringify     = $JSON && $JSON.stringify
+	  , PROTOTYPE      = 'prototype'
+	  , HIDDEN         = wks('_hidden')
+	  , TO_PRIMITIVE   = wks('toPrimitive')
+	  , isEnum         = {}.propertyIsEnumerable
+	  , SymbolRegistry = shared('symbol-registry')
+	  , AllSymbols     = shared('symbols')
+	  , OPSymbols      = shared('op-symbols')
+	  , ObjectProto    = Object[PROTOTYPE]
+	  , USE_NATIVE     = typeof $Symbol == 'function'
+	  , QObject        = global.QObject;
+	// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
+	var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
+	
+	// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
+	var setSymbolDesc = DESCRIPTORS && $fails(function(){
+	  return _create(dP({}, 'a', {
+	    get: function(){ return dP(this, 'a', {value: 7}).a; }
+	  })).a != 7;
+	}) ? function(it, key, D){
+	  var protoDesc = gOPD(ObjectProto, key);
+	  if(protoDesc)delete ObjectProto[key];
+	  dP(it, key, D);
+	  if(protoDesc && it !== ObjectProto)dP(ObjectProto, key, protoDesc);
+	} : dP;
+	
+	var wrap = function(tag){
+	  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
+	  sym._k = tag;
+	  return sym;
+	};
+	
+	var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function(it){
+	  return typeof it == 'symbol';
+	} : function(it){
+	  return it instanceof $Symbol;
+	};
+	
+	var $defineProperty = function defineProperty(it, key, D){
+	  if(it === ObjectProto)$defineProperty(OPSymbols, key, D);
+	  anObject(it);
+	  key = toPrimitive(key, true);
+	  anObject(D);
+	  if(has(AllSymbols, key)){
+	    if(!D.enumerable){
+	      if(!has(it, HIDDEN))dP(it, HIDDEN, createDesc(1, {}));
+	      it[HIDDEN][key] = true;
+	    } else {
+	      if(has(it, HIDDEN) && it[HIDDEN][key])it[HIDDEN][key] = false;
+	      D = _create(D, {enumerable: createDesc(0, false)});
+	    } return setSymbolDesc(it, key, D);
+	  } return dP(it, key, D);
+	};
+	var $defineProperties = function defineProperties(it, P){
+	  anObject(it);
+	  var keys = enumKeys(P = toIObject(P))
+	    , i    = 0
+	    , l = keys.length
+	    , key;
+	  while(l > i)$defineProperty(it, key = keys[i++], P[key]);
+	  return it;
+	};
+	var $create = function create(it, P){
+	  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
+	};
+	var $propertyIsEnumerable = function propertyIsEnumerable(key){
+	  var E = isEnum.call(this, key = toPrimitive(key, true));
+	  if(this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return false;
+	  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
+	};
+	var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key){
+	  it  = toIObject(it);
+	  key = toPrimitive(key, true);
+	  if(it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key))return;
+	  var D = gOPD(it, key);
+	  if(D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key]))D.enumerable = true;
+	  return D;
+	};
+	var $getOwnPropertyNames = function getOwnPropertyNames(it){
+	  var names  = gOPN(toIObject(it))
+	    , result = []
+	    , i      = 0
+	    , key;
+	  while(names.length > i){
+	    if(!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META)result.push(key);
+	  } return result;
+	};
+	var $getOwnPropertySymbols = function getOwnPropertySymbols(it){
+	  var IS_OP  = it === ObjectProto
+	    , names  = gOPN(IS_OP ? OPSymbols : toIObject(it))
+	    , result = []
+	    , i      = 0
+	    , key;
+	  while(names.length > i){
+	    if(has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true))result.push(AllSymbols[key]);
+	  } return result;
+	};
+	
+	// 19.4.1.1 Symbol([description])
+	if(!USE_NATIVE){
+	  $Symbol = function Symbol(){
+	    if(this instanceof $Symbol)throw TypeError('Symbol is not a constructor!');
+	    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
+	    var $set = function(value){
+	      if(this === ObjectProto)$set.call(OPSymbols, value);
+	      if(has(this, HIDDEN) && has(this[HIDDEN], tag))this[HIDDEN][tag] = false;
+	      setSymbolDesc(this, tag, createDesc(1, value));
+	    };
+	    if(DESCRIPTORS && setter)setSymbolDesc(ObjectProto, tag, {configurable: true, set: $set});
+	    return wrap(tag);
+	  };
+	  redefine($Symbol[PROTOTYPE], 'toString', function toString(){
+	    return this._k;
+	  });
+	
+	  $GOPD.f = $getOwnPropertyDescriptor;
+	  $DP.f   = $defineProperty;
+	  __webpack_require__(/*! ./_object-gopn */ 310).f = gOPNExt.f = $getOwnPropertyNames;
+	  __webpack_require__(/*! ./_object-pie */ 249).f  = $propertyIsEnumerable;
+	  __webpack_require__(/*! ./_object-gops */ 248).f = $getOwnPropertySymbols;
+	
+	  if(DESCRIPTORS && !__webpack_require__(/*! ./_library */ 258)){
+	    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
+	  }
+	
+	  wksExt.f = function(name){
+	    return wrap(wks(name));
+	  }
+	}
+	
+	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Symbol: $Symbol});
+	
+	for(var symbols = (
+	  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
+	  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
+	).split(','), i = 0; symbols.length > i; )wks(symbols[i++]);
+	
+	for(var symbols = $keys(wks.store), i = 0; symbols.length > i; )wksDefine(symbols[i++]);
+	
+	$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
+	  // 19.4.2.1 Symbol.for(key)
+	  'for': function(key){
+	    return has(SymbolRegistry, key += '')
+	      ? SymbolRegistry[key]
+	      : SymbolRegistry[key] = $Symbol(key);
+	  },
+	  // 19.4.2.5 Symbol.keyFor(sym)
+	  keyFor: function keyFor(key){
+	    if(isSymbol(key))return keyOf(SymbolRegistry, key);
+	    throw TypeError(key + ' is not a symbol!');
+	  },
+	  useSetter: function(){ setter = true; },
+	  useSimple: function(){ setter = false; }
+	});
+	
+	$export($export.S + $export.F * !USE_NATIVE, 'Object', {
+	  // 19.1.2.2 Object.create(O [, Properties])
+	  create: $create,
+	  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
+	  defineProperty: $defineProperty,
+	  // 19.1.2.3 Object.defineProperties(O, Properties)
+	  defineProperties: $defineProperties,
+	  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
+	  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
+	  // 19.1.2.7 Object.getOwnPropertyNames(O)
+	  getOwnPropertyNames: $getOwnPropertyNames,
+	  // 19.1.2.8 Object.getOwnPropertySymbols(O)
+	  getOwnPropertySymbols: $getOwnPropertySymbols
+	});
+	
+	// 24.3.2 JSON.stringify(value [, replacer [, space]])
+	$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function(){
+	  var S = $Symbol();
+	  // MS Edge converts symbol values to JSON as {}
+	  // WebKit converts symbol values to JSON as null
+	  // V8 throws on boxed symbols
+	  return _stringify([S]) != '[null]' || _stringify({a: S}) != '{}' || _stringify(Object(S)) != '{}';
+	})), 'JSON', {
+	  stringify: function stringify(it){
+	    if(it === undefined || isSymbol(it))return; // IE8 returns string on undefined
+	    var args = [it]
+	      , i    = 1
+	      , replacer, $replacer;
+	    while(arguments.length > i)args.push(arguments[i++]);
+	    replacer = args[1];
+	    if(typeof replacer == 'function')$replacer = replacer;
+	    if($replacer || !isArray(replacer))replacer = function(key, value){
+	      if($replacer)value = $replacer.call(this, key, value);
+	      if(!isSymbol(value))return value;
+	    };
+	    args[1] = replacer;
+	    return _stringify.apply($JSON, args);
+	  }
+	});
+	
+	// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
+	$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(/*! ./_hide */ 233)($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
+	// 19.4.3.5 Symbol.prototype[@@toStringTag]
+	setToStringTag($Symbol, 'Symbol');
+	// 20.2.1.9 Math[@@toStringTag]
+	setToStringTag(Math, 'Math', true);
+	// 24.3.3 JSON[@@toStringTag]
+	setToStringTag(global.JSON, 'JSON', true);
+
+/***/ },
+/* 306 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_wks-define.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var global         = __webpack_require__(/*! ./_global */ 225)
+	  , core           = __webpack_require__(/*! ./_core */ 230)
+	  , LIBRARY        = __webpack_require__(/*! ./_library */ 258)
+	  , wksExt         = __webpack_require__(/*! ./_wks-ext */ 302)
+	  , defineProperty = __webpack_require__(/*! ./_object-dp */ 234).f;
+	module.exports = function(name){
+	  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
+	  if(name.charAt(0) != '_' && !(name in $Symbol))defineProperty($Symbol, name, {value: wksExt.f(name)});
+	};
+
+/***/ },
+/* 307 */
+/*!*************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_keyof.js ***!
+  \*************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var getKeys   = __webpack_require__(/*! ./_object-keys */ 213)
+	  , toIObject = __webpack_require__(/*! ./_to-iobject */ 216);
+	module.exports = function(object, el){
+	  var O      = toIObject(object)
+	    , keys   = getKeys(O)
+	    , length = keys.length
+	    , index  = 0
+	    , key;
+	  while(length > index)if(O[key = keys[index++]] === el)return key;
+	};
+
+/***/ },
+/* 308 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_enum-keys.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// all enumerable object keys, includes symbols
+	var getKeys = __webpack_require__(/*! ./_object-keys */ 213)
+	  , gOPS    = __webpack_require__(/*! ./_object-gops */ 248)
+	  , pIE     = __webpack_require__(/*! ./_object-pie */ 249);
+	module.exports = function(it){
+	  var result     = getKeys(it)
+	    , getSymbols = gOPS.f;
+	  if(getSymbols){
+	    var symbols = getSymbols(it)
+	      , isEnum  = pIE.f
+	      , i       = 0
+	      , key;
+	    while(symbols.length > i)if(isEnum.call(it, key = symbols[i++]))result.push(key);
+	  } return result;
+	};
+
+/***/ },
+/* 309 */
+/*!***********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-gopn-ext.js ***!
+  \***********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
+	var toIObject = __webpack_require__(/*! ./_to-iobject */ 216)
+	  , gOPN      = __webpack_require__(/*! ./_object-gopn */ 310).f
+	  , toString  = {}.toString;
+	
+	var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
+	  ? Object.getOwnPropertyNames(window) : [];
+	
+	var getWindowNames = function(it){
+	  try {
+	    return gOPN(it);
+	  } catch(e){
+	    return windowNames.slice();
+	  }
+	};
+	
+	module.exports.f = function getOwnPropertyNames(it){
+	  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
+	};
+
+
+/***/ },
+/* 310 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-gopn.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
+	var $keys      = __webpack_require__(/*! ./_object-keys-internal */ 214)
+	  , hiddenKeys = __webpack_require__(/*! ./_enum-bug-keys */ 227).concat('length', 'prototype');
+	
+	exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O){
+	  return $keys(O, hiddenKeys);
+	};
+
+/***/ },
+/* 311 */
+/*!*******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_object-gopd.js ***!
+  \*******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var pIE            = __webpack_require__(/*! ./_object-pie */ 249)
+	  , createDesc     = __webpack_require__(/*! ./_property-desc */ 242)
+	  , toIObject      = __webpack_require__(/*! ./_to-iobject */ 216)
+	  , toPrimitive    = __webpack_require__(/*! ./_to-primitive */ 241)
+	  , has            = __webpack_require__(/*! ./_has */ 215)
+	  , IE8_DOM_DEFINE = __webpack_require__(/*! ./_ie8-dom-define */ 237)
+	  , gOPD           = Object.getOwnPropertyDescriptor;
+	
+	exports.f = __webpack_require__(/*! ./_descriptors */ 238) ? gOPD : function getOwnPropertyDescriptor(O, P){
+	  O = toIObject(O);
+	  P = toPrimitive(P, true);
+	  if(IE8_DOM_DEFINE)try {
+	    return gOPD(O, P);
+	  } catch(e){ /* empty */ }
+	  if(has(O, P))return createDesc(!pIE.f.call(O, P), O[P]);
+	};
+
+/***/ },
+/* 312 */
+/*!********************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es7.symbol.async-iterator.js ***!
+  \********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ./_wks-define */ 306)('asyncIterator');
+
+/***/ },
+/* 313 */
+/*!****************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es7.symbol.observable.js ***!
+  \****************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ./_wks-define */ 306)('observable');
+
+/***/ },
+/* 314 */
+/*!***************************************************!*\
+  !*** ./~/babel-runtime/core-js/json/stringify.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/json/stringify */ 315), __esModule: true };
+
+/***/ },
+/* 315 */
+/*!****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/json/stringify.js ***!
+  \****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var core  = __webpack_require__(/*! ../../modules/_core */ 230)
+	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+/***/ },
+/* 316 */
+/*!*************************************!*\
+  !*** ./~/graphql/language/kinds.js ***!
+  \*************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	// Name
+	
+	var NAME = exports.NAME = 'Name';
+	
+	// Document
+	
+	var DOCUMENT = exports.DOCUMENT = 'Document';
+	var OPERATION_DEFINITION = exports.OPERATION_DEFINITION = 'OperationDefinition';
+	var VARIABLE_DEFINITION = exports.VARIABLE_DEFINITION = 'VariableDefinition';
+	var VARIABLE = exports.VARIABLE = 'Variable';
+	var SELECTION_SET = exports.SELECTION_SET = 'SelectionSet';
+	var FIELD = exports.FIELD = 'Field';
+	var ARGUMENT = exports.ARGUMENT = 'Argument';
+	
+	// Fragments
+	
+	var FRAGMENT_SPREAD = exports.FRAGMENT_SPREAD = 'FragmentSpread';
+	var INLINE_FRAGMENT = exports.INLINE_FRAGMENT = 'InlineFragment';
+	var FRAGMENT_DEFINITION = exports.FRAGMENT_DEFINITION = 'FragmentDefinition';
+	
+	// Values
+	
+	var INT = exports.INT = 'IntValue';
+	var FLOAT = exports.FLOAT = 'FloatValue';
+	var STRING = exports.STRING = 'StringValue';
+	var BOOLEAN = exports.BOOLEAN = 'BooleanValue';
+	var ENUM = exports.ENUM = 'EnumValue';
+	var LIST = exports.LIST = 'ListValue';
+	var OBJECT = exports.OBJECT = 'ObjectValue';
+	var OBJECT_FIELD = exports.OBJECT_FIELD = 'ObjectField';
+	
+	// Directives
+	
+	var DIRECTIVE = exports.DIRECTIVE = 'Directive';
+	
+	// Types
+	
+	var NAMED_TYPE = exports.NAMED_TYPE = 'NamedType';
+	var LIST_TYPE = exports.LIST_TYPE = 'ListType';
+	var NON_NULL_TYPE = exports.NON_NULL_TYPE = 'NonNullType';
+	
+	// Type System Definitions
+	
+	var SCHEMA_DEFINITION = exports.SCHEMA_DEFINITION = 'SchemaDefinition';
+	var OPERATION_TYPE_DEFINITION = exports.OPERATION_TYPE_DEFINITION = 'OperationTypeDefinition';
+	
+	// Type Definitions
+	
+	var SCALAR_TYPE_DEFINITION = exports.SCALAR_TYPE_DEFINITION = 'ScalarTypeDefinition';
+	var OBJECT_TYPE_DEFINITION = exports.OBJECT_TYPE_DEFINITION = 'ObjectTypeDefinition';
+	var FIELD_DEFINITION = exports.FIELD_DEFINITION = 'FieldDefinition';
+	var INPUT_VALUE_DEFINITION = exports.INPUT_VALUE_DEFINITION = 'InputValueDefinition';
+	var INTERFACE_TYPE_DEFINITION = exports.INTERFACE_TYPE_DEFINITION = 'InterfaceTypeDefinition';
+	var UNION_TYPE_DEFINITION = exports.UNION_TYPE_DEFINITION = 'UnionTypeDefinition';
+	var ENUM_TYPE_DEFINITION = exports.ENUM_TYPE_DEFINITION = 'EnumTypeDefinition';
+	var ENUM_VALUE_DEFINITION = exports.ENUM_VALUE_DEFINITION = 'EnumValueDefinition';
+	var INPUT_OBJECT_TYPE_DEFINITION = exports.INPUT_OBJECT_TYPE_DEFINITION = 'InputObjectTypeDefinition';
+	
+	// Type Extensions
+	
+	var TYPE_EXTENSION_DEFINITION = exports.TYPE_EXTENSION_DEFINITION = 'TypeExtensionDefinition';
+	
+	// Directive Definitions
+	
+	var DIRECTIVE_DEFINITION = exports.DIRECTIVE_DEFINITION = 'DirectiveDefinition';
+
+/***/ },
+/* 317 */
+/*!*****************************************!*\
+  !*** ./~/graphql/type/introspection.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.TypeNameMetaFieldDef = exports.TypeMetaFieldDef = exports.SchemaMetaFieldDef = exports.__TypeKind = exports.TypeKind = exports.__EnumValue = exports.__InputValue = exports.__Field = exports.__Type = exports.__DirectiveLocation = exports.__Directive = exports.__Schema = undefined;
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _isNullish = __webpack_require__(/*! ../jsutils/isNullish */ 318);
+	
+	var _isNullish2 = _interopRequireDefault(_isNullish);
+	
+	var _astFromValue = __webpack_require__(/*! ../utilities/astFromValue */ 319);
+	
+	var _printer = __webpack_require__(/*! ../language/printer */ 355);
+	
+	var _definition = __webpack_require__(/*! ./definition */ 321);
+	
+	var _scalars = __webpack_require__(/*! ./scalars */ 335);
+	
+	var _directives = __webpack_require__(/*! ./directives */ 361);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	var __Schema = exports.__Schema = new _definition.GraphQLObjectType({
+	  name: '__Schema',
+	  description: 'A GraphQL Schema defines the capabilities of a GraphQL server. It ' + 'exposes all available types and directives on the server, as well as ' + 'the entry points for query, mutation, and subscription operations.',
+	  fields: function fields() {
+	    return {
+	      types: {
+	        description: 'A list of all types supported by this server.',
+	        type: new _definition.GraphQLNonNull(new _definition.GraphQLList(new _definition.GraphQLNonNull(__Type))),
+	        resolve: function resolve(schema) {
+	          var typeMap = schema.getTypeMap();
+	          return (0, _keys2.default)(typeMap).map(function (key) {
+	            return typeMap[key];
+	          });
+	        }
+	      },
+	      queryType: {
+	        description: 'The type that query operations will be rooted at.',
+	        type: new _definition.GraphQLNonNull(__Type),
+	        resolve: function resolve(schema) {
+	          return schema.getQueryType();
+	        }
+	      },
+	      mutationType: {
+	        description: 'If this server supports mutation, the type that ' + 'mutation operations will be rooted at.',
+	        type: __Type,
+	        resolve: function resolve(schema) {
+	          return schema.getMutationType();
+	        }
+	      },
+	      subscriptionType: {
+	        description: 'If this server support subscription, the type that ' + 'subscription operations will be rooted at.',
+	        type: __Type,
+	        resolve: function resolve(schema) {
+	          return schema.getSubscriptionType();
+	        }
+	      },
+	      directives: {
+	        description: 'A list of all directives supported by this server.',
+	        type: new _definition.GraphQLNonNull(new _definition.GraphQLList(new _definition.GraphQLNonNull(__Directive))),
+	        resolve: function resolve(schema) {
+	          return schema.getDirectives();
+	        }
+	      }
+	    };
+	  }
+	});
+	
+	var __Directive = exports.__Directive = new _definition.GraphQLObjectType({
+	  name: '__Directive',
+	  description: 'A Directive provides a way to describe alternate runtime execution and ' + 'type validation behavior in a GraphQL document.' + '\n\nIn some cases, you need to provide options to alter GraphQL’s ' + 'execution behavior in ways field arguments will not suffice, such as ' + 'conditionally including or skipping a field. Directives provide this by ' + 'describing additional information to the executor.',
+	  fields: function fields() {
+	    return {
+	      name: { type: new _definition.GraphQLNonNull(_scalars.GraphQLString) },
+	      description: { type: _scalars.GraphQLString },
+	      locations: {
+	        type: new _definition.GraphQLNonNull(new _definition.GraphQLList(new _definition.GraphQLNonNull(__DirectiveLocation)))
+	      },
+	      args: {
+	        type: new _definition.GraphQLNonNull(new _definition.GraphQLList(new _definition.GraphQLNonNull(__InputValue))),
+	        resolve: function resolve(directive) {
+	          return directive.args || [];
+	        }
+	      },
+	      // NOTE: the following three fields are deprecated and are no longer part
+	      // of the GraphQL specification.
+	      onOperation: {
+	        deprecationReason: 'Use `locations`.',
+	        type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	        resolve: function resolve(d) {
+	          return d.locations.indexOf(_directives.DirectiveLocation.QUERY) !== -1 || d.locations.indexOf(_directives.DirectiveLocation.MUTATION) !== -1 || d.locations.indexOf(_directives.DirectiveLocation.SUBSCRIPTION) !== -1;
+	        }
+	      },
+	      onFragment: {
+	        deprecationReason: 'Use `locations`.',
+	        type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	        resolve: function resolve(d) {
+	          return d.locations.indexOf(_directives.DirectiveLocation.FRAGMENT_SPREAD) !== -1 || d.locations.indexOf(_directives.DirectiveLocation.INLINE_FRAGMENT) !== -1 || d.locations.indexOf(_directives.DirectiveLocation.FRAGMENT_DEFINITION) !== -1;
+	        }
+	      },
+	      onField: {
+	        deprecationReason: 'Use `locations`.',
+	        type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	        resolve: function resolve(d) {
+	          return d.locations.indexOf(_directives.DirectiveLocation.FIELD) !== -1;
+	        }
+	      }
+	    };
+	  }
+	});
+	
+	var __DirectiveLocation = exports.__DirectiveLocation = new _definition.GraphQLEnumType({
+	  name: '__DirectiveLocation',
+	  description: 'A Directive can be adjacent to many parts of the GraphQL language, a ' + '__DirectiveLocation describes one such possible adjacencies.',
+	  values: {
+	    QUERY: {
+	      value: _directives.DirectiveLocation.QUERY,
+	      description: 'Location adjacent to a query operation.'
+	    },
+	    MUTATION: {
+	      value: _directives.DirectiveLocation.MUTATION,
+	      description: 'Location adjacent to a mutation operation.'
+	    },
+	    SUBSCRIPTION: {
+	      value: _directives.DirectiveLocation.SUBSCRIPTION,
+	      description: 'Location adjacent to a subscription operation.'
+	    },
+	    FIELD: {
+	      value: _directives.DirectiveLocation.FIELD,
+	      description: 'Location adjacent to a field.'
+	    },
+	    FRAGMENT_DEFINITION: {
+	      value: _directives.DirectiveLocation.FRAGMENT_DEFINITION,
+	      description: 'Location adjacent to a fragment definition.'
+	    },
+	    FRAGMENT_SPREAD: {
+	      value: _directives.DirectiveLocation.FRAGMENT_SPREAD,
+	      description: 'Location adjacent to a fragment spread.'
+	    },
+	    INLINE_FRAGMENT: {
+	      value: _directives.DirectiveLocation.INLINE_FRAGMENT,
+	      description: 'Location adjacent to an inline fragment.'
+	    },
+	    SCHEMA: {
+	      value: _directives.DirectiveLocation.SCHEMA,
+	      description: 'Location adjacent to a schema definition.'
+	    },
+	    SCALAR: {
+	      value: _directives.DirectiveLocation.SCALAR,
+	      description: 'Location adjacent to a scalar definition.'
+	    },
+	    OBJECT: {
+	      value: _directives.DirectiveLocation.OBJECT,
+	      description: 'Location adjacent to an object type definition.'
+	    },
+	    FIELD_DEFINITION: {
+	      value: _directives.DirectiveLocation.FIELD_DEFINITION,
+	      description: 'Location adjacent to a field definition.'
+	    },
+	    ARGUMENT_DEFINITION: {
+	      value: _directives.DirectiveLocation.ARGUMENT_DEFINITION,
+	      description: 'Location adjacent to an argument definition.'
+	    },
+	    INTERFACE: {
+	      value: _directives.DirectiveLocation.INTERFACE,
+	      description: 'Location adjacent to an interface definition.'
+	    },
+	    UNION: {
+	      value: _directives.DirectiveLocation.UNION,
+	      description: 'Location adjacent to a union definition.'
+	    },
+	    ENUM: {
+	      value: _directives.DirectiveLocation.ENUM,
+	      description: 'Location adjacent to an enum definition.'
+	    },
+	    ENUM_VALUE: {
+	      value: _directives.DirectiveLocation.ENUM_VALUE,
+	      description: 'Location adjacent to an enum value definition.'
+	    },
+	    INPUT_OBJECT: {
+	      value: _directives.DirectiveLocation.INPUT_OBJECT,
+	      description: 'Location adjacent to an input object type definition.'
+	    },
+	    INPUT_FIELD_DEFINITION: {
+	      value: _directives.DirectiveLocation.INPUT_FIELD_DEFINITION,
+	      description: 'Location adjacent to an input object field definition.'
+	    }
+	  }
+	});
+	
+	var __Type = exports.__Type = new _definition.GraphQLObjectType({
+	  name: '__Type',
+	  description: 'The fundamental unit of any GraphQL Schema is the type. There are ' + 'many kinds of types in GraphQL as represented by the `__TypeKind` enum.' + '\n\nDepending on the kind of a type, certain fields describe ' + 'information about that type. Scalar types provide no information ' + 'beyond a name and description, while Enum types provide their values. ' + 'Object and Interface types provide the fields they describe. Abstract ' + 'types, Union and Interface, provide the Object types possible ' + 'at runtime. List and NonNull types compose other types.',
+	  fields: function fields() {
+	    return {
+	      kind: {
+	        type: new _definition.GraphQLNonNull(__TypeKind),
+	        resolve: function resolve(type) {
+	          if (type instanceof _definition.GraphQLScalarType) {
+	            return TypeKind.SCALAR;
+	          } else if (type instanceof _definition.GraphQLObjectType) {
+	            return TypeKind.OBJECT;
+	          } else if (type instanceof _definition.GraphQLInterfaceType) {
+	            return TypeKind.INTERFACE;
+	          } else if (type instanceof _definition.GraphQLUnionType) {
+	            return TypeKind.UNION;
+	          } else if (type instanceof _definition.GraphQLEnumType) {
+	            return TypeKind.ENUM;
+	          } else if (type instanceof _definition.GraphQLInputObjectType) {
+	            return TypeKind.INPUT_OBJECT;
+	          } else if (type instanceof _definition.GraphQLList) {
+	            return TypeKind.LIST;
+	          } else if (type instanceof _definition.GraphQLNonNull) {
+	            return TypeKind.NON_NULL;
+	          }
+	          throw new Error('Unknown kind of type: ' + type);
+	        }
+	      },
+	      name: { type: _scalars.GraphQLString },
+	      description: { type: _scalars.GraphQLString },
+	      fields: {
+	        type: new _definition.GraphQLList(new _definition.GraphQLNonNull(__Field)),
+	        args: {
+	          includeDeprecated: { type: _scalars.GraphQLBoolean, defaultValue: false }
+	        },
+	        resolve: function resolve(type, _ref) {
+	          var includeDeprecated = _ref.includeDeprecated;
+	
+	          if (type instanceof _definition.GraphQLObjectType || type instanceof _definition.GraphQLInterfaceType) {
+	            var _ret = function () {
+	              var fieldMap = type.getFields();
+	              var fields = (0, _keys2.default)(fieldMap).map(function (fieldName) {
+	                return fieldMap[fieldName];
+	              });
+	              if (!includeDeprecated) {
+	                fields = fields.filter(function (field) {
+	                  return !field.deprecationReason;
+	                });
+	              }
+	              return {
+	                v: fields
+	              };
+	            }();
+	
+	            if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
+	          }
+	          return null;
+	        }
+	      },
+	      interfaces: {
+	        type: new _definition.GraphQLList(new _definition.GraphQLNonNull(__Type)),
+	        resolve: function resolve(type) {
+	          if (type instanceof _definition.GraphQLObjectType) {
+	            return type.getInterfaces();
+	          }
+	        }
+	      },
+	      possibleTypes: {
+	        type: new _definition.GraphQLList(new _definition.GraphQLNonNull(__Type)),
+	        resolve: function resolve(type, args, context, _ref2) {
+	          var schema = _ref2.schema;
+	
+	          if (type instanceof _definition.GraphQLInterfaceType || type instanceof _definition.GraphQLUnionType) {
+	            return schema.getPossibleTypes(type);
+	          }
+	        }
+	      },
+	      enumValues: {
+	        type: new _definition.GraphQLList(new _definition.GraphQLNonNull(__EnumValue)),
+	        args: {
+	          includeDeprecated: { type: _scalars.GraphQLBoolean, defaultValue: false }
+	        },
+	        resolve: function resolve(type, _ref3) {
+	          var includeDeprecated = _ref3.includeDeprecated;
+	
+	          if (type instanceof _definition.GraphQLEnumType) {
+	            var values = type.getValues();
+	            if (!includeDeprecated) {
+	              values = values.filter(function (value) {
+	                return !value.deprecationReason;
+	              });
+	            }
+	            return values;
+	          }
+	        }
+	      },
+	      inputFields: {
+	        type: new _definition.GraphQLList(new _definition.GraphQLNonNull(__InputValue)),
+	        resolve: function resolve(type) {
+	          if (type instanceof _definition.GraphQLInputObjectType) {
+	            var _ret2 = function () {
+	              var fieldMap = type.getFields();
+	              return {
+	                v: (0, _keys2.default)(fieldMap).map(function (fieldName) {
+	                  return fieldMap[fieldName];
+	                })
+	              };
+	            }();
+	
+	            if ((typeof _ret2 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret2)) === "object") return _ret2.v;
+	          }
+	        }
+	      },
+	      ofType: { type: __Type }
+	    };
+	  }
+	});
+	
+	var __Field = exports.__Field = new _definition.GraphQLObjectType({
+	  name: '__Field',
+	  description: 'Object and Interface types are described by a list of Fields, each of ' + 'which has a name, potentially a list of arguments, and a return type.',
+	  fields: function fields() {
+	    return {
+	      name: { type: new _definition.GraphQLNonNull(_scalars.GraphQLString) },
+	      description: { type: _scalars.GraphQLString },
+	      args: {
+	        type: new _definition.GraphQLNonNull(new _definition.GraphQLList(new _definition.GraphQLNonNull(__InputValue))),
+	        resolve: function resolve(field) {
+	          return field.args || [];
+	        }
+	      },
+	      type: { type: new _definition.GraphQLNonNull(__Type) },
+	      isDeprecated: {
+	        type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	        resolve: function resolve(field) {
+	          return !(0, _isNullish2.default)(field.deprecationReason);
+	        }
+	      },
+	      deprecationReason: {
+	        type: _scalars.GraphQLString
+	      }
+	    };
+	  }
+	});
+	
+	var __InputValue = exports.__InputValue = new _definition.GraphQLObjectType({
+	  name: '__InputValue',
+	  description: 'Arguments provided to Fields or Directives and the input fields of an ' + 'InputObject are represented as Input Values which describe their type ' + 'and optionally a default value.',
+	  fields: function fields() {
+	    return {
+	      name: { type: new _definition.GraphQLNonNull(_scalars.GraphQLString) },
+	      description: { type: _scalars.GraphQLString },
+	      type: { type: new _definition.GraphQLNonNull(__Type) },
+	      defaultValue: {
+	        type: _scalars.GraphQLString,
+	        description: 'A GraphQL-formatted string representing the default value for this ' + 'input value.',
+	        resolve: function resolve(inputVal) {
+	          return (0, _isNullish2.default)(inputVal.defaultValue) ? null : (0, _printer.print)((0, _astFromValue.astFromValue)(inputVal.defaultValue, inputVal));
+	        }
+	      }
+	    };
+	  }
+	});
+	
+	var __EnumValue = exports.__EnumValue = new _definition.GraphQLObjectType({
+	  name: '__EnumValue',
+	  description: 'One possible value for a given Enum. Enum values are unique values, not ' + 'a placeholder for a string or numeric value. However an Enum value is ' + 'returned in a JSON response as a string.',
+	  fields: function fields() {
+	    return {
+	      name: { type: new _definition.GraphQLNonNull(_scalars.GraphQLString) },
+	      description: { type: _scalars.GraphQLString },
+	      isDeprecated: {
+	        type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	        resolve: function resolve(enumValue) {
+	          return !(0, _isNullish2.default)(enumValue.deprecationReason);
+	        }
+	      },
+	      deprecationReason: {
+	        type: _scalars.GraphQLString
+	      }
+	    };
+	  }
+	});
+	
+	var TypeKind = exports.TypeKind = {
+	  SCALAR: 'SCALAR',
+	  OBJECT: 'OBJECT',
+	  INTERFACE: 'INTERFACE',
+	  UNION: 'UNION',
+	  ENUM: 'ENUM',
+	  INPUT_OBJECT: 'INPUT_OBJECT',
+	  LIST: 'LIST',
+	  NON_NULL: 'NON_NULL'
+	};
+	
+	var __TypeKind = exports.__TypeKind = new _definition.GraphQLEnumType({
+	  name: '__TypeKind',
+	  description: 'An enum describing what kind of type a given `__Type` is.',
+	  values: {
+	    SCALAR: {
+	      value: TypeKind.SCALAR,
+	      description: 'Indicates this type is a scalar.'
+	    },
+	    OBJECT: {
+	      value: TypeKind.OBJECT,
+	      description: 'Indicates this type is an object. ' + '`fields` and `interfaces` are valid fields.'
+	    },
+	    INTERFACE: {
+	      value: TypeKind.INTERFACE,
+	      description: 'Indicates this type is an interface. ' + '`fields` and `possibleTypes` are valid fields.'
+	    },
+	    UNION: {
+	      value: TypeKind.UNION,
+	      description: 'Indicates this type is a union. ' + '`possibleTypes` is a valid field.'
+	    },
+	    ENUM: {
+	      value: TypeKind.ENUM,
+	      description: 'Indicates this type is an enum. ' + '`enumValues` is a valid field.'
+	    },
+	    INPUT_OBJECT: {
+	      value: TypeKind.INPUT_OBJECT,
+	      description: 'Indicates this type is an input object. ' + '`inputFields` is a valid field.'
+	    },
+	    LIST: {
+	      value: TypeKind.LIST,
+	      description: 'Indicates this type is a list. ' + '`ofType` is a valid field.'
+	    },
+	    NON_NULL: {
+	      value: TypeKind.NON_NULL,
+	      description: 'Indicates this type is a non-null. ' + '`ofType` is a valid field.'
+	    }
+	  }
+	});
+	
+	/**
+	 * Note that these are GraphQLFieldDefinition and not GraphQLFieldConfig,
+	 * so the format for args is different.
+	 */
+	
+	var SchemaMetaFieldDef = exports.SchemaMetaFieldDef = {
+	  name: '__schema',
+	  type: new _definition.GraphQLNonNull(__Schema),
+	  description: 'Access the current type schema of this server.',
+	  args: [],
+	  resolve: function resolve(source, args, context, _ref4) {
+	    var schema = _ref4.schema;
+	    return schema;
+	  }
+	};
+	
+	var TypeMetaFieldDef = exports.TypeMetaFieldDef = {
+	  name: '__type',
+	  type: __Type,
+	  description: 'Request the type information of a single type.',
+	  args: [{ name: 'name', type: new _definition.GraphQLNonNull(_scalars.GraphQLString) }],
+	  resolve: function resolve(source, _ref5, context, _ref6) {
+	    var name = _ref5.name;
+	    var schema = _ref6.schema;
+	    return schema.getType(name);
+	  }
+	};
+	
+	var TypeNameMetaFieldDef = exports.TypeNameMetaFieldDef = {
+	  name: '__typename',
+	  type: new _definition.GraphQLNonNull(_scalars.GraphQLString),
+	  description: 'The name of the current Object type at runtime.',
+	  args: [],
+	  resolve: function resolve(source, args, context, _ref7) {
+	    var parentType = _ref7.parentType;
+	    return parentType.name;
+	  }
+	};
+
+/***/ },
+/* 318 */
+/*!****************************************!*\
+  !*** ./~/graphql/jsutils/isNullish.js ***!
+  \****************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isNullish;
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	/**
+	 * Returns true if a value is null, undefined, or NaN.
+	 */
+	function isNullish(value) {
+	  return value === null || value === undefined || value !== value;
+	}
+
+/***/ },
+/* 319 */
+/*!*********************************************!*\
+  !*** ./~/graphql/utilities/astFromValue.js ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	exports.astFromValue = astFromValue;
+	
+	var _invariant = __webpack_require__(/*! ../jsutils/invariant */ 320);
+	
+	var _invariant2 = _interopRequireDefault(_invariant);
+	
+	var _isNullish = __webpack_require__(/*! ../jsutils/isNullish */ 318);
+	
+	var _isNullish2 = _interopRequireDefault(_isNullish);
+	
+	var _kinds = __webpack_require__(/*! ../language/kinds */ 316);
+	
+	var _definition = __webpack_require__(/*! ../type/definition */ 321);
+	
+	var _scalars = __webpack_require__(/*! ../type/scalars */ 335);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Produces a GraphQL Value AST given a JavaScript value.
+	 *
+	 * Optionally, a GraphQL type may be provided, which will be used to
+	 * disambiguate between value primitives.
+	 *
+	 * | JSON Value    | GraphQL Value        |
+	 * | ------------- | -------------------- |
+	 * | Object        | Input Object         |
+	 * | Array         | List                 |
+	 * | Boolean       | Boolean              |
+	 * | String        | String / Enum Value  |
+	 * | Number        | Int / Float          |
+	 *
+	 */
+	function astFromValue(value, type) {
+	  // Ensure flow knows that we treat function params as const.
+	  var _value = value;
+	
+	  if (type instanceof _definition.GraphQLNonNull) {
+	    // Note: we're not checking that the result is non-null.
+	    // This function is not responsible for validating the input value.
+	    return astFromValue(_value, type.ofType);
+	  }
+	
+	  if ((0, _isNullish2.default)(_value)) {
+	    return null;
+	  }
+	
+	  // Convert JavaScript array to GraphQL list. If the GraphQLType is a list, but
+	  // the value is not an array, convert the value using the list's item type.
+	  if (Array.isArray(_value)) {
+	    var _ret = function () {
+	      var itemType = type instanceof _definition.GraphQLList ? type.ofType : null;
+	      return {
+	        v: {
+	          kind: _kinds.LIST,
+	          values: _value.map(function (item) {
+	            var itemValue = astFromValue(item, itemType);
+	            (0, _invariant2.default)(itemValue, 'Could not create AST item.');
+	            return itemValue;
+	          })
+	        }
+	      };
+	    }();
+	
+	    if ((typeof _ret === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret)) === "object") return _ret.v;
+	  } else if (type instanceof _definition.GraphQLList) {
+	    // Because GraphQL will accept single values as a "list of one" when
+	    // expecting a list, if there's a non-array value and an expected list type,
+	    // create an AST using the list's item type.
+	    return astFromValue(_value, type.ofType);
+	  }
+	
+	  if (typeof _value === 'boolean') {
+	    return { kind: _kinds.BOOLEAN, value: _value };
+	  }
+	
+	  // JavaScript numbers can be Float or Int values. Use the GraphQLType to
+	  // differentiate if available, otherwise prefer Int if the value is a
+	  // valid Int.
+	  if (typeof _value === 'number') {
+	    var stringNum = String(_value);
+	    var isIntValue = /^[0-9]+$/.test(stringNum);
+	    if (isIntValue) {
+	      if (type === _scalars.GraphQLFloat) {
+	        return { kind: _kinds.FLOAT, value: stringNum + '.0' };
+	      }
+	      return { kind: _kinds.INT, value: stringNum };
+	    }
+	    return { kind: _kinds.FLOAT, value: stringNum };
+	  }
+	
+	  // JavaScript strings can be Enum values or String values. Use the
+	  // GraphQLType to differentiate if possible.
+	  if (typeof _value === 'string') {
+	    if (type instanceof _definition.GraphQLEnumType && /^[_a-zA-Z][_a-zA-Z0-9]*$/.test(_value)) {
+	      return { kind: _kinds.ENUM, value: _value };
+	    }
+	    // Use JSON stringify, which uses the same string encoding as GraphQL,
+	    // then remove the quotes.
+	    return {
+	      kind: _kinds.STRING,
+	      value: (0, _stringify2.default)(_value).slice(1, -1)
+	    };
+	  }
+	
+	  // last remaining possible typeof
+	  (0, _invariant2.default)((typeof _value === 'undefined' ? 'undefined' : (0, _typeof3.default)(_value)) === 'object' && _value !== null);
+	
+	  // Populate the fields of the input object by creating ASTs from each value
+	  // in the JavaScript object.
+	  var fields = [];
+	  (0, _keys2.default)(_value).forEach(function (fieldName) {
+	    var fieldType = void 0;
+	    if (type instanceof _definition.GraphQLInputObjectType) {
+	      var fieldDef = type.getFields()[fieldName];
+	      fieldType = fieldDef && fieldDef.type;
+	    }
+	    var fieldValue = astFromValue(_value[fieldName], fieldType);
+	    if (fieldValue) {
+	      fields.push({
+	        kind: _kinds.OBJECT_FIELD,
+	        name: { kind: _kinds.NAME, value: fieldName },
+	        value: fieldValue
+	      });
+	    }
+	  });
+	  return { kind: _kinds.OBJECT, fields: fields };
+	}
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+/***/ },
+/* 320 */
+/*!****************************************!*\
+  !*** ./~/graphql/jsutils/invariant.js ***!
+  \****************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = invariant;
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function invariant(condition, message) {
+	  if (!condition) {
+	    throw new Error(message);
+	  }
+	}
+
+/***/ },
+/* 321 */
+/*!**************************************!*\
+  !*** ./~/graphql/type/definition.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.GraphQLNonNull = exports.GraphQLList = exports.GraphQLInputObjectType = exports.GraphQLEnumType = exports.GraphQLUnionType = exports.GraphQLInterfaceType = exports.GraphQLObjectType = exports.GraphQLScalarType = undefined;
+	
+	var _create = __webpack_require__(/*! babel-runtime/core-js/object/create */ 322);
+	
+	var _create2 = _interopRequireDefault(_create);
+	
+	var _map = __webpack_require__(/*! babel-runtime/core-js/map */ 325);
+	
+	var _map2 = _interopRequireDefault(_map);
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 330);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	exports.isType = isType;
+	exports.isInputType = isInputType;
+	exports.isOutputType = isOutputType;
+	exports.isLeafType = isLeafType;
+	exports.isCompositeType = isCompositeType;
+	exports.isAbstractType = isAbstractType;
+	exports.getNullableType = getNullableType;
+	exports.getNamedType = getNamedType;
+	
+	var _invariant = __webpack_require__(/*! ../jsutils/invariant */ 320);
+	
+	var _invariant2 = _interopRequireDefault(_invariant);
+	
+	var _isNullish = __webpack_require__(/*! ../jsutils/isNullish */ 318);
+	
+	var _isNullish2 = _interopRequireDefault(_isNullish);
+	
+	var _kinds = __webpack_require__(/*! ../language/kinds */ 316);
+	
+	var _assertValidName = __webpack_require__(/*! ../utilities/assertValidName */ 334);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	// Predicates
+	
+	/**
+	 * These are all of the possible kinds of types.
+	 */
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function isType(type) {
+	  return type instanceof GraphQLScalarType || type instanceof GraphQLObjectType || type instanceof GraphQLInterfaceType || type instanceof GraphQLUnionType || type instanceof GraphQLEnumType || type instanceof GraphQLInputObjectType || type instanceof GraphQLList || type instanceof GraphQLNonNull;
+	}
+	
+	/**
+	 * These types may be used as input types for arguments and directives.
+	 */
+	function isInputType(type) {
+	  var namedType = getNamedType(type);
+	  return namedType instanceof GraphQLScalarType || namedType instanceof GraphQLEnumType || namedType instanceof GraphQLInputObjectType;
+	}
+	
+	/**
+	 * These types may be used as output types as the result of fields.
+	 */
+	function isOutputType(type) {
+	  var namedType = getNamedType(type);
+	  return namedType instanceof GraphQLScalarType || namedType instanceof GraphQLObjectType || namedType instanceof GraphQLInterfaceType || namedType instanceof GraphQLUnionType || namedType instanceof GraphQLEnumType;
+	}
+	
+	/**
+	 * These types may describe types which may be leaf values.
+	 */
+	function isLeafType(type) {
+	  var namedType = getNamedType(type);
+	  return namedType instanceof GraphQLScalarType || namedType instanceof GraphQLEnumType;
+	}
+	
+	/**
+	 * These types may describe the parent context of a selection set.
+	 */
+	function isCompositeType(type) {
+	  return type instanceof GraphQLObjectType || type instanceof GraphQLInterfaceType || type instanceof GraphQLUnionType;
+	}
+	
+	/**
+	 * These types may describe the parent context of a selection set.
+	 */
+	function isAbstractType(type) {
+	  return type instanceof GraphQLInterfaceType || type instanceof GraphQLUnionType;
+	}
+	
+	/**
+	 * These types can all accept null as a value.
+	 */
+	function getNullableType(type) {
+	  return type instanceof GraphQLNonNull ? type.ofType : type;
+	}
+	
+	/**
+	 * These named types do not include modifiers like List or NonNull.
+	 */
+	function getNamedType(type) {
+	  var unmodifiedType = type;
+	  while (unmodifiedType instanceof GraphQLList || unmodifiedType instanceof GraphQLNonNull) {
+	    unmodifiedType = unmodifiedType.ofType;
+	  }
+	  return unmodifiedType;
+	}
+	
+	/**
+	 * Scalar Type Definition
+	 *
+	 * The leaf values of any request and input values to arguments are
+	 * Scalars (or Enums) and are defined with a name and a series of functions
+	 * used to parse input from ast or variables and to ensure validity.
+	 *
+	 * Example:
+	 *
+	 *     const OddType = new GraphQLScalarType({
+	 *       name: 'Odd',
+	 *       serialize(value) {
+	 *         return value % 2 === 1 ? value : null;
+	 *       }
+	 *     });
+	 *
+	 */
+	
+	var GraphQLScalarType = exports.GraphQLScalarType = function () {
+	  function GraphQLScalarType(config) {
+	    (0, _classCallCheck3.default)(this, GraphQLScalarType);
+	
+	    (0, _invariant2.default)(config.name, 'Type must be named.');
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.name = config.name;
+	    this.description = config.description;
+	    (0, _invariant2.default)(typeof config.serialize === 'function', this + ' must provide "serialize" function. If this custom Scalar is ' + 'also used as an input type, ensure "parseValue" and "parseLiteral" ' + 'functions are also provided.');
+	    if (config.parseValue || config.parseLiteral) {
+	      (0, _invariant2.default)(typeof config.parseValue === 'function' && typeof config.parseLiteral === 'function', this + ' must provide both "parseValue" and "parseLiteral" functions.');
+	    }
+	    this._scalarConfig = config;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLScalarType, [{
+	    key: 'serialize',
+	    value: function serialize(value) {
+	      var serializer = this._scalarConfig.serialize;
+	      return serializer(value);
+	    }
+	  }, {
+	    key: 'parseValue',
+	    value: function parseValue(value) {
+	      var parser = this._scalarConfig.parseValue;
+	      return parser ? parser(value) : null;
+	    }
+	  }, {
+	    key: 'parseLiteral',
+	    value: function parseLiteral(valueAST) {
+	      var parser = this._scalarConfig.parseLiteral;
+	      return parser ? parser(valueAST) : null;
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLScalarType;
+	}();
+	
+	/**
+	 * Object Type Definition
+	 *
+	 * Almost all of the GraphQL types you define will be object types. Object types
+	 * have a name, but most importantly describe their fields.
+	 *
+	 * Example:
+	 *
+	 *     const AddressType = new GraphQLObjectType({
+	 *       name: 'Address',
+	 *       fields: {
+	 *         street: { type: GraphQLString },
+	 *         number: { type: GraphQLInt },
+	 *         formatted: {
+	 *           type: GraphQLString,
+	 *           resolve(obj) {
+	 *             return obj.number + ' ' + obj.street
+	 *           }
+	 *         }
+	 *       }
+	 *     });
+	 *
+	 * When two types need to refer to each other, or a type needs to refer to
+	 * itself in a field, you can use a function expression (aka a closure or a
+	 * thunk) to supply the fields lazily.
+	 *
+	 * Example:
+	 *
+	 *     const PersonType = new GraphQLObjectType({
+	 *       name: 'Person',
+	 *       fields: () => ({
+	 *         name: { type: GraphQLString },
+	 *         bestFriend: { type: PersonType },
+	 *       })
+	 *     });
+	 *
+	 */
+	
+	var GraphQLObjectType = exports.GraphQLObjectType = function () {
+	  function GraphQLObjectType(config) {
+	    (0, _classCallCheck3.default)(this, GraphQLObjectType);
+	
+	    (0, _invariant2.default)(config.name, 'Type must be named.');
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.name = config.name;
+	    this.description = config.description;
+	    if (config.isTypeOf) {
+	      (0, _invariant2.default)(typeof config.isTypeOf === 'function', this + ' must provide "isTypeOf" as a function.');
+	    }
+	    this.isTypeOf = config.isTypeOf;
+	    this._typeConfig = config;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLObjectType, [{
+	    key: 'getFields',
+	    value: function getFields() {
+	      return this._fields || (this._fields = defineFieldMap(this, this._typeConfig.fields));
+	    }
+	  }, {
+	    key: 'getInterfaces',
+	    value: function getInterfaces() {
+	      return this._interfaces || (this._interfaces = defineInterfaces(this, this._typeConfig.interfaces));
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLObjectType;
+	}();
+	
+	function resolveMaybeThunk(thingOrThunk) {
+	  return typeof thingOrThunk === 'function' ? thingOrThunk() : thingOrThunk;
+	}
+	
+	function defineInterfaces(type, interfacesOrThunk) {
+	  var interfaces = resolveMaybeThunk(interfacesOrThunk);
+	  if (!interfaces) {
+	    return [];
+	  }
+	  (0, _invariant2.default)(Array.isArray(interfaces), type + ' interfaces must be an Array or a function which returns an Array.');
+	  interfaces.forEach(function (iface) {
+	    (0, _invariant2.default)(iface instanceof GraphQLInterfaceType, type + ' may only implement Interface types, it cannot ' + ('implement: ' + iface + '.'));
+	    if (typeof iface.resolveType !== 'function') {
+	      (0, _invariant2.default)(typeof type.isTypeOf === 'function', 'Interface Type ' + iface + ' does not provide a "resolveType" function ' + ('and implementing Type ' + type + ' does not provide a "isTypeOf" ') + 'function. There is no way to resolve this implementing type ' + 'during execution.');
+	    }
+	  });
+	  return interfaces;
+	}
+	
+	function defineFieldMap(type, fields) {
+	  var fieldMap = resolveMaybeThunk(fields);
+	  (0, _invariant2.default)(isPlainObj(fieldMap), type + ' fields must be an object with field names as keys or a ' + 'function which returns such an object.');
+	
+	  var fieldNames = (0, _keys2.default)(fieldMap);
+	  (0, _invariant2.default)(fieldNames.length > 0, type + ' fields must be an object with field names as keys or a ' + 'function which returns such an object.');
+	
+	  var resultFieldMap = {};
+	  fieldNames.forEach(function (fieldName) {
+	    (0, _assertValidName.assertValidName)(fieldName);
+	    var field = (0, _extends3.default)({}, fieldMap[fieldName], {
+	      name: fieldName
+	    });
+	    (0, _invariant2.default)(!field.hasOwnProperty('isDeprecated'), type + '.' + fieldName + ' should provide "deprecationReason" instead ' + 'of "isDeprecated".');
+	    (0, _invariant2.default)(isOutputType(field.type), type + '.' + fieldName + ' field type must be Output Type but ' + ('got: ' + field.type + '.'));
+	    if (!field.args) {
+	      field.args = [];
+	    } else {
+	      (0, _invariant2.default)(isPlainObj(field.args), type + '.' + fieldName + ' args must be an object with argument names ' + 'as keys.');
+	      field.args = (0, _keys2.default)(field.args).map(function (argName) {
+	        (0, _assertValidName.assertValidName)(argName);
+	        var arg = field.args[argName];
+	        (0, _invariant2.default)(isInputType(arg.type), type + '.' + fieldName + '(' + argName + ':) argument type must be ' + ('Input Type but got: ' + arg.type + '.'));
+	        return {
+	          name: argName,
+	          description: arg.description === undefined ? null : arg.description,
+	          type: arg.type,
+	          defaultValue: arg.defaultValue === undefined ? null : arg.defaultValue
+	        };
+	      });
+	    }
+	    resultFieldMap[fieldName] = field;
+	  });
+	  return resultFieldMap;
+	}
+	
+	function isPlainObj(obj) {
+	  return obj && (typeof obj === 'undefined' ? 'undefined' : (0, _typeof3.default)(obj)) === 'object' && !Array.isArray(obj);
+	}
+	
+	/**
+	 * Interface Type Definition
+	 *
+	 * When a field can return one of a heterogeneous set of types, a Interface type
+	 * is used to describe what types are possible, what fields are in common across
+	 * all types, as well as a function to determine which type is actually used
+	 * when the field is resolved.
+	 *
+	 * Example:
+	 *
+	 *     const EntityType = new GraphQLInterfaceType({
+	 *       name: 'Entity',
+	 *       fields: {
+	 *         name: { type: GraphQLString }
+	 *       }
+	 *     });
+	 *
+	 */
+	
+	var GraphQLInterfaceType = exports.GraphQLInterfaceType = function () {
+	  function GraphQLInterfaceType(config) {
+	    (0, _classCallCheck3.default)(this, GraphQLInterfaceType);
+	
+	    (0, _invariant2.default)(config.name, 'Type must be named.');
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.name = config.name;
+	    this.description = config.description;
+	    if (config.resolveType) {
+	      (0, _invariant2.default)(typeof config.resolveType === 'function', this + ' must provide "resolveType" as a function.');
+	    }
+	    this.resolveType = config.resolveType;
+	    this._typeConfig = config;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLInterfaceType, [{
+	    key: 'getFields',
+	    value: function getFields() {
+	      return this._fields || (this._fields = defineFieldMap(this, this._typeConfig.fields));
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLInterfaceType;
+	}();
+	
+	/**
+	 * Union Type Definition
+	 *
+	 * When a field can return one of a heterogeneous set of types, a Union type
+	 * is used to describe what types are possible as well as providing a function
+	 * to determine which type is actually used when the field is resolved.
+	 *
+	 * Example:
+	 *
+	 *     const PetType = new GraphQLUnionType({
+	 *       name: 'Pet',
+	 *       types: [ DogType, CatType ],
+	 *       resolveType(value) {
+	 *         if (value instanceof Dog) {
+	 *           return DogType;
+	 *         }
+	 *         if (value instanceof Cat) {
+	 *           return CatType;
+	 *         }
+	 *       }
+	 *     });
+	 *
+	 */
+	
+	var GraphQLUnionType = exports.GraphQLUnionType = function () {
+	  function GraphQLUnionType(config) {
+	    var _this = this;
+	
+	    (0, _classCallCheck3.default)(this, GraphQLUnionType);
+	
+	    (0, _invariant2.default)(config.name, 'Type must be named.');
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.name = config.name;
+	    this.description = config.description;
+	    if (config.resolveType) {
+	      (0, _invariant2.default)(typeof config.resolveType === 'function', this + ' must provide "resolveType" as a function.');
+	    }
+	    this.resolveType = config.resolveType;
+	    (0, _invariant2.default)(Array.isArray(config.types) && config.types.length > 0, 'Must provide Array of types for Union ' + config.name + '.');
+	    config.types.forEach(function (type) {
+	      (0, _invariant2.default)(type instanceof GraphQLObjectType, _this + ' may only contain Object types, it cannot contain: ' + type + '.');
+	      if (typeof _this.resolveType !== 'function') {
+	        (0, _invariant2.default)(typeof type.isTypeOf === 'function', 'Union Type ' + _this + ' does not provide a "resolveType" function ' + ('and possible Type ' + type + ' does not provide a "isTypeOf" ') + 'function. There is no way to resolve this possible type ' + 'during execution.');
+	      }
+	    });
+	    this._types = config.types;
+	    this._typeConfig = config;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLUnionType, [{
+	    key: 'getTypes',
+	    value: function getTypes() {
+	      return this._types;
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLUnionType;
+	}();
+	
+	/**
+	 * Enum Type Definition
+	 *
+	 * Some leaf values of requests and input values are Enums. GraphQL serializes
+	 * Enum values as strings, however internally Enums can be represented by any
+	 * kind of type, often integers.
+	 *
+	 * Example:
+	 *
+	 *     const RGBType = new GraphQLEnumType({
+	 *       name: 'RGB',
+	 *       values: {
+	 *         RED: { value: 0 },
+	 *         GREEN: { value: 1 },
+	 *         BLUE: { value: 2 }
+	 *       }
+	 *     });
+	 *
+	 * Note: If a value is not provided in a definition, the name of the enum value
+	 * will be used as its internal value.
+	 */
+	
+	var GraphQLEnumType /* <T> */ = exports.GraphQLEnumType = function () {
+	  /* <T> */
+	  function GraphQLEnumType(config /* <T> */) {
+	    (0, _classCallCheck3.default)(this, GraphQLEnumType);
+	
+	    this.name = config.name;
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.description = config.description;
+	    this._values = defineEnumValues(this, config.values);
+	    this._enumConfig = config;
+	  } /* <T> */
+	
+	  (0, _createClass3.default)(GraphQLEnumType, [{
+	    key: 'getValues',
+	    value: function getValues() /* <T> */{
+	      return this._values;
+	    }
+	  }, {
+	    key: 'serialize',
+	    value: function serialize(value /* T */) {
+	      var enumValue = this._getValueLookup().get(value);
+	      return enumValue ? enumValue.name : null;
+	    }
+	  }, {
+	    key: 'parseValue',
+	    value: function parseValue(value) /* T */{
+	      if (typeof value === 'string') {
+	        var enumValue = this._getNameLookup()[value];
+	        if (enumValue) {
+	          return enumValue.value;
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'parseLiteral',
+	    value: function parseLiteral(valueAST) /* T */{
+	      if (valueAST.kind === _kinds.ENUM) {
+	        var enumValue = this._getNameLookup()[valueAST.value];
+	        if (enumValue) {
+	          return enumValue.value;
+	        }
+	      }
+	    }
+	  }, {
+	    key: '_getValueLookup',
+	    value: function _getValueLookup() {
+	      var _this2 = this;
+	
+	      if (!this._valueLookup) {
+	        (function () {
+	          var lookup = new _map2.default();
+	          _this2.getValues().forEach(function (value) {
+	            lookup.set(value.value, value);
+	          });
+	          _this2._valueLookup = lookup;
+	        })();
+	      }
+	      return this._valueLookup;
+	    }
+	  }, {
+	    key: '_getNameLookup',
+	    value: function _getNameLookup() {
+	      var _this3 = this;
+	
+	      if (!this._nameLookup) {
+	        (function () {
+	          var lookup = (0, _create2.default)(null);
+	          _this3.getValues().forEach(function (value) {
+	            lookup[value.name] = value;
+	          });
+	          _this3._nameLookup = lookup;
+	        })();
+	      }
+	      return this._nameLookup;
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLEnumType;
+	}();
+	
+	function defineEnumValues(type, valueMap /* <T> */
+	) /* <T> */{
+	  (0, _invariant2.default)(isPlainObj(valueMap), type + ' values must be an object with value names as keys.');
+	  var valueNames = (0, _keys2.default)(valueMap);
+	  (0, _invariant2.default)(valueNames.length > 0, type + ' values must be an object with value names as keys.');
+	  return valueNames.map(function (valueName) {
+	    (0, _assertValidName.assertValidName)(valueName);
+	    var value = valueMap[valueName];
+	    (0, _invariant2.default)(isPlainObj(value), type + '.' + valueName + ' must refer to an object with a "value" key ' + ('representing an internal value but got: ' + value + '.'));
+	    (0, _invariant2.default)(!value.hasOwnProperty('isDeprecated'), type + '.' + valueName + ' should provide "deprecationReason" instead ' + 'of "isDeprecated".');
+	    return {
+	      name: valueName,
+	      description: value.description,
+	      deprecationReason: value.deprecationReason,
+	      value: (0, _isNullish2.default)(value.value) ? valueName : value.value
+	    };
+	  });
+	} /* <T> */
+	
+	/* T */
+	
+	/**
+	 * Input Object Type Definition
+	 *
+	 * An input object defines a structured collection of fields which may be
+	 * supplied to a field argument.
+	 *
+	 * Using `NonNull` will ensure that a value must be provided by the query
+	 *
+	 * Example:
+	 *
+	 *     const GeoPoint = new GraphQLInputObjectType({
+	 *       name: 'GeoPoint',
+	 *       fields: {
+	 *         lat: { type: new GraphQLNonNull(GraphQLFloat) },
+	 *         lon: { type: new GraphQLNonNull(GraphQLFloat) },
+	 *         alt: { type: GraphQLFloat, defaultValue: 0 },
+	 *       }
+	 *     });
+	 *
+	 */
+	
+	var GraphQLInputObjectType = exports.GraphQLInputObjectType = function () {
+	  function GraphQLInputObjectType(config) {
+	    (0, _classCallCheck3.default)(this, GraphQLInputObjectType);
+	
+	    (0, _invariant2.default)(config.name, 'Type must be named.');
+	    (0, _assertValidName.assertValidName)(config.name);
+	    this.name = config.name;
+	    this.description = config.description;
+	    this._typeConfig = config;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLInputObjectType, [{
+	    key: 'getFields',
+	    value: function getFields() {
+	      return this._fields || (this._fields = this._defineFieldMap());
+	    }
+	  }, {
+	    key: '_defineFieldMap',
+	    value: function _defineFieldMap() {
+	      var _this4 = this;
+	
+	      var fieldMap = resolveMaybeThunk(this._typeConfig.fields);
+	      (0, _invariant2.default)(isPlainObj(fieldMap), this + ' fields must be an object with field names as keys or a ' + 'function which returns such an object.');
+	      var fieldNames = (0, _keys2.default)(fieldMap);
+	      (0, _invariant2.default)(fieldNames.length > 0, this + ' fields must be an object with field names as keys or a ' + 'function which returns such an object.');
+	      var resultFieldMap = {};
+	      fieldNames.forEach(function (fieldName) {
+	        (0, _assertValidName.assertValidName)(fieldName);
+	        var field = (0, _extends3.default)({}, fieldMap[fieldName], {
+	          name: fieldName
+	        });
+	        (0, _invariant2.default)(isInputType(field.type), _this4 + '.' + fieldName + ' field type must be Input Type but ' + ('got: ' + field.type + '.'));
+	        resultFieldMap[fieldName] = field;
+	      });
+	      return resultFieldMap;
+	    }
+	  }, {
+	    key: 'toString',
+	    value: function toString() {
+	      return this.name;
+	    }
+	  }]);
+	  return GraphQLInputObjectType;
+	}();
+	
+	/**
+	 * List Modifier
+	 *
+	 * A list is a kind of type marker, a wrapping type which points to another
+	 * type. Lists are often created within the context of defining the fields of
+	 * an object type.
+	 *
+	 * Example:
+	 *
+	 *     const PersonType = new GraphQLObjectType({
+	 *       name: 'Person',
+	 *       fields: () => ({
+	 *         parents: { type: new GraphQLList(Person) },
+	 *         children: { type: new GraphQLList(Person) },
+	 *       })
+	 *     })
+	 *
+	 */
+	
+	var GraphQLList = exports.GraphQLList = function () {
+	  function GraphQLList(type) {
+	    (0, _classCallCheck3.default)(this, GraphQLList);
+	
+	    (0, _invariant2.default)(isType(type), 'Can only create List of a GraphQLType but got: ' + type + '.');
+	    this.ofType = type;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLList, [{
+	    key: 'toString',
+	    value: function toString() {
+	      return '[' + String(this.ofType) + ']';
+	    }
+	  }]);
+	  return GraphQLList;
+	}();
+	
+	/**
+	 * Non-Null Modifier
+	 *
+	 * A non-null is a kind of type marker, a wrapping type which points to another
+	 * type. Non-null types enforce that their values are never null and can ensure
+	 * an error is raised if this ever occurs during a request. It is useful for
+	 * fields which you can make a strong guarantee on non-nullability, for example
+	 * usually the id field of a database row will never be null.
+	 *
+	 * Example:
+	 *
+	 *     const RowType = new GraphQLObjectType({
+	 *       name: 'Row',
+	 *       fields: () => ({
+	 *         id: { type: new GraphQLNonNull(GraphQLString) },
+	 *       })
+	 *     })
+	 *
+	 * Note: the enforcement of non-nullability occurs within the executor.
+	 */
+	
+	
+	var GraphQLNonNull = exports.GraphQLNonNull = function () {
+	  function GraphQLNonNull(type) {
+	    (0, _classCallCheck3.default)(this, GraphQLNonNull);
+	
+	    (0, _invariant2.default)(isType(type) && !(type instanceof GraphQLNonNull), 'Can only create NonNull of a Nullable GraphQLType but got: ' + type + '.');
+	    this.ofType = type;
+	  }
+	
+	  (0, _createClass3.default)(GraphQLNonNull, [{
+	    key: 'toString',
+	    value: function toString() {
+	      return this.ofType.toString() + '!';
+	    }
+	  }]);
+	  return GraphQLNonNull;
+	}();
+
+/***/ },
+/* 322 */
+/*!**************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/create.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/create */ 323), __esModule: true };
+
+/***/ },
+/* 323 */
+/*!***************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/create.js ***!
+  \***************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.create */ 324);
+	var $Object = __webpack_require__(/*! ../../modules/_core */ 230).Object;
+	module.exports = function create(P, D){
+	  return $Object.create(P, D);
+	};
+
+/***/ },
+/* 324 */
+/*!************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.create.js ***!
+  \************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(/*! ./_export */ 229)
+	// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
+	$export($export.S, 'Object', {create: __webpack_require__(/*! ./_object-create */ 261)});
+
+/***/ },
+/* 325 */
+/*!****************************************!*\
+  !*** ./~/babel-runtime/core-js/map.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/map */ 326), __esModule: true };
+
+/***/ },
+/* 326 */
+/*!*****************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/map.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../modules/es6.object.to-string */ 282);
+	__webpack_require__(/*! ../modules/es6.string.iterator */ 267);
+	__webpack_require__(/*! ../modules/web.dom.iterable */ 252);
+	__webpack_require__(/*! ../modules/es6.map */ 327);
+	__webpack_require__(/*! ../modules/es7.map.to-json */ 328);
+	module.exports = __webpack_require__(/*! ../modules/_core */ 230).Map;
+
+/***/ },
+/* 327 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.map.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var strong = __webpack_require__(/*! ./_collection-strong */ 284);
+	
+	// 23.1 Map Objects
+	module.exports = __webpack_require__(/*! ./_collection */ 290)('Map', function(get){
+	  return function Map(){ return get(this, arguments.length > 0 ? arguments[0] : undefined); };
+	}, {
+	  // 23.1.3.6 Map.prototype.get(key)
+	  get: function get(key){
+	    var entry = strong.getEntry(this, key);
+	    return entry && entry.v;
+	  },
+	  // 23.1.3.9 Map.prototype.set(key, value)
+	  set: function set(key, value){
+	    return strong.def(this, key === 0 ? 0 : key, value);
+	  }
+	}, strong, true);
+
+/***/ },
+/* 328 */
+/*!**********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es7.map.to-json.js ***!
+  \**********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// https://github.com/DavidBruant/Map-Set.prototype.toJSON
+	var $export  = __webpack_require__(/*! ./_export */ 229);
+	
+	$export($export.P + $export.R, 'Map', {toJSON: __webpack_require__(/*! ./_collection-to-json */ 296)('Map')});
+
+/***/ },
+/* 329 */
+/*!***************************************************!*\
+  !*** ./~/babel-runtime/helpers/classCallCheck.js ***!
+  \***************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	exports.default = function (instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	};
+
+/***/ },
+/* 330 */
+/*!************************************************!*\
+  !*** ./~/babel-runtime/helpers/createClass.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _defineProperty = __webpack_require__(/*! ../core-js/object/define-property */ 331);
+	
+	var _defineProperty2 = _interopRequireDefault(_defineProperty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];
+	      descriptor.enumerable = descriptor.enumerable || false;
+	      descriptor.configurable = true;
+	      if ("value" in descriptor) descriptor.writable = true;
+	      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
+	    }
+	  }
+	
+	  return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);
+	    if (staticProps) defineProperties(Constructor, staticProps);
+	    return Constructor;
+	  };
+	}();
+
+/***/ },
+/* 331 */
+/*!***********************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/define-property.js ***!
+  \***********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/define-property */ 332), __esModule: true };
+
+/***/ },
+/* 332 */
+/*!************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/define-property.js ***!
+  \************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.define-property */ 333);
+	var $Object = __webpack_require__(/*! ../../modules/_core */ 230).Object;
+	module.exports = function defineProperty(it, key, desc){
+	  return $Object.defineProperty(it, key, desc);
+	};
+
+/***/ },
+/* 333 */
+/*!*********************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.define-property.js ***!
+  \*********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var $export = __webpack_require__(/*! ./_export */ 229);
+	// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
+	$export($export.S + $export.F * !__webpack_require__(/*! ./_descriptors */ 238), 'Object', {defineProperty: __webpack_require__(/*! ./_object-dp */ 234).f});
+
+/***/ },
+/* 334 */
+/*!************************************************!*\
+  !*** ./~/graphql/utilities/assertValidName.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.assertValidName = assertValidName;
+	
+	var _invariant = __webpack_require__(/*! ../jsutils/invariant */ 320);
+	
+	var _invariant2 = _interopRequireDefault(_invariant);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var NAME_RX = /^[_a-zA-Z][_a-zA-Z0-9]*$/;
+	
+	// Helper to assert that provided names are valid.
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function assertValidName(name) {
+	  (0, _invariant2.default)(NAME_RX.test(name), 'Names must match /^[_a-zA-Z][_a-zA-Z0-9]*$/ but "' + name + '" does not.');
+	}
+
+/***/ },
+/* 335 */
+/*!***********************************!*\
+  !*** ./~/graphql/type/scalars.js ***!
+  \***********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.GraphQLID = exports.GraphQLBoolean = exports.GraphQLString = exports.GraphQLFloat = exports.GraphQLInt = undefined;
+	
+	var _definition = __webpack_require__(/*! ./definition */ 321);
+	
+	var _language = __webpack_require__(/*! ../language */ 336);
+	
+	// As per the GraphQL Spec, Integers are only treated as valid when a valid
+	// 32-bit signed integer, providing the broadest support across platforms.
+	//
+	// n.b. JavaScript's integers are safe between -(2^53 - 1) and 2^53 - 1 because
+	// they are internally represented as IEEE 754 doubles.
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	var MAX_INT = 2147483647;
+	var MIN_INT = -2147483648;
+	
+	function coerceInt(value) {
+	  var num = Number(value);
+	  if (num === num && num <= MAX_INT && num >= MIN_INT) {
+	    return (num < 0 ? Math.ceil : Math.floor)(num);
+	  }
+	  return null;
+	}
+	
+	var GraphQLInt = exports.GraphQLInt = new _definition.GraphQLScalarType({
+	  name: 'Int',
+	  description: 'The `Int` scalar type represents non-fractional signed whole numeric ' + 'values. Int can represent values between -(2^31) and 2^31 - 1. ',
+	  serialize: coerceInt,
+	  parseValue: coerceInt,
+	  parseLiteral: function parseLiteral(ast) {
+	    if (ast.kind === _language.Kind.INT) {
+	      var num = parseInt(ast.value, 10);
+	      if (num <= MAX_INT && num >= MIN_INT) {
+	        return num;
+	      }
+	    }
+	    return null;
+	  }
+	});
+	
+	function coerceFloat(value) {
+	  var num = Number(value);
+	  return num === num ? num : null;
+	}
+	
+	var GraphQLFloat = exports.GraphQLFloat = new _definition.GraphQLScalarType({
+	  name: 'Float',
+	  description: 'The `Float` scalar type represents signed double-precision fractional ' + 'values as specified by ' + '[IEEE 754](http://en.wikipedia.org/wiki/IEEE_floating_point). ',
+	  serialize: coerceFloat,
+	  parseValue: coerceFloat,
+	  parseLiteral: function parseLiteral(ast) {
+	    return ast.kind === _language.Kind.FLOAT || ast.kind === _language.Kind.INT ? parseFloat(ast.value) : null;
+	  }
+	});
+	
+	var GraphQLString = exports.GraphQLString = new _definition.GraphQLScalarType({
+	  name: 'String',
+	  description: 'The `String` scalar type represents textual data, represented as UTF-8 ' + 'character sequences. The String type is most often used by GraphQL to ' + 'represent free-form human-readable text.',
+	  serialize: String,
+	  parseValue: String,
+	  parseLiteral: function parseLiteral(ast) {
+	    return ast.kind === _language.Kind.STRING ? ast.value : null;
+	  }
+	});
+	
+	var GraphQLBoolean = exports.GraphQLBoolean = new _definition.GraphQLScalarType({
+	  name: 'Boolean',
+	  description: 'The `Boolean` scalar type represents `true` or `false`.',
+	  serialize: Boolean,
+	  parseValue: Boolean,
+	  parseLiteral: function parseLiteral(ast) {
+	    return ast.kind === _language.Kind.BOOLEAN ? ast.value : null;
+	  }
+	});
+	
+	var GraphQLID = exports.GraphQLID = new _definition.GraphQLScalarType({
+	  name: 'ID',
+	  description: 'The `ID` scalar type represents a unique identifier, often used to ' + 'refetch an object or as key for a cache. The ID type appears in a JSON ' + 'response as a String; however, it is not intended to be human-readable. ' + 'When expected as an input type, any string (such as `"4"`) or integer ' + '(such as `4`) input value will be accepted as an ID.',
+	  serialize: String,
+	  parseValue: String,
+	  parseLiteral: function parseLiteral(ast) {
+	    return ast.kind === _language.Kind.STRING || ast.kind === _language.Kind.INT ? ast.value : null;
+	  }
+	});
+
+/***/ },
+/* 336 */
+/*!*************************************!*\
+  !*** ./~/graphql/language/index.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.BREAK = exports.visitWithTypeInfo = exports.visitInParallel = exports.visit = exports.Source = exports.print = exports.parseValue = exports.parse = exports.lex = exports.Kind = exports.getLocation = undefined;
+	
+	var _location = __webpack_require__(/*! ./location */ 337);
+	
+	Object.defineProperty(exports, 'getLocation', {
+	  enumerable: true,
+	  get: function get() {
+	    return _location.getLocation;
+	  }
+	});
+	
+	var _lexer = __webpack_require__(/*! ./lexer */ 338);
+	
+	Object.defineProperty(exports, 'lex', {
+	  enumerable: true,
+	  get: function get() {
+	    return _lexer.lex;
+	  }
+	});
+	
+	var _parser = __webpack_require__(/*! ./parser */ 353);
+	
+	Object.defineProperty(exports, 'parse', {
+	  enumerable: true,
+	  get: function get() {
+	    return _parser.parse;
+	  }
+	});
+	Object.defineProperty(exports, 'parseValue', {
+	  enumerable: true,
+	  get: function get() {
+	    return _parser.parseValue;
+	  }
+	});
+	
+	var _printer = __webpack_require__(/*! ./printer */ 355);
+	
+	Object.defineProperty(exports, 'print', {
+	  enumerable: true,
+	  get: function get() {
+	    return _printer.print;
+	  }
+	});
+	
+	var _source = __webpack_require__(/*! ./source */ 354);
+	
+	Object.defineProperty(exports, 'Source', {
+	  enumerable: true,
+	  get: function get() {
+	    return _source.Source;
+	  }
+	});
+	
+	var _visitor = __webpack_require__(/*! ./visitor */ 356);
+	
+	Object.defineProperty(exports, 'visit', {
+	  enumerable: true,
+	  get: function get() {
+	    return _visitor.visit;
+	  }
+	});
+	Object.defineProperty(exports, 'visitInParallel', {
+	  enumerable: true,
+	  get: function get() {
+	    return _visitor.visitInParallel;
+	  }
+	});
+	Object.defineProperty(exports, 'visitWithTypeInfo', {
+	  enumerable: true,
+	  get: function get() {
+	    return _visitor.visitWithTypeInfo;
+	  }
+	});
+	Object.defineProperty(exports, 'BREAK', {
+	  enumerable: true,
+	  get: function get() {
+	    return _visitor.BREAK;
+	  }
+	});
+	
+	var _kinds = __webpack_require__(/*! ./kinds */ 316);
+	
+	var Kind = _interopRequireWildcard(_kinds);
+	
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	
+	exports.Kind = Kind;
+
+/***/ },
+/* 337 */
+/*!****************************************!*\
+  !*** ./~/graphql/language/location.js ***!
+  \****************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getLocation = getLocation;
+	
+	
+	/**
+	 * Takes a Source and a UTF-8 character offset, and returns the corresponding
+	 * line and column as a SourceLocation.
+	 */
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function getLocation(source, position) {
+	  var lineRegexp = /\r\n|[\n\r]/g;
+	  var line = 1;
+	  var column = position + 1;
+	  var match = void 0;
+	  while ((match = lineRegexp.exec(source.body)) && match.index < position) {
+	    line += 1;
+	    column = position + 1 - (match.index + match[0].length);
+	  }
+	  return { line: line, column: column };
+	}
+	
+	/**
+	 * Represents a location in a Source.
+	 */
+
+/***/ },
+/* 338 */
+/*!*************************************!*\
+  !*** ./~/graphql/language/lexer.js ***!
+  \*************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.TokenKind = undefined;
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	exports.lex = lex;
+	exports.getTokenDesc = getTokenDesc;
+	exports.getTokenKindDesc = getTokenKindDesc;
+	
+	var _error = __webpack_require__(/*! ../error */ 339);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Given a Source object, this returns a Lexer for that source.
+	 * A Lexer is a function that acts like a generator in that every time
+	 * it is called, it returns the next token in the Source. Assuming the
+	 * source lexes, the final Token emitted by the lexer will be of kind
+	 * EOF, after which the lexer will repeatedly return EOF tokens whenever
+	 * called.
+	 *
+	 * The argument to the lexer function is optional, and can be used to
+	 * rewind or fast forward the lexer to a new position in the source.
+	 */
+	
+	
+	/**
+	 * A representation of a lexed Token. Value only appears for non-punctuation
+	 * tokens: NAME, INT, FLOAT, and STRING.
+	 */
+	/*  /
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function lex(source) {
+	  var prevPosition = 0;
+	  return function nextToken(resetPosition) {
+	    var token = readToken(source, resetPosition === undefined ? prevPosition : resetPosition);
+	    prevPosition = token.end;
+	    return token;
+	  };
+	}
+	
+	/**
+	 * An enum describing the different kinds of tokens that the lexer emits.
+	 */
+	var TokenKind = exports.TokenKind = {
+	  EOF: 1,
+	  BANG: 2,
+	  DOLLAR: 3,
+	  PAREN_L: 4,
+	  PAREN_R: 5,
+	  SPREAD: 6,
+	  COLON: 7,
+	  EQUALS: 8,
+	  AT: 9,
+	  BRACKET_L: 10,
+	  BRACKET_R: 11,
+	  BRACE_L: 12,
+	  PIPE: 13,
+	  BRACE_R: 14,
+	  NAME: 15,
+	  INT: 16,
+	  FLOAT: 17,
+	  STRING: 18
+	};
+	
+	/**
+	 * A helper function to describe a token as a string for debugging
+	 */
+	function getTokenDesc(token) {
+	  return token.value ? getTokenKindDesc(token.kind) + ' "' + token.value + '"' : getTokenKindDesc(token.kind);
+	}
+	
+	/**
+	 * A helper function to describe a token kind as a string for debugging
+	 */
+	function getTokenKindDesc(kind) {
+	  return tokenDescription[kind];
+	}
+	
+	var tokenDescription = {};
+	tokenDescription[TokenKind.EOF] = 'EOF';
+	tokenDescription[TokenKind.BANG] = '!';
+	tokenDescription[TokenKind.DOLLAR] = '$';
+	tokenDescription[TokenKind.PAREN_L] = '(';
+	tokenDescription[TokenKind.PAREN_R] = ')';
+	tokenDescription[TokenKind.SPREAD] = '...';
+	tokenDescription[TokenKind.COLON] = ':';
+	tokenDescription[TokenKind.EQUALS] = '=';
+	tokenDescription[TokenKind.AT] = '@';
+	tokenDescription[TokenKind.BRACKET_L] = '[';
+	tokenDescription[TokenKind.BRACKET_R] = ']';
+	tokenDescription[TokenKind.BRACE_L] = '{';
+	tokenDescription[TokenKind.PIPE] = '|';
+	tokenDescription[TokenKind.BRACE_R] = '}';
+	tokenDescription[TokenKind.NAME] = 'Name';
+	tokenDescription[TokenKind.INT] = 'Int';
+	tokenDescription[TokenKind.FLOAT] = 'Float';
+	tokenDescription[TokenKind.STRING] = 'String';
+	
+	var charCodeAt = String.prototype.charCodeAt;
+	var slice = String.prototype.slice;
+	
+	/**
+	 * Helper function for constructing the Token object.
+	 */
+	function makeToken(kind, start, end, value) {
+	  return { kind: kind, start: start, end: end, value: value };
+	}
+	
+	function printCharCode(code) {
+	  return(
+	    // NaN/undefined represents access beyond the end of the file.
+	    isNaN(code) ? '<EOF>' :
+	    // Trust JSON for ASCII.
+	    code < 0x007F ? (0, _stringify2.default)(String.fromCharCode(code)) :
+	    // Otherwise print the escaped form.
+	    '"\\u' + ('00' + code.toString(16).toUpperCase()).slice(-4) + '"'
+	  );
+	}
+	
+	/**
+	 * Gets the next token from the source starting at the given position.
+	 *
+	 * This skips over whitespace and comments until it finds the next lexable
+	 * token, then lexes punctuators immediately or calls the appropriate helper
+	 * function for more complicated tokens.
+	 */
+	function readToken(source, fromPosition) {
+	  var body = source.body;
+	  var bodyLength = body.length;
+	
+	  var position = positionAfterWhitespace(body, fromPosition);
+	
+	  if (position >= bodyLength) {
+	    return makeToken(TokenKind.EOF, position, position);
+	  }
+	
+	  var code = charCodeAt.call(body, position);
+	
+	  // SourceCharacter
+	  if (code < 0x0020 && code !== 0x0009 && code !== 0x000A && code !== 0x000D) {
+	    throw (0, _error.syntaxError)(source, position, 'Invalid character ' + printCharCode(code) + '.');
+	  }
+	
+	  switch (code) {
+	    // !
+	    case 33:
+	      return makeToken(TokenKind.BANG, position, position + 1);
+	    // $
+	    case 36:
+	      return makeToken(TokenKind.DOLLAR, position, position + 1);
+	    // (
+	    case 40:
+	      return makeToken(TokenKind.PAREN_L, position, position + 1);
+	    // )
+	    case 41:
+	      return makeToken(TokenKind.PAREN_R, position, position + 1);
+	    // .
+	    case 46:
+	      if (charCodeAt.call(body, position + 1) === 46 && charCodeAt.call(body, position + 2) === 46) {
+	        return makeToken(TokenKind.SPREAD, position, position + 3);
+	      }
+	      break;
+	    // :
+	    case 58:
+	      return makeToken(TokenKind.COLON, position, position + 1);
+	    // =
+	    case 61:
+	      return makeToken(TokenKind.EQUALS, position, position + 1);
+	    // @
+	    case 64:
+	      return makeToken(TokenKind.AT, position, position + 1);
+	    // [
+	    case 91:
+	      return makeToken(TokenKind.BRACKET_L, position, position + 1);
+	    // ]
+	    case 93:
+	      return makeToken(TokenKind.BRACKET_R, position, position + 1);
+	    // {
+	    case 123:
+	      return makeToken(TokenKind.BRACE_L, position, position + 1);
+	    // |
+	    case 124:
+	      return makeToken(TokenKind.PIPE, position, position + 1);
+	    // }
+	    case 125:
+	      return makeToken(TokenKind.BRACE_R, position, position + 1);
+	    // A-Z
+	    case 65:case 66:case 67:case 68:case 69:case 70:case 71:case 72:
+	    case 73:case 74:case 75:case 76:case 77:case 78:case 79:case 80:
+	    case 81:case 82:case 83:case 84:case 85:case 86:case 87:case 88:
+	    case 89:case 90:
+	    // _
+	    case 95:
+	    // a-z
+	    case 97:case 98:case 99:case 100:case 101:case 102:case 103:case 104:
+	    case 105:case 106:case 107:case 108:case 109:case 110:case 111:
+	    case 112:case 113:case 114:case 115:case 116:case 117:case 118:
+	    case 119:case 120:case 121:case 122:
+	      return readName(source, position);
+	    // -
+	    case 45:
+	    // 0-9
+	    case 48:case 49:case 50:case 51:case 52:
+	    case 53:case 54:case 55:case 56:case 57:
+	      return readNumber(source, position, code);
+	    // "
+	    case 34:
+	      return readString(source, position);
+	  }
+	
+	  throw (0, _error.syntaxError)(source, position, 'Unexpected character ' + printCharCode(code) + '.');
+	}
+	
+	/**
+	 * Reads from body starting at startPosition until it finds a non-whitespace
+	 * or commented character, then returns the position of that character for
+	 * lexing.
+	 */
+	function positionAfterWhitespace(body, startPosition) {
+	  var bodyLength = body.length;
+	  var position = startPosition;
+	  while (position < bodyLength) {
+	    var code = charCodeAt.call(body, position);
+	    // Skip Ignored
+	    if (
+	    // BOM
+	    code === 0xFEFF ||
+	    // White Space
+	    code === 0x0009 || // tab
+	    code === 0x0020 || // space
+	    // Line Terminator
+	    code === 0x000A || // new line
+	    code === 0x000D || // carriage return
+	    // Comma
+	    code === 0x002C) {
+	      ++position;
+	      // Skip comments
+	    } else if (code === 35) {
+	        // #
+	        ++position;
+	        while (position < bodyLength && (code = charCodeAt.call(body, position)) !== null && (
+	        // SourceCharacter but not LineTerminator
+	        code > 0x001F || code === 0x0009) && code !== 0x000A && code !== 0x000D) {
+	          ++position;
+	        }
+	      } else {
+	        break;
+	      }
+	  }
+	  return position;
+	}
+	
+	/**
+	 * Reads a number token from the source file, either a float
+	 * or an int depending on whether a decimal point appears.
+	 *
+	 * Int:   -?(0|[1-9][0-9]*)
+	 * Float: -?(0|[1-9][0-9]*)(\.[0-9]+)?((E|e)(+|-)?[0-9]+)?
+	 */
+	function readNumber(source, start, firstCode) {
+	  var body = source.body;
+	  var code = firstCode;
+	  var position = start;
+	  var isFloat = false;
+	
+	  if (code === 45) {
+	    // -
+	    code = charCodeAt.call(body, ++position);
+	  }
+	
+	  if (code === 48) {
+	    // 0
+	    code = charCodeAt.call(body, ++position);
+	    if (code >= 48 && code <= 57) {
+	      throw (0, _error.syntaxError)(source, position, 'Invalid number, unexpected digit after 0: ' + printCharCode(code) + '.');
+	    }
+	  } else {
+	    position = readDigits(source, position, code);
+	    code = charCodeAt.call(body, position);
+	  }
+	
+	  if (code === 46) {
+	    // .
+	    isFloat = true;
+	
+	    code = charCodeAt.call(body, ++position);
+	    position = readDigits(source, position, code);
+	    code = charCodeAt.call(body, position);
+	  }
+	
+	  if (code === 69 || code === 101) {
+	    // E e
+	    isFloat = true;
+	
+	    code = charCodeAt.call(body, ++position);
+	    if (code === 43 || code === 45) {
+	      // + -
+	      code = charCodeAt.call(body, ++position);
+	    }
+	    position = readDigits(source, position, code);
+	  }
+	
+	  return makeToken(isFloat ? TokenKind.FLOAT : TokenKind.INT, start, position, slice.call(body, start, position));
+	}
+	
+	/**
+	 * Returns the new position in the source after reading digits.
+	 */
+	function readDigits(source, start, firstCode) {
+	  var body = source.body;
+	  var position = start;
+	  var code = firstCode;
+	  if (code >= 48 && code <= 57) {
+	    // 0 - 9
+	    do {
+	      code = charCodeAt.call(body, ++position);
+	    } while (code >= 48 && code <= 57); // 0 - 9
+	    return position;
+	  }
+	  throw (0, _error.syntaxError)(source, position, 'Invalid number, expected digit but got: ' + printCharCode(code) + '.');
+	}
+	
+	/**
+	 * Reads a string token from the source file.
+	 *
+	 * "([^"\\\u000A\u000D]|(\\(u[0-9a-fA-F]{4}|["\\/bfnrt])))*"
+	 */
+	function readString(source, start) {
+	  var body = source.body;
+	  var position = start + 1;
+	  var chunkStart = position;
+	  var code = 0;
+	  var value = '';
+	
+	  while (position < body.length && (code = charCodeAt.call(body, position)) !== null &&
+	  // not LineTerminator
+	  code !== 0x000A && code !== 0x000D &&
+	  // not Quote (")
+	  code !== 34) {
+	    // SourceCharacter
+	    if (code < 0x0020 && code !== 0x0009) {
+	      throw (0, _error.syntaxError)(source, position, 'Invalid character within String: ' + printCharCode(code) + '.');
+	    }
+	
+	    ++position;
+	    if (code === 92) {
+	      // \
+	      value += slice.call(body, chunkStart, position - 1);
+	      code = charCodeAt.call(body, position);
+	      switch (code) {
+	        case 34:
+	          value += '"';break;
+	        case 47:
+	          value += '\/';break;
+	        case 92:
+	          value += '\\';break;
+	        case 98:
+	          value += '\b';break;
+	        case 102:
+	          value += '\f';break;
+	        case 110:
+	          value += '\n';break;
+	        case 114:
+	          value += '\r';break;
+	        case 116:
+	          value += '\t';break;
+	        case 117:
+	          // u
+	          var charCode = uniCharCode(charCodeAt.call(body, position + 1), charCodeAt.call(body, position + 2), charCodeAt.call(body, position + 3), charCodeAt.call(body, position + 4));
+	          if (charCode < 0) {
+	            throw (0, _error.syntaxError)(source, position, 'Invalid character escape sequence: ' + ('\\u' + body.slice(position + 1, position + 5) + '.'));
+	          }
+	          value += String.fromCharCode(charCode);
+	          position += 4;
+	          break;
+	        default:
+	          throw (0, _error.syntaxError)(source, position, 'Invalid character escape sequence: \\' + String.fromCharCode(code) + '.');
+	      }
+	      ++position;
+	      chunkStart = position;
+	    }
+	  }
+	
+	  if (code !== 34) {
+	    // quote (")
+	    throw (0, _error.syntaxError)(source, position, 'Unterminated string.');
+	  }
+	
+	  value += slice.call(body, chunkStart, position);
+	  return makeToken(TokenKind.STRING, start, position + 1, value);
+	}
+	
+	/**
+	 * Converts four hexidecimal chars to the integer that the
+	 * string represents. For example, uniCharCode('0','0','0','f')
+	 * will return 15, and uniCharCode('0','0','f','f') returns 255.
+	 *
+	 * Returns a negative number on error, if a char was invalid.
+	 *
+	 * This is implemented by noting that char2hex() returns -1 on error,
+	 * which means the result of ORing the char2hex() will also be negative.
+	 */
+	function uniCharCode(a, b, c, d) {
+	  return char2hex(a) << 12 | char2hex(b) << 8 | char2hex(c) << 4 | char2hex(d);
+	}
+	
+	/**
+	 * Converts a hex character to its integer value.
+	 * '0' becomes 0, '9' becomes 9
+	 * 'A' becomes 10, 'F' becomes 15
+	 * 'a' becomes 10, 'f' becomes 15
+	 *
+	 * Returns -1 on error.
+	 */
+	function char2hex(a) {
+	  return a >= 48 && a <= 57 ? a - 48 : // 0-9
+	  a >= 65 && a <= 70 ? a - 55 : // A-F
+	  a >= 97 && a <= 102 ? a - 87 : // a-f
+	  -1;
+	}
+	
+	/**
+	 * Reads an alphanumeric + underscore name from the source.
+	 *
+	 * [_A-Za-z][_0-9A-Za-z]*
+	 */
+	function readName(source, position) {
+	  var body = source.body;
+	  var bodyLength = body.length;
+	  var end = position + 1;
+	  var code = 0;
+	  while (end !== bodyLength && (code = charCodeAt.call(body, end)) !== null && (code === 95 || // _
+	  code >= 48 && code <= 57 || // 0-9
+	  code >= 65 && code <= 90 || // A-Z
+	  code >= 97 && code <= 122 // a-z
+	  )) {
+	    ++end;
+	  }
+	  return makeToken(TokenKind.NAME, position, end, slice.call(body, position, end));
+	}
+
+/***/ },
+/* 339 */
+/*!**********************************!*\
+  !*** ./~/graphql/error/index.js ***!
+  \**********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _GraphQLError = __webpack_require__(/*! ./GraphQLError */ 340);
+	
+	Object.defineProperty(exports, 'GraphQLError', {
+	  enumerable: true,
+	  get: function get() {
+	    return _GraphQLError.GraphQLError;
+	  }
+	});
+	
+	var _syntaxError = __webpack_require__(/*! ./syntaxError */ 350);
+	
+	Object.defineProperty(exports, 'syntaxError', {
+	  enumerable: true,
+	  get: function get() {
+	    return _syntaxError.syntaxError;
+	  }
+	});
+	
+	var _locatedError = __webpack_require__(/*! ./locatedError */ 351);
+	
+	Object.defineProperty(exports, 'locatedError', {
+	  enumerable: true,
+	  get: function get() {
+	    return _locatedError.locatedError;
+	  }
+	});
+	
+	var _formatError = __webpack_require__(/*! ./formatError */ 352);
+	
+	Object.defineProperty(exports, 'formatError', {
+	  enumerable: true,
+	  get: function get() {
+	    return _formatError.formatError;
+	  }
+	});
+
+/***/ },
+/* 340 */
+/*!*****************************************!*\
+  !*** ./~/graphql/error/GraphQLError.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.GraphQLError = undefined;
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 341);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 344);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 345);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _language = __webpack_require__(/*! ../language */ 336);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var GraphQLError = exports.GraphQLError = function (_Error) {
+	  (0, _inherits3.default)(GraphQLError, _Error);
+	
+	  function GraphQLError(message,
+	  // A flow bug keeps us from declaring nodes as an array of Node
+	  nodes, /* Node */stack, source, positions) {
+	    (0, _classCallCheck3.default)(this, GraphQLError);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(GraphQLError).call(this, message));
+	
+	    _this.message = message;
+	
+	    Object.defineProperty(_this, 'stack', { value: stack || message });
+	    Object.defineProperty(_this, 'nodes', { value: nodes });
+	
+	    // Note: flow does not yet know about Object.defineProperty with `get`.
+	    Object.defineProperty(_this, 'source', {
+	      get: function get() {
+	        if (source) {
+	          return source;
+	        }
+	        if (nodes && nodes.length > 0) {
+	          var node = nodes[0];
+	          return node && node.loc && node.loc.source;
+	        }
+	      }
+	    });
+	
+	    Object.defineProperty(_this, 'positions', {
+	      get: function get() {
+	        if (positions) {
+	          return positions;
+	        }
+	        if (nodes) {
+	          var nodePositions = nodes.map(function (node) {
+	            return node.loc && node.loc.start;
+	          });
+	          if (nodePositions.some(function (p) {
+	            return p;
+	          })) {
+	            return nodePositions;
+	          }
+	        }
+	      }
+	    });
+	
+	    Object.defineProperty(_this, 'locations', {
+	      get: function get() {
+	        var _this2 = this;
+	
+	        if (this.positions && this.source) {
+	          return this.positions.map(function (pos) {
+	            return (0, _language.getLocation)(_this2.source, pos);
+	          });
+	        }
+	      }
+	    });
+	    return _this;
+	  }
+	
+	  return GraphQLError;
+	}(Error);
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+/***/ },
+/* 341 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/get-prototype-of.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/get-prototype-of */ 342), __esModule: true };
+
+/***/ },
+/* 342 */
+/*!*************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/get-prototype-of.js ***!
+  \*************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.get-prototype-of */ 343);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Object.getPrototypeOf;
+
+/***/ },
+/* 343 */
+/*!**********************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.get-prototype-of.js ***!
+  \**********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.2.9 Object.getPrototypeOf(O)
+	var toObject        = __webpack_require__(/*! ./_to-object */ 211)
+	  , $getPrototypeOf = __webpack_require__(/*! ./_object-gpo */ 266);
+	
+	__webpack_require__(/*! ./_object-sap */ 228)('getPrototypeOf', function(){
+	  return function getPrototypeOf(it){
+	    return $getPrototypeOf(toObject(it));
+	  };
+	});
+
+/***/ },
+/* 344 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/helpers/possibleConstructorReturn.js ***!
+  \**************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _typeof2 = __webpack_require__(/*! ../helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }
+	
+	  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
+	};
+
+/***/ },
+/* 345 */
+/*!*********************************************!*\
+  !*** ./~/babel-runtime/helpers/inherits.js ***!
+  \*********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _setPrototypeOf = __webpack_require__(/*! ../core-js/object/set-prototype-of */ 346);
+	
+	var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
+	
+	var _create = __webpack_require__(/*! ../core-js/object/create */ 322);
+	
+	var _create2 = _interopRequireDefault(_create);
+	
+	var _typeof2 = __webpack_require__(/*! ../helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
+	  }
+	
+	  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
+	    constructor: {
+	      value: subClass,
+	      enumerable: false,
+	      writable: true,
+	      configurable: true
+	    }
+	  });
+	  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
+	};
+
+/***/ },
+/* 346 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/core-js/object/set-prototype-of.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/set-prototype-of */ 347), __esModule: true };
+
+/***/ },
+/* 347 */
+/*!*************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/object/set-prototype-of.js ***!
+  \*************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ 348);
+	module.exports = __webpack_require__(/*! ../../modules/_core */ 230).Object.setPrototypeOf;
+
+/***/ },
+/* 348 */
+/*!**********************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.object.set-prototype-of.js ***!
+  \**********************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 19.1.3.19 Object.setPrototypeOf(O, proto)
+	var $export = __webpack_require__(/*! ./_export */ 229);
+	$export($export.S, 'Object', {setPrototypeOf: __webpack_require__(/*! ./_set-proto */ 349).set});
+
+/***/ },
+/* 349 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_set-proto.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// Works with __proto__ only. Old v8 can't work with null proto objects.
+	/* eslint-disable no-proto */
+	var isObject = __webpack_require__(/*! ./_is-object */ 236)
+	  , anObject = __webpack_require__(/*! ./_an-object */ 235);
+	var check = function(O, proto){
+	  anObject(O);
+	  if(!isObject(proto) && proto !== null)throw TypeError(proto + ": can't set as prototype!");
+	};
+	module.exports = {
+	  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
+	    function(test, buggy, set){
+	      try {
+	        set = __webpack_require__(/*! ./_ctx */ 231)(Function.call, __webpack_require__(/*! ./_object-gopd */ 311).f(Object.prototype, '__proto__').set, 2);
+	        set(test, []);
+	        buggy = !(test instanceof Array);
+	      } catch(e){ buggy = true; }
+	      return function setPrototypeOf(O, proto){
+	        check(O, proto);
+	        if(buggy)O.__proto__ = proto;
+	        else set(O, proto);
+	        return O;
+	      };
+	    }({}, false) : undefined),
+	  check: check
+	};
+
+/***/ },
+/* 350 */
+/*!****************************************!*\
+  !*** ./~/graphql/error/syntaxError.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.syntaxError = syntaxError;
+	
+	var _location = __webpack_require__(/*! ../language/location */ 337);
+	
+	var _GraphQLError = __webpack_require__(/*! ./GraphQLError */ 340);
+	
+	/**
+	 * Produces a GraphQLError representing a syntax error, containing useful
+	 * descriptive information about the syntax error's position in the source.
+	 */
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function syntaxError(source, position, description) {
+	  var location = (0, _location.getLocation)(source, position);
+	  var error = new _GraphQLError.GraphQLError('Syntax Error ' + source.name + ' (' + location.line + ':' + location.column + ') ' + description + '\n\n' + highlightSourceAtLocation(source, location), undefined, undefined, source, [position]);
+	  return error;
+	}
+	
+	/**
+	 * Render a helpful description of the location of the error in the GraphQL
+	 * Source document.
+	 */
+	function highlightSourceAtLocation(source, location) {
+	  var line = location.line;
+	  var prevLineNum = (line - 1).toString();
+	  var lineNum = line.toString();
+	  var nextLineNum = (line + 1).toString();
+	  var padLen = nextLineNum.length;
+	  var lines = source.body.split(/\r\n|[\n\r]/g);
+	  return (line >= 2 ? lpad(padLen, prevLineNum) + ': ' + lines[line - 2] + '\n' : '') + lpad(padLen, lineNum) + ': ' + lines[line - 1] + '\n' + Array(2 + padLen + location.column).join(' ') + '^\n' + (line < lines.length ? lpad(padLen, nextLineNum) + ': ' + lines[line] + '\n' : '');
+	}
+	
+	function lpad(len, str) {
+	  return Array(len - str.length + 1).join(' ') + str;
+	}
+
+/***/ },
+/* 351 */
+/*!*****************************************!*\
+  !*** ./~/graphql/error/locatedError.js ***!
+  \*****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.locatedError = locatedError;
+	
+	var _GraphQLError = __webpack_require__(/*! ./GraphQLError */ 340);
+	
+	/**
+	 * Given an arbitrary Error, presumably thrown while attempting to execute a
+	 * GraphQL operation, produce a new GraphQLError aware of the location in the
+	 * document responsible for the original Error.
+	 */
+	function locatedError(originalError, nodes) {
+	  var message = originalError ? originalError.message || String(originalError) : 'An unknown error occurred.';
+	  var stack = originalError ? originalError.stack : null;
+	  var error = new _GraphQLError.GraphQLError(message, nodes, stack);
+	  error.originalError = originalError;
+	  return error;
+	}
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+/***/ },
+/* 352 */
+/*!****************************************!*\
+  !*** ./~/graphql/error/formatError.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.formatError = formatError;
+	
+	var _invariant = __webpack_require__(/*! ../jsutils/invariant */ 320);
+	
+	var _invariant2 = _interopRequireDefault(_invariant);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Given a GraphQLError, format it according to the rules described by the
+	 * Response Format, Errors section of the GraphQL Specification.
+	 */
+	function formatError(error) {
+	  (0, _invariant2.default)(error, 'Received null or undefined error.');
+	  return {
+	    message: error.message,
+	    locations: error.locations
+	  };
+	}
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+
+/***/ },
+/* 353 */
+/*!**************************************!*\
+  !*** ./~/graphql/language/parser.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.parse = parse;
+	exports.parseValue = parseValue;
+	exports.parseConstValue = parseConstValue;
+	exports.parseType = parseType;
+	exports.parseNamedType = parseNamedType;
+	
+	var _source = __webpack_require__(/*! ./source */ 354);
+	
+	var _error = __webpack_require__(/*! ../error */ 339);
+	
+	var _lexer = __webpack_require__(/*! ./lexer */ 338);
+	
+	var _kinds = __webpack_require__(/*! ./kinds */ 316);
+	
+	/**
+	 * Given a GraphQL source, parses it into a Document.
+	 * Throws GraphQLError if a syntax error is encountered.
+	 */
+	
+	
+	/**
+	 * Configuration options to control parser behavior
+	 */
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	function parse(source, options) {
+	  var sourceObj = source instanceof _source.Source ? source : new _source.Source(source);
+	  var parser = makeParser(sourceObj, options || {});
+	  return parseDocument(parser);
+	}
+	
+	/**
+	 * Given a string containing a GraphQL value, parse the AST for that value.
+	 * Throws GraphQLError if a syntax error is encountered.
+	 *
+	 * This is useful within tools that operate upon GraphQL Values directly and
+	 * in isolation of complete GraphQL documents.
+	 */
+	function parseValue(source, options) {
+	  var sourceObj = source instanceof _source.Source ? source : new _source.Source(source);
+	  var parser = makeParser(sourceObj, options || {});
+	  return parseValueLiteral(parser, false);
+	}
+	
+	/**
+	 * Converts a name lex token into a name parse node.
+	 */
+	function parseName(parser) {
+	  var token = expect(parser, _lexer.TokenKind.NAME);
+	  return {
+	    kind: _kinds.NAME,
+	    value: token.value,
+	    loc: loc(parser, token.start)
+	  };
+	}
+	
+	// Implements the parsing rules in the Document section.
+	
+	/**
+	 * Document : Definition+
+	 */
+	function parseDocument(parser) {
+	  var start = parser.token.start;
+	
+	  var definitions = [];
+	  do {
+	    definitions.push(parseDefinition(parser));
+	  } while (!skip(parser, _lexer.TokenKind.EOF));
+	
+	  return {
+	    kind: _kinds.DOCUMENT,
+	    definitions: definitions,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * Definition :
+	 *   - OperationDefinition
+	 *   - FragmentDefinition
+	 *   - TypeSystemDefinition
+	 */
+	function parseDefinition(parser) {
+	  if (peek(parser, _lexer.TokenKind.BRACE_L)) {
+	    return parseOperationDefinition(parser);
+	  }
+	
+	  if (peek(parser, _lexer.TokenKind.NAME)) {
+	    switch (parser.token.value) {
+	      case 'query':
+	      case 'mutation':
+	      // Note: subscription is an experimental non-spec addition.
+	      case 'subscription':
+	        return parseOperationDefinition(parser);
+	
+	      case 'fragment':
+	        return parseFragmentDefinition(parser);
+	
+	      // Note: the Type System IDL is an experimental non-spec addition.
+	      case 'schema':
+	      case 'scalar':
+	      case 'type':
+	      case 'interface':
+	      case 'union':
+	      case 'enum':
+	      case 'input':
+	      case 'extend':
+	      case 'directive':
+	        return parseTypeSystemDefinition(parser);
+	    }
+	  }
+	
+	  throw unexpected(parser);
+	}
+	
+	// Implements the parsing rules in the Operations section.
+	
+	/**
+	 * OperationDefinition :
+	 *  - SelectionSet
+	 *  - OperationType Name? VariableDefinitions? Directives? SelectionSet
+	 */
+	function parseOperationDefinition(parser) {
+	  var start = parser.token.start;
+	  if (peek(parser, _lexer.TokenKind.BRACE_L)) {
+	    return {
+	      kind: _kinds.OPERATION_DEFINITION,
+	      operation: 'query',
+	      name: null,
+	      variableDefinitions: null,
+	      directives: [],
+	      selectionSet: parseSelectionSet(parser),
+	      loc: loc(parser, start)
+	    };
+	  }
+	  var operation = parseOperationType(parser);
+	  var name = void 0;
+	  if (peek(parser, _lexer.TokenKind.NAME)) {
+	    name = parseName(parser);
+	  }
+	  return {
+	    kind: _kinds.OPERATION_DEFINITION,
+	    operation: operation,
+	    name: name,
+	    variableDefinitions: parseVariableDefinitions(parser),
+	    directives: parseDirectives(parser),
+	    selectionSet: parseSelectionSet(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * OperationType : one of query mutation subscription
+	 */
+	function parseOperationType(parser) {
+	  var operationToken = expect(parser, _lexer.TokenKind.NAME);
+	  switch (operationToken.value) {
+	    case 'query':
+	      return 'query';
+	    case 'mutation':
+	      return 'mutation';
+	    // Note: subscription is an experimental non-spec addition.
+	    case 'subscription':
+	      return 'subscription';
+	  }
+	
+	  throw unexpected(parser, operationToken);
+	}
+	
+	/**
+	 * VariableDefinitions : ( VariableDefinition+ )
+	 */
+	function parseVariableDefinitions(parser) {
+	  return peek(parser, _lexer.TokenKind.PAREN_L) ? many(parser, _lexer.TokenKind.PAREN_L, parseVariableDefinition, _lexer.TokenKind.PAREN_R) : [];
+	}
+	
+	/**
+	 * VariableDefinition : Variable : Type DefaultValue?
+	 */
+	function parseVariableDefinition(parser) {
+	  var start = parser.token.start;
+	  return {
+	    kind: _kinds.VARIABLE_DEFINITION,
+	    variable: parseVariable(parser),
+	    type: (expect(parser, _lexer.TokenKind.COLON), parseType(parser)),
+	    defaultValue: skip(parser, _lexer.TokenKind.EQUALS) ? parseValueLiteral(parser, true) : null,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * Variable : $ Name
+	 */
+	function parseVariable(parser) {
+	  var start = parser.token.start;
+	  expect(parser, _lexer.TokenKind.DOLLAR);
+	  return {
+	    kind: _kinds.VARIABLE,
+	    name: parseName(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * SelectionSet : { Selection+ }
+	 */
+	function parseSelectionSet(parser) {
+	  var start = parser.token.start;
+	  return {
+	    kind: _kinds.SELECTION_SET,
+	    selections: many(parser, _lexer.TokenKind.BRACE_L, parseSelection, _lexer.TokenKind.BRACE_R),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * Selection :
+	 *   - Field
+	 *   - FragmentSpread
+	 *   - InlineFragment
+	 */
+	function parseSelection(parser) {
+	  return peek(parser, _lexer.TokenKind.SPREAD) ? parseFragment(parser) : parseField(parser);
+	}
+	
+	/**
+	 * Field : Alias? Name Arguments? Directives? SelectionSet?
+	 *
+	 * Alias : Name :
+	 */
+	function parseField(parser) {
+	  var start = parser.token.start;
+	
+	  var nameOrAlias = parseName(parser);
+	  var alias = void 0;
+	  var name = void 0;
+	  if (skip(parser, _lexer.TokenKind.COLON)) {
+	    alias = nameOrAlias;
+	    name = parseName(parser);
+	  } else {
+	    alias = null;
+	    name = nameOrAlias;
+	  }
+	
+	  return {
+	    kind: _kinds.FIELD,
+	    alias: alias,
+	    name: name,
+	    arguments: parseArguments(parser),
+	    directives: parseDirectives(parser),
+	    selectionSet: peek(parser, _lexer.TokenKind.BRACE_L) ? parseSelectionSet(parser) : null,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * Arguments : ( Argument+ )
+	 */
+	function parseArguments(parser) {
+	  return peek(parser, _lexer.TokenKind.PAREN_L) ? many(parser, _lexer.TokenKind.PAREN_L, parseArgument, _lexer.TokenKind.PAREN_R) : [];
+	}
+	
+	/**
+	 * Argument : Name : Value
+	 */
+	function parseArgument(parser) {
+	  var start = parser.token.start;
+	  return {
+	    kind: _kinds.ARGUMENT,
+	    name: parseName(parser),
+	    value: (expect(parser, _lexer.TokenKind.COLON), parseValueLiteral(parser, false)),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	// Implements the parsing rules in the Fragments section.
+	
+	/**
+	 * Corresponds to both FragmentSpread and InlineFragment in the spec.
+	 *
+	 * FragmentSpread : ... FragmentName Directives?
+	 *
+	 * InlineFragment : ... TypeCondition? Directives? SelectionSet
+	 */
+	function parseFragment(parser) {
+	  var start = parser.token.start;
+	  expect(parser, _lexer.TokenKind.SPREAD);
+	  if (peek(parser, _lexer.TokenKind.NAME) && parser.token.value !== 'on') {
+	    return {
+	      kind: _kinds.FRAGMENT_SPREAD,
+	      name: parseFragmentName(parser),
+	      directives: parseDirectives(parser),
+	      loc: loc(parser, start)
+	    };
+	  }
+	  var typeCondition = null;
+	  if (parser.token.value === 'on') {
+	    advance(parser);
+	    typeCondition = parseNamedType(parser);
+	  }
+	  return {
+	    kind: _kinds.INLINE_FRAGMENT,
+	    typeCondition: typeCondition,
+	    directives: parseDirectives(parser),
+	    selectionSet: parseSelectionSet(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * FragmentDefinition :
+	 *   - fragment FragmentName on TypeCondition Directives? SelectionSet
+	 *
+	 * TypeCondition : NamedType
+	 */
+	function parseFragmentDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'fragment');
+	  return {
+	    kind: _kinds.FRAGMENT_DEFINITION,
+	    name: parseFragmentName(parser),
+	    typeCondition: (expectKeyword(parser, 'on'), parseNamedType(parser)),
+	    directives: parseDirectives(parser),
+	    selectionSet: parseSelectionSet(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * FragmentName : Name but not `on`
+	 */
+	function parseFragmentName(parser) {
+	  if (parser.token.value === 'on') {
+	    throw unexpected(parser);
+	  }
+	  return parseName(parser);
+	}
+	
+	// Implements the parsing rules in the Values section.
+	
+	/**
+	 * Value[Const] :
+	 *   - [~Const] Variable
+	 *   - IntValue
+	 *   - FloatValue
+	 *   - StringValue
+	 *   - BooleanValue
+	 *   - EnumValue
+	 *   - ListValue[?Const]
+	 *   - ObjectValue[?Const]
+	 *
+	 * BooleanValue : one of `true` `false`
+	 *
+	 * EnumValue : Name but not `true`, `false` or `null`
+	 */
+	function parseValueLiteral(parser, isConst) {
+	  var token = parser.token;
+	  switch (token.kind) {
+	    case _lexer.TokenKind.BRACKET_L:
+	      return parseList(parser, isConst);
+	    case _lexer.TokenKind.BRACE_L:
+	      return parseObject(parser, isConst);
+	    case _lexer.TokenKind.INT:
+	      advance(parser);
+	      return {
+	        kind: _kinds.INT,
+	        value: token.value,
+	        loc: loc(parser, token.start)
+	      };
+	    case _lexer.TokenKind.FLOAT:
+	      advance(parser);
+	      return {
+	        kind: _kinds.FLOAT,
+	        value: token.value,
+	        loc: loc(parser, token.start)
+	      };
+	    case _lexer.TokenKind.STRING:
+	      advance(parser);
+	      return {
+	        kind: _kinds.STRING,
+	        value: token.value,
+	        loc: loc(parser, token.start)
+	      };
+	    case _lexer.TokenKind.NAME:
+	      if (token.value === 'true' || token.value === 'false') {
+	        advance(parser);
+	        return {
+	          kind: _kinds.BOOLEAN,
+	          value: token.value === 'true',
+	          loc: loc(parser, token.start)
+	        };
+	      } else if (token.value !== 'null') {
+	        advance(parser);
+	        return {
+	          kind: _kinds.ENUM,
+	          value: token.value,
+	          loc: loc(parser, token.start)
+	        };
+	      }
+	      break;
+	    case _lexer.TokenKind.DOLLAR:
+	      if (!isConst) {
+	        return parseVariable(parser);
+	      }
+	      break;
+	  }
+	  throw unexpected(parser);
+	}
+	
+	function parseConstValue(parser) {
+	  return parseValueLiteral(parser, true);
+	}
+	
+	function parseValueValue(parser) {
+	  return parseValueLiteral(parser, false);
+	}
+	
+	/**
+	 * ListValue[Const] :
+	 *   - [ ]
+	 *   - [ Value[?Const]+ ]
+	 */
+	function parseList(parser, isConst) {
+	  var start = parser.token.start;
+	  var item = isConst ? parseConstValue : parseValueValue;
+	  return {
+	    kind: _kinds.LIST,
+	    values: any(parser, _lexer.TokenKind.BRACKET_L, item, _lexer.TokenKind.BRACKET_R),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ObjectValue[Const] :
+	 *   - { }
+	 *   - { ObjectField[?Const]+ }
+	 */
+	function parseObject(parser, isConst) {
+	  var start = parser.token.start;
+	  expect(parser, _lexer.TokenKind.BRACE_L);
+	  var fields = [];
+	  while (!skip(parser, _lexer.TokenKind.BRACE_R)) {
+	    fields.push(parseObjectField(parser, isConst));
+	  }
+	  return {
+	    kind: _kinds.OBJECT,
+	    fields: fields,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ObjectField[Const] : Name : Value[?Const]
+	 */
+	function parseObjectField(parser, isConst) {
+	  var start = parser.token.start;
+	  return {
+	    kind: _kinds.OBJECT_FIELD,
+	    name: parseName(parser),
+	    value: (expect(parser, _lexer.TokenKind.COLON), parseValueLiteral(parser, isConst)),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	// Implements the parsing rules in the Directives section.
+	
+	/**
+	 * Directives : Directive+
+	 */
+	function parseDirectives(parser) {
+	  var directives = [];
+	  while (peek(parser, _lexer.TokenKind.AT)) {
+	    directives.push(parseDirective(parser));
+	  }
+	  return directives;
+	}
+	
+	/**
+	 * Directive : @ Name Arguments?
+	 */
+	function parseDirective(parser) {
+	  var start = parser.token.start;
+	  expect(parser, _lexer.TokenKind.AT);
+	  return {
+	    kind: _kinds.DIRECTIVE,
+	    name: parseName(parser),
+	    arguments: parseArguments(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	// Implements the parsing rules in the Types section.
+	
+	/**
+	 * Type :
+	 *   - NamedType
+	 *   - ListType
+	 *   - NonNullType
+	 */
+	function parseType(parser) {
+	  var start = parser.token.start;
+	  var type = void 0;
+	  if (skip(parser, _lexer.TokenKind.BRACKET_L)) {
+	    type = parseType(parser);
+	    expect(parser, _lexer.TokenKind.BRACKET_R);
+	    type = {
+	      kind: _kinds.LIST_TYPE,
+	      type: type,
+	      loc: loc(parser, start)
+	    };
+	  } else {
+	    type = parseNamedType(parser);
+	  }
+	  if (skip(parser, _lexer.TokenKind.BANG)) {
+	    return {
+	      kind: _kinds.NON_NULL_TYPE,
+	      type: type,
+	      loc: loc(parser, start)
+	    };
+	  }
+	  return type;
+	}
+	
+	/**
+	 * NamedType : Name
+	 */
+	function parseNamedType(parser) {
+	  var start = parser.token.start;
+	  return {
+	    kind: _kinds.NAMED_TYPE,
+	    name: parseName(parser),
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	// Implements the parsing rules in the Type Definition section.
+	
+	/**
+	 * TypeSystemDefinition :
+	 *   - SchemaDefinition
+	 *   - TypeDefinition
+	 *   - TypeExtensionDefinition
+	 *   - DirectiveDefinition
+	 *
+	 * TypeDefinition :
+	 *   - ScalarTypeDefinition
+	 *   - ObjectTypeDefinition
+	 *   - InterfaceTypeDefinition
+	 *   - UnionTypeDefinition
+	 *   - EnumTypeDefinition
+	 *   - InputObjectTypeDefinition
+	 */
+	function parseTypeSystemDefinition(parser) {
+	  if (peek(parser, _lexer.TokenKind.NAME)) {
+	    switch (parser.token.value) {
+	      case 'schema':
+	        return parseSchemaDefinition(parser);
+	      case 'scalar':
+	        return parseScalarTypeDefinition(parser);
+	      case 'type':
+	        return parseObjectTypeDefinition(parser);
+	      case 'interface':
+	        return parseInterfaceTypeDefinition(parser);
+	      case 'union':
+	        return parseUnionTypeDefinition(parser);
+	      case 'enum':
+	        return parseEnumTypeDefinition(parser);
+	      case 'input':
+	        return parseInputObjectTypeDefinition(parser);
+	      case 'extend':
+	        return parseTypeExtensionDefinition(parser);
+	      case 'directive':
+	        return parseDirectiveDefinition(parser);
+	    }
+	  }
+	
+	  throw unexpected(parser);
+	}
+	
+	/**
+	 * SchemaDefinition : schema Directives? { OperationTypeDefinition+ }
+	 *
+	 * OperationTypeDefinition : OperationType : NamedType
+	 */
+	function parseSchemaDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'schema');
+	  var directives = parseDirectives(parser);
+	  var operationTypes = many(parser, _lexer.TokenKind.BRACE_L, parseOperationTypeDefinition, _lexer.TokenKind.BRACE_R);
+	  return {
+	    kind: _kinds.SCHEMA_DEFINITION,
+	    directives: directives,
+	    operationTypes: operationTypes,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	function parseOperationTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  var operation = parseOperationType(parser);
+	  expect(parser, _lexer.TokenKind.COLON);
+	  var type = parseNamedType(parser);
+	  return {
+	    kind: _kinds.OPERATION_TYPE_DEFINITION,
+	    operation: operation,
+	    type: type,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ScalarTypeDefinition : scalar Name Directives?
+	 */
+	function parseScalarTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'scalar');
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  return {
+	    kind: _kinds.SCALAR_TYPE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ObjectTypeDefinition :
+	 *   - type Name ImplementsInterfaces? Directives? { FieldDefinition+ }
+	 */
+	function parseObjectTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'type');
+	  var name = parseName(parser);
+	  var interfaces = parseImplementsInterfaces(parser);
+	  var directives = parseDirectives(parser);
+	  var fields = any(parser, _lexer.TokenKind.BRACE_L, parseFieldDefinition, _lexer.TokenKind.BRACE_R);
+	  return {
+	    kind: _kinds.OBJECT_TYPE_DEFINITION,
+	    name: name,
+	    interfaces: interfaces,
+	    directives: directives,
+	    fields: fields,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ImplementsInterfaces : implements NamedType+
+	 */
+	function parseImplementsInterfaces(parser) {
+	  var types = [];
+	  if (parser.token.value === 'implements') {
+	    advance(parser);
+	    do {
+	      types.push(parseNamedType(parser));
+	    } while (peek(parser, _lexer.TokenKind.NAME));
+	  }
+	  return types;
+	}
+	
+	/**
+	 * FieldDefinition : Name ArgumentsDefinition? : Type Directives?
+	 */
+	function parseFieldDefinition(parser) {
+	  var start = parser.token.start;
+	  var name = parseName(parser);
+	  var args = parseArgumentDefs(parser);
+	  expect(parser, _lexer.TokenKind.COLON);
+	  var type = parseType(parser);
+	  var directives = parseDirectives(parser);
+	  return {
+	    kind: _kinds.FIELD_DEFINITION,
+	    name: name,
+	    arguments: args,
+	    type: type,
+	    directives: directives,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * ArgumentsDefinition : ( InputValueDefinition+ )
+	 */
+	function parseArgumentDefs(parser) {
+	  if (!peek(parser, _lexer.TokenKind.PAREN_L)) {
+	    return [];
+	  }
+	  return many(parser, _lexer.TokenKind.PAREN_L, parseInputValueDef, _lexer.TokenKind.PAREN_R);
+	}
+	
+	/**
+	 * InputValueDefinition : Name : Type DefaultValue? Directives?
+	 */
+	function parseInputValueDef(parser) {
+	  var start = parser.token.start;
+	  var name = parseName(parser);
+	  expect(parser, _lexer.TokenKind.COLON);
+	  var type = parseType(parser);
+	  var defaultValue = null;
+	  if (skip(parser, _lexer.TokenKind.EQUALS)) {
+	    defaultValue = parseConstValue(parser);
+	  }
+	  var directives = parseDirectives(parser);
+	  return {
+	    kind: _kinds.INPUT_VALUE_DEFINITION,
+	    name: name,
+	    type: type,
+	    defaultValue: defaultValue,
+	    directives: directives,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * InterfaceTypeDefinition : interface Name Directives? { FieldDefinition+ }
+	 */
+	function parseInterfaceTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'interface');
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  var fields = any(parser, _lexer.TokenKind.BRACE_L, parseFieldDefinition, _lexer.TokenKind.BRACE_R);
+	  return {
+	    kind: _kinds.INTERFACE_TYPE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    fields: fields,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * UnionTypeDefinition : union Name Directives? = UnionMembers
+	 */
+	function parseUnionTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'union');
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  expect(parser, _lexer.TokenKind.EQUALS);
+	  var types = parseUnionMembers(parser);
+	  return {
+	    kind: _kinds.UNION_TYPE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    types: types,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * UnionMembers :
+	 *   - NamedType
+	 *   - UnionMembers | NamedType
+	 */
+	function parseUnionMembers(parser) {
+	  var members = [];
+	  do {
+	    members.push(parseNamedType(parser));
+	  } while (skip(parser, _lexer.TokenKind.PIPE));
+	  return members;
+	}
+	
+	/**
+	 * EnumTypeDefinition : enum Name Directives? { EnumValueDefinition+ }
+	 */
+	function parseEnumTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'enum');
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  var values = many(parser, _lexer.TokenKind.BRACE_L, parseEnumValueDefinition, _lexer.TokenKind.BRACE_R);
+	  return {
+	    kind: _kinds.ENUM_TYPE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    values: values,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * EnumValueDefinition : EnumValue Directives?
+	 *
+	 * EnumValue : Name
+	 */
+	function parseEnumValueDefinition(parser) {
+	  var start = parser.token.start;
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  return {
+	    kind: _kinds.ENUM_VALUE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * InputObjectTypeDefinition : input Name Directives? { InputValueDefinition+ }
+	 */
+	function parseInputObjectTypeDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'input');
+	  var name = parseName(parser);
+	  var directives = parseDirectives(parser);
+	  var fields = any(parser, _lexer.TokenKind.BRACE_L, parseInputValueDef, _lexer.TokenKind.BRACE_R);
+	  return {
+	    kind: _kinds.INPUT_OBJECT_TYPE_DEFINITION,
+	    name: name,
+	    directives: directives,
+	    fields: fields,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * TypeExtensionDefinition : extend ObjectTypeDefinition
+	 */
+	function parseTypeExtensionDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'extend');
+	  var definition = parseObjectTypeDefinition(parser);
+	  return {
+	    kind: _kinds.TYPE_EXTENSION_DEFINITION,
+	    definition: definition,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * DirectiveDefinition :
+	 *   - directive @ Name ArgumentsDefinition? on DirectiveLocations
+	 */
+	function parseDirectiveDefinition(parser) {
+	  var start = parser.token.start;
+	  expectKeyword(parser, 'directive');
+	  expect(parser, _lexer.TokenKind.AT);
+	  var name = parseName(parser);
+	  var args = parseArgumentDefs(parser);
+	  expectKeyword(parser, 'on');
+	  var locations = parseDirectiveLocations(parser);
+	  return {
+	    kind: _kinds.DIRECTIVE_DEFINITION,
+	    name: name,
+	    arguments: args,
+	    locations: locations,
+	    loc: loc(parser, start)
+	  };
+	}
+	
+	/**
+	 * DirectiveLocations :
+	 *   - Name
+	 *   - DirectiveLocations | Name
+	 */
+	function parseDirectiveLocations(parser) {
+	  var locations = [];
+	  do {
+	    locations.push(parseName(parser));
+	  } while (skip(parser, _lexer.TokenKind.PIPE));
+	  return locations;
+	}
+	
+	// Core parsing utility functions
+	
+	/**
+	 * Returns the parser object that is used to store state throughout the
+	 * process of parsing.
+	 */
+	function makeParser(source, options) {
+	  var _lexToken = (0, _lexer.lex)(source);
+	  return {
+	    _lexToken: _lexToken,
+	    source: source,
+	    options: options,
+	    prevEnd: 0,
+	    token: _lexToken()
+	  };
+	}
+	
+	/**
+	 * Returns a location object, used to identify the place in
+	 * the source that created a given parsed object.
+	 */
+	function loc(parser, start) {
+	  if (parser.options.noLocation) {
+	    return null;
+	  }
+	  if (parser.options.noSource) {
+	    return { start: start, end: parser.prevEnd };
+	  }
+	  return { start: start, end: parser.prevEnd, source: parser.source };
+	}
+	
+	/**
+	 * Moves the internal parser object to the next lexed token.
+	 */
+	function advance(parser) {
+	  var prevEnd = parser.token.end;
+	  parser.prevEnd = prevEnd;
+	  parser.token = parser._lexToken(prevEnd);
+	}
+	
+	/**
+	 * Determines if the next token is of a given kind
+	 */
+	function peek(parser, kind) {
+	  return parser.token.kind === kind;
+	}
+	
+	/**
+	 * If the next token is of the given kind, return true after advancing
+	 * the parser. Otherwise, do not change the parser state and return false.
+	 */
+	function skip(parser, kind) {
+	  var match = parser.token.kind === kind;
+	  if (match) {
+	    advance(parser);
+	  }
+	  return match;
+	}
+	
+	/**
+	 * If the next token is of the given kind, return that token after advancing
+	 * the parser. Otherwise, do not change the parser state and throw an error.
+	 */
+	function expect(parser, kind) {
+	  var token = parser.token;
+	  if (token.kind === kind) {
+	    advance(parser);
+	    return token;
+	  }
+	  throw (0, _error.syntaxError)(parser.source, token.start, 'Expected ' + (0, _lexer.getTokenKindDesc)(kind) + ', found ' + (0, _lexer.getTokenDesc)(token));
+	}
+	
+	/**
+	 * If the next token is a keyword with the given value, return that token after
+	 * advancing the parser. Otherwise, do not change the parser state and return
+	 * false.
+	 */
+	function expectKeyword(parser, value) {
+	  var token = parser.token;
+	  if (token.kind === _lexer.TokenKind.NAME && token.value === value) {
+	    advance(parser);
+	    return token;
+	  }
+	  throw (0, _error.syntaxError)(parser.source, token.start, 'Expected "' + value + '", found ' + (0, _lexer.getTokenDesc)(token));
+	}
+	
+	/**
+	 * Helper function for creating an error when an unexpected lexed token
+	 * is encountered.
+	 */
+	function unexpected(parser, atToken) {
+	  var token = atToken || parser.token;
+	  return (0, _error.syntaxError)(parser.source, token.start, 'Unexpected ' + (0, _lexer.getTokenDesc)(token));
+	}
+	
+	/**
+	 * Returns a possibly empty list of parse nodes, determined by
+	 * the parseFn. This list begins with a lex token of openKind
+	 * and ends with a lex token of closeKind. Advances the parser
+	 * to the next lex token after the closing token.
+	 */
+	function any(parser, openKind, parseFn, closeKind) {
+	  expect(parser, openKind);
+	  var nodes = [];
+	  while (!skip(parser, closeKind)) {
+	    nodes.push(parseFn(parser));
+	  }
+	  return nodes;
+	}
+	
+	/**
+	 * Returns a non-empty list of parse nodes, determined by
+	 * the parseFn. This list begins with a lex token of openKind
+	 * and ends with a lex token of closeKind. Advances the parser
+	 * to the next lex token after the closing token.
+	 */
+	function many(parser, openKind, parseFn, closeKind) {
+	  expect(parser, openKind);
+	  var nodes = [parseFn(parser)];
+	  while (!skip(parser, closeKind)) {
+	    nodes.push(parseFn(parser));
+	  }
+	  return nodes;
+	}
+
+/***/ },
+/* 354 */
+/*!**************************************!*\
+  !*** ./~/graphql/language/source.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.Source = undefined;
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	/**
+	 * A representation of source input to GraphQL. The name is optional,
+	 * but is mostly useful for clients who store GraphQL documents in
+	 * source files; for example, if the GraphQL input is in a file Foo.graphql,
+	 * it might be useful for name to be "Foo.graphql".
+	 */
+	
+	var Source = exports.Source = function Source(body, name) {
+	  (0, _classCallCheck3.default)(this, Source);
+	
+	  this.body = body;
+	  this.name = name || 'GraphQL';
+	};
+
+/***/ },
+/* 355 */
+/*!***************************************!*\
+  !*** ./~/graphql/language/printer.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	exports.print = print;
+	
+	var _visitor = __webpack_require__(/*! ./visitor */ 356);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * Converts an AST into a string, using one set of reasonable
+	 * formatting rules.
+	 */
+	function print(ast) {
+	  return (0, _visitor.visit)(ast, { leave: printDocASTReducer });
+	} /**
+	   *  Copyright (c) 2015, Facebook, Inc.
+	   *  All rights reserved.
+	   *
+	   *  This source code is licensed under the BSD-style license found in the
+	   *  LICENSE file in the root directory of this source tree. An additional grant
+	   *  of patent rights can be found in the PATENTS file in the same directory.
+	   */
+	
+	var printDocASTReducer = {
+	  Name: function Name(node) {
+	    return node.value;
+	  },
+	  Variable: function Variable(node) {
+	    return '$' + node.name;
+	  },
+	
+	  // Document
+	
+	  Document: function Document(node) {
+	    return join(node.definitions, '\n\n') + '\n';
+	  },
+	
+	  OperationDefinition: function OperationDefinition(node) {
+	    var op = node.operation;
+	    var name = node.name;
+	    var varDefs = wrap('(', join(node.variableDefinitions, ', '), ')');
+	    var directives = join(node.directives, ' ');
+	    var selectionSet = node.selectionSet;
+	    // Anonymous queries with no directives or variable definitions can use
+	    // the query short form.
+	    return !name && !directives && !varDefs && op === 'query' ? selectionSet : join([op, join([name, varDefs]), directives, selectionSet], ' ');
+	  },
+	
+	
+	  VariableDefinition: function VariableDefinition(_ref) {
+	    var variable = _ref.variable;
+	    var type = _ref.type;
+	    var defaultValue = _ref.defaultValue;
+	    return variable + ': ' + type + wrap(' = ', defaultValue);
+	  },
+	
+	  SelectionSet: function SelectionSet(_ref2) {
+	    var selections = _ref2.selections;
+	    return block(selections);
+	  },
+	
+	  Field: function Field(_ref3) {
+	    var alias = _ref3.alias;
+	    var name = _ref3.name;
+	    var args = _ref3.arguments;
+	    var directives = _ref3.directives;
+	    var selectionSet = _ref3.selectionSet;
+	    return join([wrap('', alias, ': ') + name + wrap('(', join(args, ', '), ')'), join(directives, ' '), selectionSet], ' ');
+	  },
+	
+	  Argument: function Argument(_ref4) {
+	    var name = _ref4.name;
+	    var value = _ref4.value;
+	    return name + ': ' + value;
+	  },
+	
+	  // Fragments
+	
+	  FragmentSpread: function FragmentSpread(_ref5) {
+	    var name = _ref5.name;
+	    var directives = _ref5.directives;
+	    return '...' + name + wrap(' ', join(directives, ' '));
+	  },
+	
+	  InlineFragment: function InlineFragment(_ref6) {
+	    var typeCondition = _ref6.typeCondition;
+	    var directives = _ref6.directives;
+	    var selectionSet = _ref6.selectionSet;
+	    return join(['...', wrap('on ', typeCondition), join(directives, ' '), selectionSet], ' ');
+	  },
+	
+	  FragmentDefinition: function FragmentDefinition(_ref7) {
+	    var name = _ref7.name;
+	    var typeCondition = _ref7.typeCondition;
+	    var directives = _ref7.directives;
+	    var selectionSet = _ref7.selectionSet;
+	    return 'fragment ' + name + ' on ' + typeCondition + ' ' + wrap('', join(directives, ' '), ' ') + selectionSet;
+	  },
+	
+	  // Value
+	
+	  IntValue: function IntValue(_ref8) {
+	    var value = _ref8.value;
+	    return value;
+	  },
+	  FloatValue: function FloatValue(_ref9) {
+	    var value = _ref9.value;
+	    return value;
+	  },
+	  StringValue: function StringValue(_ref10) {
+	    var value = _ref10.value;
+	    return (0, _stringify2.default)(value);
+	  },
+	  BooleanValue: function BooleanValue(_ref11) {
+	    var value = _ref11.value;
+	    return (0, _stringify2.default)(value);
+	  },
+	  EnumValue: function EnumValue(_ref12) {
+	    var value = _ref12.value;
+	    return value;
+	  },
+	  ListValue: function ListValue(_ref13) {
+	    var values = _ref13.values;
+	    return '[' + join(values, ', ') + ']';
+	  },
+	  ObjectValue: function ObjectValue(_ref14) {
+	    var fields = _ref14.fields;
+	    return '{' + join(fields, ', ') + '}';
+	  },
+	  ObjectField: function ObjectField(_ref15) {
+	    var name = _ref15.name;
+	    var value = _ref15.value;
+	    return name + ': ' + value;
+	  },
+	
+	  // Directive
+	
+	  Directive: function Directive(_ref16) {
+	    var name = _ref16.name;
+	    var args = _ref16.arguments;
+	    return '@' + name + wrap('(', join(args, ', '), ')');
+	  },
+	
+	  // Type
+	
+	  NamedType: function NamedType(_ref17) {
+	    var name = _ref17.name;
+	    return name;
+	  },
+	  ListType: function ListType(_ref18) {
+	    var type = _ref18.type;
+	    return '[' + type + ']';
+	  },
+	  NonNullType: function NonNullType(_ref19) {
+	    var type = _ref19.type;
+	    return type + '!';
+	  },
+	
+	  // Type System Definitions
+	
+	  SchemaDefinition: function SchemaDefinition(_ref20) {
+	    var directives = _ref20.directives;
+	    var operationTypes = _ref20.operationTypes;
+	    return join(['schema', join(directives, ' '), block(operationTypes)], ' ');
+	  },
+	
+	  OperationTypeDefinition: function OperationTypeDefinition(_ref21) {
+	    var operation = _ref21.operation;
+	    var type = _ref21.type;
+	    return operation + ': ' + type;
+	  },
+	
+	  ScalarTypeDefinition: function ScalarTypeDefinition(_ref22) {
+	    var name = _ref22.name;
+	    var directives = _ref22.directives;
+	    return join(['scalar', name, join(directives, ' ')], ' ');
+	  },
+	
+	  ObjectTypeDefinition: function ObjectTypeDefinition(_ref23) {
+	    var name = _ref23.name;
+	    var interfaces = _ref23.interfaces;
+	    var directives = _ref23.directives;
+	    var fields = _ref23.fields;
+	    return join(['type', name, wrap('implements ', join(interfaces, ', ')), join(directives, ' '), block(fields)], ' ');
+	  },
+	
+	  FieldDefinition: function FieldDefinition(_ref24) {
+	    var name = _ref24.name;
+	    var args = _ref24.arguments;
+	    var type = _ref24.type;
+	    var directives = _ref24.directives;
+	    return name + wrap('(', join(args, ', '), ')') + ': ' + type + wrap(' ', join(directives, ' '));
+	  },
+	
+	  InputValueDefinition: function InputValueDefinition(_ref25) {
+	    var name = _ref25.name;
+	    var type = _ref25.type;
+	    var defaultValue = _ref25.defaultValue;
+	    var directives = _ref25.directives;
+	    return join([name + ': ' + type, wrap('= ', defaultValue), join(directives, ' ')], ' ');
+	  },
+	
+	  InterfaceTypeDefinition: function InterfaceTypeDefinition(_ref26) {
+	    var name = _ref26.name;
+	    var directives = _ref26.directives;
+	    var fields = _ref26.fields;
+	    return join(['interface', name, join(directives, ' '), block(fields)], ' ');
+	  },
+	
+	  UnionTypeDefinition: function UnionTypeDefinition(_ref27) {
+	    var name = _ref27.name;
+	    var directives = _ref27.directives;
+	    var types = _ref27.types;
+	    return join(['union', name, join(directives, ' '), '= ' + join(types, ' | ')], ' ');
+	  },
+	
+	  EnumTypeDefinition: function EnumTypeDefinition(_ref28) {
+	    var name = _ref28.name;
+	    var directives = _ref28.directives;
+	    var values = _ref28.values;
+	    return join(['enum', name, join(directives, ' '), block(values)], ' ');
+	  },
+	
+	  EnumValueDefinition: function EnumValueDefinition(_ref29) {
+	    var name = _ref29.name;
+	    var directives = _ref29.directives;
+	    return join([name, join(directives, ' ')], ' ');
+	  },
+	
+	  InputObjectTypeDefinition: function InputObjectTypeDefinition(_ref30) {
+	    var name = _ref30.name;
+	    var directives = _ref30.directives;
+	    var fields = _ref30.fields;
+	    return join(['input', name, join(directives, ' '), block(fields)], ' ');
+	  },
+	
+	  TypeExtensionDefinition: function TypeExtensionDefinition(_ref31) {
+	    var definition = _ref31.definition;
+	    return 'extend ' + definition;
+	  },
+	
+	  DirectiveDefinition: function DirectiveDefinition(_ref32) {
+	    var name = _ref32.name;
+	    var args = _ref32.arguments;
+	    var locations = _ref32.locations;
+	    return 'directive @' + name + wrap('(', join(args, ', '), ')') + ' on ' + join(locations, ' | ');
+	  }
+	};
+	
+	/**
+	 * Given maybeArray, print an empty string if it is null or empty, otherwise
+	 * print all items together separated by separator if provided
+	 */
+	function join(maybeArray, separator) {
+	  return maybeArray ? maybeArray.filter(function (x) {
+	    return x;
+	  }).join(separator || '') : '';
+	}
+	
+	/**
+	 * Given array, print each item on its own line, wrapped in an
+	 * indented "{ }" block.
+	 */
+	function block(array) {
+	  return array && array.length !== 0 ? indent('{\n' + join(array, '\n')) + '\n}' : '{}';
+	}
+	
+	/**
+	 * If maybeString is not null or empty, then wrap with start and end, otherwise
+	 * print an empty string.
+	 */
+	function wrap(start, maybeString, end) {
+	  return maybeString ? start + maybeString + (end || '') : '';
+	}
+	
+	function indent(maybeString) {
+	  return maybeString && maybeString.replace(/\n/g, '\n  ');
+	}
+
+/***/ },
+/* 356 */
+/*!***************************************!*\
+  !*** ./~/graphql/language/visitor.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.BREAK = exports.QueryDocumentKeys = undefined;
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ 357);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
+	exports.visit = visit;
+	exports.visitInParallel = visitInParallel;
+	exports.visitWithTypeInfo = visitWithTypeInfo;
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	var QueryDocumentKeys = exports.QueryDocumentKeys = {
+	  Name: [],
+	
+	  Document: ['definitions'],
+	  OperationDefinition: ['name', 'variableDefinitions', 'directives', 'selectionSet'],
+	  VariableDefinition: ['variable', 'type', 'defaultValue'],
+	  Variable: ['name'],
+	  SelectionSet: ['selections'],
+	  Field: ['alias', 'name', 'arguments', 'directives', 'selectionSet'],
+	  Argument: ['name', 'value'],
+	
+	  FragmentSpread: ['name', 'directives'],
+	  InlineFragment: ['typeCondition', 'directives', 'selectionSet'],
+	  FragmentDefinition: ['name', 'typeCondition', 'directives', 'selectionSet'],
+	
+	  IntValue: [],
+	  FloatValue: [],
+	  StringValue: [],
+	  BooleanValue: [],
+	  EnumValue: [],
+	  ListValue: ['values'],
+	  ObjectValue: ['fields'],
+	  ObjectField: ['name', 'value'],
+	
+	  Directive: ['name', 'arguments'],
+	
+	  NamedType: ['name'],
+	  ListType: ['type'],
+	  NonNullType: ['type'],
+	
+	  SchemaDefinition: ['directives', 'operationTypes'],
+	  OperationTypeDefinition: ['type'],
+	
+	  ScalarTypeDefinition: ['name', 'directives'],
+	  ObjectTypeDefinition: ['name', 'interfaces', 'directives', 'fields'],
+	  FieldDefinition: ['name', 'arguments', 'type', 'directives'],
+	  InputValueDefinition: ['name', 'type', 'defaultValue', 'directives'],
+	  InterfaceTypeDefinition: ['name', 'directives', 'fields'],
+	  UnionTypeDefinition: ['name', 'directives', 'types'],
+	  EnumTypeDefinition: ['name', 'directives', 'values'],
+	  EnumValueDefinition: ['name', 'directives'],
+	  InputObjectTypeDefinition: ['name', 'directives', 'fields'],
+	
+	  TypeExtensionDefinition: ['definition'],
+	
+	  DirectiveDefinition: ['name', 'arguments', 'locations']
+	};
+	
+	var BREAK = exports.BREAK = {};
+	
+	/**
+	 * visit() will walk through an AST using a depth first traversal, calling
+	 * the visitor's enter function at each node in the traversal, and calling the
+	 * leave function after visiting that node and all of its child nodes.
+	 *
+	 * By returning different values from the enter and leave functions, the
+	 * behavior of the visitor can be altered, including skipping over a sub-tree of
+	 * the AST (by returning false), editing the AST by returning a value or null
+	 * to remove the value, or to stop the whole traversal by returning BREAK.
+	 *
+	 * When using visit() to edit an AST, the original AST will not be modified, and
+	 * a new version of the AST with the changes applied will be returned from the
+	 * visit function.
+	 *
+	 *     const editedAST = visit(ast, {
+	 *       enter(node, key, parent, path, ancestors) {
+	 *         // @return
+	 *         //   undefined: no action
+	 *         //   false: skip visiting this node
+	 *         //   visitor.BREAK: stop visiting altogether
+	 *         //   null: delete this node
+	 *         //   any value: replace this node with the returned value
+	 *       },
+	 *       leave(node, key, parent, path, ancestors) {
+	 *         // @return
+	 *         //   undefined: no action
+	 *         //   false: no action
+	 *         //   visitor.BREAK: stop visiting altogether
+	 *         //   null: delete this node
+	 *         //   any value: replace this node with the returned value
+	 *       }
+	 *     });
+	 *
+	 * Alternatively to providing enter() and leave() functions, a visitor can
+	 * instead provide functions named the same as the kinds of AST nodes, or
+	 * enter/leave visitors at a named key, leading to four permutations of
+	 * visitor API:
+	 *
+	 * 1) Named visitors triggered when entering a node a specific kind.
+	 *
+	 *     visit(ast, {
+	 *       Kind(node) {
+	 *         // enter the "Kind" node
+	 *       }
+	 *     })
+	 *
+	 * 2) Named visitors that trigger upon entering and leaving a node of
+	 *    a specific kind.
+	 *
+	 *     visit(ast, {
+	 *       Kind: {
+	 *         enter(node) {
+	 *           // enter the "Kind" node
+	 *         }
+	 *         leave(node) {
+	 *           // leave the "Kind" node
+	 *         }
+	 *       }
+	 *     })
+	 *
+	 * 3) Generic visitors that trigger upon entering and leaving any node.
+	 *
+	 *     visit(ast, {
+	 *       enter(node) {
+	 *         // enter any node
+	 *       },
+	 *       leave(node) {
+	 *         // leave any node
+	 *       }
+	 *     })
+	 *
+	 * 4) Parallel visitors for entering and leaving nodes of a specific kind.
+	 *
+	 *     visit(ast, {
+	 *       enter: {
+	 *         Kind(node) {
+	 *           // enter the "Kind" node
+	 *         }
+	 *       },
+	 *       leave: {
+	 *         Kind(node) {
+	 *           // leave the "Kind" node
+	 *         }
+	 *       }
+	 *     })
+	 */
+	function visit(root, visitor, keyMap) {
+	  var visitorKeys = keyMap || QueryDocumentKeys;
+	
+	  var stack = void 0;
+	  var inArray = Array.isArray(root);
+	  var keys = [root];
+	  var index = -1;
+	  var edits = [];
+	  var parent = void 0;
+	  var path = [];
+	  var ancestors = [];
+	  var newRoot = root;
+	
+	  do {
+	    index++;
+	    var isLeaving = index === keys.length;
+	    var key = void 0;
+	    var node = void 0;
+	    var isEdited = isLeaving && edits.length !== 0;
+	    if (isLeaving) {
+	      key = ancestors.length === 0 ? undefined : path.pop();
+	      node = parent;
+	      parent = ancestors.pop();
+	      if (isEdited) {
+	        if (inArray) {
+	          node = node.slice();
+	        } else {
+	          var clone = {};
+	          for (var k in node) {
+	            if (node.hasOwnProperty(k)) {
+	              clone[k] = node[k];
+	            }
+	          }
+	          node = clone;
+	        }
+	        var editOffset = 0;
+	        for (var ii = 0; ii < edits.length; ii++) {
+	          var _edits$ii = (0, _slicedToArray3.default)(edits[ii], 1);
+	
+	          var editKey = _edits$ii[0];
+	
+	          var _edits$ii2 = (0, _slicedToArray3.default)(edits[ii], 2);
+	
+	          var editValue = _edits$ii2[1];
+	
+	          if (inArray) {
+	            editKey -= editOffset;
+	          }
+	          if (inArray && editValue === null) {
+	            node.splice(editKey, 1);
+	            editOffset++;
+	          } else {
+	            node[editKey] = editValue;
+	          }
+	        }
+	      }
+	      index = stack.index;
+	      keys = stack.keys;
+	      edits = stack.edits;
+	      inArray = stack.inArray;
+	      stack = stack.prev;
+	    } else {
+	      key = parent ? inArray ? index : keys[index] : undefined;
+	      node = parent ? parent[key] : newRoot;
+	      if (node === null || node === undefined) {
+	        continue;
+	      }
+	      if (parent) {
+	        path.push(key);
+	      }
+	    }
+	
+	    var result = void 0;
+	    if (!Array.isArray(node)) {
+	      if (!isNode(node)) {
+	        throw new Error('Invalid AST Node: ' + (0, _stringify2.default)(node));
+	      }
+	      var visitFn = getVisitFn(visitor, node.kind, isLeaving);
+	      if (visitFn) {
+	        result = visitFn.call(visitor, node, key, parent, path, ancestors);
+	
+	        if (result === BREAK) {
+	          break;
+	        }
+	
+	        if (result === false) {
+	          if (!isLeaving) {
+	            path.pop();
+	            continue;
+	          }
+	        } else if (result !== undefined) {
+	          edits.push([key, result]);
+	          if (!isLeaving) {
+	            if (isNode(result)) {
+	              node = result;
+	            } else {
+	              path.pop();
+	              continue;
+	            }
+	          }
+	        }
+	      }
+	    }
+	
+	    if (result === undefined && isEdited) {
+	      edits.push([key, node]);
+	    }
+	
+	    if (!isLeaving) {
+	      stack = { inArray: inArray, index: index, keys: keys, edits: edits, prev: stack };
+	      inArray = Array.isArray(node);
+	      keys = inArray ? node : visitorKeys[node.kind] || [];
+	      index = -1;
+	      edits = [];
+	      if (parent) {
+	        ancestors.push(parent);
+	      }
+	      parent = node;
+	    }
+	  } while (stack !== undefined);
+	
+	  if (edits.length !== 0) {
+	    newRoot = edits[edits.length - 1][1];
+	  }
+	
+	  return newRoot;
+	}
+	
+	function isNode(maybeNode) {
+	  return maybeNode && typeof maybeNode.kind === 'string';
+	}
+	
+	/**
+	 * Creates a new visitor instance which delegates to many visitors to run in
+	 * parallel. Each visitor will be visited for each node before moving on.
+	 *
+	 * If a prior visitor edits a node, no following visitors will see that node.
+	 */
+	function visitInParallel(visitors) {
+	  var skipping = new Array(visitors.length);
+	
+	  return {
+	    enter: function enter(node) {
+	      for (var i = 0; i < visitors.length; i++) {
+	        if (!skipping[i]) {
+	          var fn = getVisitFn(visitors[i], node.kind, /* isLeaving */false);
+	          if (fn) {
+	            var result = fn.apply(visitors[i], arguments);
+	            if (result === false) {
+	              skipping[i] = node;
+	            } else if (result === BREAK) {
+	              skipping[i] = BREAK;
+	            } else if (result !== undefined) {
+	              return result;
+	            }
+	          }
+	        }
+	      }
+	    },
+	    leave: function leave(node) {
+	      for (var i = 0; i < visitors.length; i++) {
+	        if (!skipping[i]) {
+	          var fn = getVisitFn(visitors[i], node.kind, /* isLeaving */true);
+	          if (fn) {
+	            var result = fn.apply(visitors[i], arguments);
+	            if (result === BREAK) {
+	              skipping[i] = BREAK;
+	            } else if (result !== undefined && result !== false) {
+	              return result;
+	            }
+	          }
+	        } else if (skipping[i] === node) {
+	          skipping[i] = null;
+	        }
+	      }
+	    }
+	  };
+	}
+	
+	/**
+	 * Creates a new visitor instance which maintains a provided TypeInfo instance
+	 * along with visiting visitor.
+	 */
+	function visitWithTypeInfo(typeInfo, visitor) {
+	  return {
+	    enter: function enter(node) {
+	      typeInfo.enter(node);
+	      var fn = getVisitFn(visitor, node.kind, /* isLeaving */false);
+	      if (fn) {
+	        var result = fn.apply(visitor, arguments);
+	        if (result !== undefined) {
+	          typeInfo.leave(node);
+	          if (isNode(result)) {
+	            typeInfo.enter(result);
+	          }
+	        }
+	        return result;
+	      }
+	    },
+	    leave: function leave(node) {
+	      var fn = getVisitFn(visitor, node.kind, /* isLeaving */true);
+	      var result = void 0;
+	      if (fn) {
+	        result = fn.apply(visitor, arguments);
+	      }
+	      typeInfo.leave(node);
+	      return result;
+	    }
+	  };
+	}
+	
+	/**
+	 * Given a visitor instance, if it is leaving or not, and a node kind, return
+	 * the function the visitor runtime should call.
+	 */
+	function getVisitFn(visitor, kind, isLeaving) {
+	  var kindVisitor = visitor[kind];
+	  if (kindVisitor) {
+	    if (!isLeaving && typeof kindVisitor === 'function') {
+	      // { Kind() {} }
+	      return kindVisitor;
+	    }
+	    var kindSpecificVisitor = isLeaving ? kindVisitor.leave : kindVisitor.enter;
+	    if (typeof kindSpecificVisitor === 'function') {
+	      // { Kind: { enter() {}, leave() {} } }
+	      return kindSpecificVisitor;
+	    }
+	  } else {
+	    var specificVisitor = isLeaving ? visitor.leave : visitor.enter;
+	    if (specificVisitor) {
+	      if (typeof specificVisitor === 'function') {
+	        // { enter() {}, leave() {} }
+	        return specificVisitor;
+	      }
+	      var specificKindVisitor = specificVisitor[kind];
+	      if (typeof specificKindVisitor === 'function') {
+	        // { enter: { Kind() {} }, leave: { Kind() {} } }
+	        return specificKindVisitor;
+	      }
+	    }
+	  }
+	}
+
+/***/ },
+/* 357 */
+/*!**************************************************!*\
+  !*** ./~/babel-runtime/helpers/slicedToArray.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _isIterable2 = __webpack_require__(/*! ../core-js/is-iterable */ 358);
+	
+	var _isIterable3 = _interopRequireDefault(_isIterable2);
+	
+	var _getIterator2 = __webpack_require__(/*! ../core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function () {
+	  function sliceIterator(arr, i) {
+	    var _arr = [];
+	    var _n = true;
+	    var _d = false;
+	    var _e = undefined;
+	
+	    try {
+	      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
+	        _arr.push(_s.value);
+	
+	        if (i && _arr.length === i) break;
+	      }
+	    } catch (err) {
+	      _d = true;
+	      _e = err;
+	    } finally {
+	      try {
+	        if (!_n && _i["return"]) _i["return"]();
+	      } finally {
+	        if (_d) throw _e;
+	      }
+	    }
+	
+	    return _arr;
+	  }
+	
+	  return function (arr, i) {
+	    if (Array.isArray(arr)) {
+	      return arr;
+	    } else if ((0, _isIterable3.default)(Object(arr))) {
+	      return sliceIterator(arr, i);
+	    } else {
+	      throw new TypeError("Invalid attempt to destructure non-iterable instance");
+	    }
+	  };
+	}();
+
+/***/ },
+/* 358 */
+/*!************************************************!*\
+  !*** ./~/babel-runtime/core-js/is-iterable.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/is-iterable */ 359), __esModule: true };
+
+/***/ },
+/* 359 */
+/*!*************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/is-iterable.js ***!
+  \*************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../modules/web.dom.iterable */ 252);
+	__webpack_require__(/*! ../modules/es6.string.iterator */ 267);
+	module.exports = __webpack_require__(/*! ../modules/core.is-iterable */ 360);
+
+/***/ },
+/* 360 */
+/*!***********************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/core.is-iterable.js ***!
+  \***********************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(/*! ./_classof */ 271)
+	  , ITERATOR  = __webpack_require__(/*! ./_wks */ 265)('iterator')
+	  , Iterators = __webpack_require__(/*! ./_iterators */ 256);
+	module.exports = __webpack_require__(/*! ./_core */ 230).isIterable = function(it){
+	  var O = Object(it);
+	  return O[ITERATOR] !== undefined
+	    || '@@iterator' in O
+	    || Iterators.hasOwnProperty(classof(O));
+	};
+
+/***/ },
+/* 361 */
+/*!**************************************!*\
+  !*** ./~/graphql/type/directives.js ***!
+  \**************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.specifiedDirectives = exports.GraphQLDeprecatedDirective = exports.DEFAULT_DEPRECATION_REASON = exports.GraphQLSkipDirective = exports.GraphQLIncludeDirective = exports.GraphQLDirective = exports.DirectiveLocation = undefined;
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _definition = __webpack_require__(/*! ./definition */ 321);
+	
+	var _scalars = __webpack_require__(/*! ./scalars */ 335);
+	
+	var _invariant = __webpack_require__(/*! ../jsutils/invariant */ 320);
+	
+	var _invariant2 = _interopRequireDefault(_invariant);
+	
+	var _assertValidName = __webpack_require__(/*! ../utilities/assertValidName */ 334);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 *  Copyright (c) 2015, Facebook, Inc.
+	 *  All rights reserved.
+	 *
+	 *  This source code is licensed under the BSD-style license found in the
+	 *  LICENSE file in the root directory of this source tree. An additional grant
+	 *  of patent rights can be found in the PATENTS file in the same directory.
+	 */
+	
+	var DirectiveLocation = exports.DirectiveLocation = {
+	  // Operations
+	  QUERY: 'QUERY',
+	  MUTATION: 'MUTATION',
+	  SUBSCRIPTION: 'SUBSCRIPTION',
+	  FIELD: 'FIELD',
+	  FRAGMENT_DEFINITION: 'FRAGMENT_DEFINITION',
+	  FRAGMENT_SPREAD: 'FRAGMENT_SPREAD',
+	  INLINE_FRAGMENT: 'INLINE_FRAGMENT',
+	  // Schema Definitions
+	  SCHEMA: 'SCHEMA',
+	  SCALAR: 'SCALAR',
+	  OBJECT: 'OBJECT',
+	  FIELD_DEFINITION: 'FIELD_DEFINITION',
+	  ARGUMENT_DEFINITION: 'ARGUMENT_DEFINITION',
+	  INTERFACE: 'INTERFACE',
+	  UNION: 'UNION',
+	  ENUM: 'ENUM',
+	  ENUM_VALUE: 'ENUM_VALUE',
+	  INPUT_OBJECT: 'INPUT_OBJECT',
+	  INPUT_FIELD_DEFINITION: 'INPUT_FIELD_DEFINITION'
+	};
+	
+	// eslint-disable-line
+	
+	/**
+	 * Directives are used by the GraphQL runtime as a way of modifying execution
+	 * behavior. Type system creators will usually not create these directly.
+	 */
+	
+	var GraphQLDirective = exports.GraphQLDirective = function GraphQLDirective(config) {
+	  (0, _classCallCheck3.default)(this, GraphQLDirective);
+	
+	  (0, _invariant2.default)(config.name, 'Directive must be named.');
+	  (0, _assertValidName.assertValidName)(config.name);
+	  (0, _invariant2.default)(Array.isArray(config.locations), 'Must provide locations for directive.');
+	  this.name = config.name;
+	  this.description = config.description;
+	  this.locations = config.locations;
+	
+	  var args = config.args;
+	  if (!args) {
+	    this.args = [];
+	  } else {
+	    (0, _invariant2.default)(!Array.isArray(args), '@' + config.name + ' args must be an object with argument names as keys.');
+	    this.args = (0, _keys2.default)(args).map(function (argName) {
+	      (0, _assertValidName.assertValidName)(argName);
+	      var arg = args[argName];
+	      (0, _invariant2.default)((0, _definition.isInputType)(arg.type), '@' + config.name + '(' + argName + ':) argument type must be ' + ('Input Type but got: ' + arg.type + '.'));
+	      return {
+	        name: argName,
+	        description: arg.description === undefined ? null : arg.description,
+	        type: arg.type,
+	        defaultValue: arg.defaultValue === undefined ? null : arg.defaultValue
+	      };
+	    });
+	  }
+	};
+	
+	/**
+	 * Used to conditionally include fields or fragments.
+	 */
+	var GraphQLIncludeDirective = exports.GraphQLIncludeDirective = new GraphQLDirective({
+	  name: 'include',
+	  description: 'Directs the executor to include this field or fragment only when ' + 'the `if` argument is true.',
+	  locations: [DirectiveLocation.FIELD, DirectiveLocation.FRAGMENT_SPREAD, DirectiveLocation.INLINE_FRAGMENT],
+	  args: {
+	    if: {
+	      type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	      description: 'Included when true.'
+	    }
+	  }
+	});
+	
+	/**
+	 * Used to conditionally skip (exclude) fields or fragments.
+	 */
+	var GraphQLSkipDirective = exports.GraphQLSkipDirective = new GraphQLDirective({
+	  name: 'skip',
+	  description: 'Directs the executor to skip this field or fragment when the `if` ' + 'argument is true.',
+	  locations: [DirectiveLocation.FIELD, DirectiveLocation.FRAGMENT_SPREAD, DirectiveLocation.INLINE_FRAGMENT],
+	  args: {
+	    if: {
+	      type: new _definition.GraphQLNonNull(_scalars.GraphQLBoolean),
+	      description: 'Skipped when true.'
+	    }
+	  }
+	});
+	
+	/**
+	 * Constant string used for default reason for a deprecation.
+	 */
+	var DEFAULT_DEPRECATION_REASON = exports.DEFAULT_DEPRECATION_REASON = 'No longer supported';
+	
+	/**
+	 * Used to declare element of a GraphQL schema as deprecated.
+	 */
+	var GraphQLDeprecatedDirective = exports.GraphQLDeprecatedDirective = new GraphQLDirective({
+	  name: 'deprecated',
+	  description: 'Marks an element of a GraphQL schema as no longer supported.',
+	  locations: [DirectiveLocation.FIELD_DEFINITION, DirectiveLocation.ENUM_VALUE],
+	  args: {
+	    reason: {
+	      type: _scalars.GraphQLString,
+	      description: 'Explains why this element was deprecated, usually also including a ' + 'suggestion for how to access supported similar data. Formatted' + 'in [Markdown](https://daringfireball.net/projects/markdown/).',
+	      defaultValue: DEFAULT_DEPRECATION_REASON
+	    }
+	  }
+	});
+	
+	/**
+	 * The full list of specified directives.
+	 */
+	var specifiedDirectives = exports.specifiedDirectives = [GraphQLIncludeDirective, GraphQLSkipDirective, GraphQLDeprecatedDirective];
+
+/***/ },
+/* 362 */
+/*!********************************!*\
+  !*** ./~/cashay/lib/Cashay.js ***!
+  \********************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _promise = __webpack_require__(/*! babel-runtime/core-js/promise */ 363);
+	
+	var _promise2 = _interopRequireDefault(_promise);
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ 370);
+	
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ 374);
+	
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _set = __webpack_require__(/*! babel-runtime/core-js/set */ 280);
+	
+	var _set2 = _interopRequireDefault(_set);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 330);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _duck = __webpack_require__(/*! ./normalize/duck */ 206);
+	
+	var _denormalizeStore = __webpack_require__(/*! ./normalize/denormalizeStore */ 375);
+	
+	var _denormalizeStore2 = _interopRequireDefault(_denormalizeStore);
+	
+	var _denormalizeHelpers = __webpack_require__(/*! ./normalize/denormalizeHelpers */ 376);
+	
+	var _normalizeResponse = __webpack_require__(/*! ./normalize/normalizeResponse */ 381);
+	
+	var _normalizeResponse2 = _interopRequireDefault(_normalizeResponse);
+	
+	var _printMinimalQuery = __webpack_require__(/*! ./query/printMinimalQuery */ 383);
+	
+	var _queryHelpers = __webpack_require__(/*! ./query/queryHelpers */ 384);
+	
+	var _utils = __webpack_require__(/*! ./utils */ 298);
+	
+	var _mergeStores = __webpack_require__(/*! ./normalize/mergeStores */ 207);
+	
+	var _mergeStores2 = _interopRequireDefault(_mergeStores);
+	
+	var _helperClasses = __webpack_require__(/*! ./helperClasses */ 379);
+	
+	var _flushDependencies = __webpack_require__(/*! ./query/flushDependencies */ 386);
+	
+	var _flushDependencies2 = _interopRequireDefault(_flushDependencies);
+	
+	var _namespaceMutation3 = __webpack_require__(/*! ./mutate/namespaceMutation */ 387);
+	
+	var _namespaceMutation4 = _interopRequireDefault(_namespaceMutation3);
+	
+	var _createMutationFromQuery = __webpack_require__(/*! ./mutate/createMutationFromQuery */ 388);
+	
+	var _createMutationFromQuery2 = _interopRequireDefault(_createMutationFromQuery);
+	
+	var _removeNamespacing = __webpack_require__(/*! ./mutate/removeNamespacing */ 392);
+	
+	var _removeNamespacing2 = _interopRequireDefault(_removeNamespacing);
+	
+	var _makeFriendlyStore = __webpack_require__(/*! ./mutate/makeFriendlyStore */ 393);
+	
+	var _makeFriendlyStore2 = _interopRequireDefault(_makeFriendlyStore);
+	
+	var _addDeps = __webpack_require__(/*! ./normalize/addDeps */ 394);
+	
+	var _addDeps2 = _interopRequireDefault(_addDeps);
+	
+	var _mergeMutations = __webpack_require__(/*! ./mutate/mergeMutations */ 389);
+	
+	var _mergeMutations2 = _interopRequireDefault(_mergeMutations);
+	
+	var _ActiveQueries = __webpack_require__(/*! ./mutate/ActiveQueries */ 395);
+	
+	var _ActiveQueries2 = _interopRequireDefault(_ActiveQueries);
+	
+	var _createBasicMutation = __webpack_require__(/*! ./mutate/createBasicMutation */ 396);
+	
+	var _createBasicMutation2 = _interopRequireDefault(_createBasicMutation);
+	
+	var _setSubVariablesFactory = __webpack_require__(/*! ./subscribe/setSubVariablesFactory */ 397);
+	
+	var _setSubVariablesFactory2 = _interopRequireDefault(_setSubVariablesFactory);
+	
+	var _hasMatchingVariables = __webpack_require__(/*! ./mutate/hasMatchingVariables */ 398);
+	
+	var _hasMatchingVariables2 = _interopRequireDefault(_hasMatchingVariables);
+	
+	var _getNewDenormalizedData = __webpack_require__(/*! ./subscribe/getNewDenormalizedData */ 399);
+	
+	var _getNewDenormalizedData2 = _interopRequireDefault(_getNewDenormalizedData);
+	
+	var _isMutationResponseScalar = __webpack_require__(/*! ./mutate/isMutationResponseScalar */ 400);
+	
+	var _isMutationResponseScalar2 = _interopRequireDefault(_isMutationResponseScalar);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var defaultGetToState = function defaultGetToState(store) {
+	  return store.getState().cashay;
+	};
+	var defaultPaginationWords = {
+	  before: 'before',
+	  after: 'after',
+	  first: 'first',
+	  last: 'last'
+	};
+	
+	var defaultCoerceTypes = {
+	  DateTime: function DateTime(val) {
+	    return new Date(val);
+	  }
+	};
+	
+	var defaultInvalidate = function defaultInvalidate() {
+	  return true;
+	};
+	
+	var Cashay = function () {
+	  function Cashay() {
+	    var _this = this;
+	
+	    (0, _classCallCheck3.default)(this, Cashay);
+	
+	    this._getTypeFactory = function (op, key) {
+	      return function (typeName) {
+	        var cashayState = _this.getState();
+	        var rawState = cashayState.entities[typeName];
+	        if (!rawState) {
+	          throw new Error(typeName + ' does not exist in your cashay data state entities!');
+	        }
+	
+	        // TODO using stateVars is wrong because vars could be static in the query, instead we need to check the schema + varDefs + vars
+	        var stateVars = (0, _utils.getStateVars)(cashayState, op, key);
+	        if (!stateVars) {
+	          return rawState;
+	        }
+	        var context = {
+	          paginationWords: _this.paginationWords,
+	          variables: stateVars,
+	          skipTransform: true,
+	          schema: _this.schema
+	        };
+	        return (0, _makeFriendlyStore2.default)(rawState, typeName, context);
+	      };
+	    };
+	
+	    // many mutations can share the same mutationName, making it hard to cache stuff without adding complexity
+	    // we can assume that a mutationName + the components it affects = a unique, reproduceable fullMutation
+	    // const example = {
+	    //   [mutationName]: {
+	    //     activeQueries: {
+	    //       [op]: key
+	    //     },
+	    //     fullMutation: MutationString,
+	    //     variableEnhancers: [variableEnhancerFn],
+	    //     singles: {
+	    //       [op]: {
+	    //          ast: MutationAST,
+	    //          variableEnhancers: [variableEnhancerFn]
+	    //       }
+	    //     }
+	    //   }
+	    // }
+	    this.cachedMutations = {};
+	
+	    // the object to hold the denormalized query responses
+	    // const example = {
+	    //   [op]: {
+	    //     ast,
+	    //     refetch: FunctionToRefetchQuery,
+	    //     responses: {
+	    //       [key = '']: DenormalizedResponse
+	    //     }
+	    //   }
+	    // }
+	    this.cachedQueries = {};
+	
+	    // the object to hold the subscription stream
+	    // const example = {
+	    //   [subscriptionString]: {
+	    //     ast: SubscriptionAST,
+	    //     deps: {
+	    //       [key='']: {
+	    //         [dep]: invalidateFn || () => true
+	    //       }
+	    //     },
+	    //     responses: {
+	    //       [key = '']: DenormalizedResponseWithUnsub
+	    //     }
+	    //   }
+	    // };
+	    this.cachedSubscriptions = {};
+	
+	    // the object to hold all sub-based computations
+	    // const example = {
+	    //   inputs: [scalar, arr, obj],
+	    //   response: DenormalizedResponseData
+	    // };
+	    this.cachedComputed = {};
+	
+	    // a flag thrown by the invalidate function and reset when that query is added to the queue
+	    this._willInvalidateListener = false;
+	
+	    // const example = {
+	    //   [mutationName]: {
+	    //     [op]: mutationHandlerFn
+	    //   }
+	    // }
+	    this.mutationHandlers = {};
+	
+	    // denormalized deps is an object that matches the cashayState.entities
+	    // instead of an object of values, it holds an object of of Sets of keys for every query affected by a change
+	    // the value of each UID is a set of components
+	    // const example = {
+	    //   Pets: {
+	    //     1: {
+	    //       [op]: Set(['key1', 'key2'])
+	    //     }
+	    //   }
+	    // }
+	    this.denormalizedDeps = {};
+	
+	    // the deps used by mutations to determine what branches of the state tree to invalidate from a mutation
+	    // const example = {
+	    //   [op]: {
+	    //     [key]: Set(...['Pets.1', 'Pets.2'])
+	    //   }
+	    // }
+	    this.normalizedDeps = {};
+	
+	    // a Set of minimized query strings. Identical strings are ignored
+	    // this could be improved to minimize traffic, but it favors fast and cheap for now
+	    this.pendingQueries = new _set2.default();
+	  }
+	
+	  /**
+	   * The primary method to begin using the singleton
+	   *
+	   * @param {Object} coerceTypes an object full of methods names matching GraphQL types. It takes in a single scalar value
+	   * and returns the output. This is useful for things like converting dates from strings to numbers or Date types.
+	   * @param {Function} getToState a function to get to the cashayState.
+	   * Useful if your store is not a POJO or if your reducer isn't called `cashay`
+	   * @param {HTTPTransport} httpTransport an instance of an HTTPTransport used to connect cashay to your server
+	   * @param {string} idFieldName name of the unique identifier for your documents, defaults to `id`, is `_id` for MongoDB
+	   * @param {Object} paginationWords reserved arguments for cusor-based pagination
+	   * @param {Transport} priorityTransport an instance of a Transport used to connect cashay to your server.
+	   * Takes prioirty over httpTransport. Useful for server-side rendering and sockets.
+	   * @param {Object} schema the client graphQL schema
+	   * @param {Object} store the redux store
+	   * */
+	
+	
+	  (0, _createClass3.default)(Cashay, [{
+	    key: 'create',
+	    value: function create(_ref) {
+	      var _this2 = this;
+	
+	      var coerceTypes = _ref.coerceTypes;
+	      var getToState = _ref.getToState;
+	      var httpTransport = _ref.httpTransport;
+	      var idFieldName = _ref.idFieldName;
+	      var paginationWords = _ref.paginationWords;
+	      var priorityTransport = _ref.priorityTransport;
+	      var schema = _ref.schema;
+	      var store = _ref.store;
+	
+	      this.coerceTypes = coerceTypes === undefined ? this.coerceTypes || defaultCoerceTypes : coerceTypes;
+	      this.store = store || this.store;
+	      this.getState = getToState ? function () {
+	        return getToState(_this2.store);
+	      } : this.getState || function () {
+	        return defaultGetToState(_this2.store);
+	      };
+	      this.paginationWords = paginationWords === undefined ? this.paginationWords || defaultPaginationWords : (0, _extends3.default)({}, defaultPaginationWords, paginationWords);
+	      this.idFieldName = idFieldName === undefined ? this.idFieldName || 'id' : idFieldName;
+	      this.httpTransport = httpTransport === undefined ? this.httpTransport : httpTransport;
+	      this.priorityTransport = priorityTransport === undefined ? this.priorityTransport : priorityTransport;
+	      this.schema = schema || this.schema;
+	    }
+	
+	    /**
+	     * a method given to a mutation callback that turns on a global.
+	     * if true, then we know to queue up a requery
+	     */
+	
+	  }, {
+	    key: '_invalidate',
+	    value: function _invalidate() {
+	      this._willInvalidateListener = true;
+	    }
+	
+	    /**
+	     * A method to get the best transport to send the request
+	     * */
+	
+	  }, {
+	    key: 'getTransport',
+	    value: function getTransport(specificTransport) {
+	      return specificTransport || this.priorityTransport || this.httpTransport;
+	    }
+	
+	    /**
+	     * A method that accepts a GraphQL query and returns a result using only local data.
+	     * If it cannot complete the request on local data alone, it also asks the server for the data that it does not have.
+	     *
+	     * @param {string} queryString - The GraphQL query string, exactly as you'd send it to a GraphQL server
+	     * @param {Object} [options] - The optional objects to include with the query
+	     *
+	     * @param {string} [options.op] - A string to match the op.
+	     * @param {string} [options.key=''] - A string to uniquely match the op insance.
+	     * @param {Boolean} [options.forceFetch] - is true if the query is to ignore all local data and fetch new data
+	     * @param {Function} [options.transport] - The function used to send the data request to GraphQL, if different from default
+	     * @param {Object} [options.variables] - are the variables sent along with the query
+	     * @param {Object} [options.mutationHandlers] - the functions used to change the local data when a mutation occurs
+	     * @param {Object} [options.customMutations] - if mutations are too complex to be autogenerated (rare), write them here
+	     * @param {Boolean} [options.localOnly] - if you only want to query the local cache, set this to true
+	     *
+	     * @returns {Object} data, setVariables, and status
+	     *
+	     */
+	
+	  }, {
+	    key: 'query',
+	    value: function query(queryString) {
+	      var _this3 = this;
+	
+	      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	      //if you call forceFetch in a mapStateToProps, you're gonna have a bad time (it'll refresh on EVERY dispatch)
+	      // Each op can have only 1 unique queryString/variable combo. This keeps memory use minimal.
+	      // if 2 components have the same queryString/variable but a different op, it'll fetch twice
+	      var forceFetch = options.forceFetch;
+	      var _options$key = options.key;
+	      var key = _options$key === undefined ? '' : _options$key;
+	      var _options$op = options.op;
+	      var op = _options$op === undefined ? queryString : _options$op;
+	
+	      // get the result, containing a response, queryString, and options to re-call the query
+	
+	      var fastResult = this.cachedQueries[op];
+	
+	      // if we got local data cached already, send it back fast
+	      var fastResponse = !forceFetch && fastResult && fastResult.responses[key];
+	      if (fastResponse) return fastResponse;
+	
+	      // Make sure we got everything we need
+	      if (!this.store || !this.schema) {
+	        throw new Error('Cashay requires a store & schema');
+	      }
+	
+	      if (options.mutationHandlers && op === queryString) {
+	        throw new Error('\'op\' is required when including \'mutationHandlers\' for: ' + queryString);
+	      }
+	
+	      // save the query so we can call it from anywhere
+	      if (!fastResult) {
+	        var refetch = function refetch(key) {
+	          _this3.query(queryString, {
+	            key: key,
+	            forceFetch: true,
+	            transport: _this3.getTransport(options.transport)
+	          });
+	        };
+	        this.cachedQueries[op] = new _helperClasses.CachedQuery(queryString, this.schema, this.idFieldName, refetch, key);
+	        (0, _queryHelpers.invalidateMutationsOnNewQuery)(op, this.cachedMutations);
+	      }
+	
+	      var cachedQuery = this.cachedQueries[op];
+	      var initialCachedResponse = cachedQuery.responses[key];
+	      var cashayState = this.getState();
+	      // override singleton defaults with query-specific values
+	      var variables = (0, _utils.getVariables)(options.variables, cashayState, op, key, initialCachedResponse);
+	
+	      // create an AST that we can mutate
+	      var coerceTypes = this.coerceTypes;
+	      var paginationWords = this.paginationWords;
+	      var idFieldName = this.idFieldName;
+	      var schema = this.schema;
+	      var store = this.store;
+	      var getState = this.getState;
+	
+	      var context = (0, _utils.buildExecutionContext)(cachedQuery.ast, {
+	        cashayState: cashayState,
+	        coerceTypes: coerceTypes,
+	        variables: variables,
+	        paginationWords: paginationWords,
+	        idFieldName: idFieldName,
+	        schema: schema
+	      });
+	
+	      // create a response with denormalized data and a function to set the variables
+	      cachedQuery.createResponse(context, op, key, store.dispatch, getState, forceFetch);
+	      var cachedResponse = cachedQuery.responses[key];
+	
+	      // if this is a different query string but the same base query
+	      // eg in this one we request 1 more field
+	      // we'll want to add dependencies since we don't know when the server response will come back
+	      // normalize the cachedResponse so we can add dependencies and stick it in the store
+	      var normalizedPartialResponse = (0, _normalizeResponse2.default)(cachedResponse.data, context);
+	      (0, _addDeps2.default)(normalizedPartialResponse, op, key, this.normalizedDeps, this.denormalizedDeps);
+	
+	      // if we need more data, get it from the server
+	      if (cachedResponse.status === _utils.LOADING) {
+	        // if a variable is a function, it may need info that comes from the updated cachedResponse
+	        context.variables = (0, _utils.getVariables)(options.variables, cashayState, op, key, cachedResponse);
+	
+	        //  async query the server (no need to track the promise it returns, as it will change the redux state)
+	        var transport = this.getTransport(options.transport);
+	        if (!transport) {
+	          throw new Error('Cashay requires a transport to query the server. If you want to query locally, use `localOnly: true`');
+	        }
+	        if (!options.localOnly) {
+	          this.queryServer(transport, context, op, key);
+	        }
+	      }
+	
+	      var stateVars = (0, _utils.getStateVars)(cashayState, op, key);
+	      this._prepareMutations(op, stateVars, options);
+	
+	      // TODO dispatch with status
+	
+	      return cachedResponse;
+	    }
+	
+	    /**
+	     * A method used to get missing data from the server.
+	     * Once the data comes back, it is normalized, old dependencies are removed, new ones are created,
+	     * and the data that comes back from the server is compared to local data to minimize invalidations
+	     *
+	     * @param {function} transport the transport class to send the query + vars to a GraphQL endpoint
+	     * @param {object} context the context to normalize data, including the requestAST and schema
+	     * @param {string} op an ID specific to the queryString/variable combo (defaults to the queryString)
+	     * @param {string} key A unique key to match the op instance, only used where you would use React's key
+	     * (eg in a component that you called map on in the parent component).
+	     *
+	     * @return {undefined}
+	     */
+	
+	  }, {
+	    key: 'queryServer',
+	    value: function () {
+	      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(transport, context, op, key) {
+	        var variables, operation, idFieldName, schema, dispatch, minimizedQueryString, basePendingQuery, pendingQuery, _ref2,
+	
+	        // send minimizedQueryString to server and await minimizedQueryResponse
+	        error, data, ops, i, _pendingQuery$i, _key, _op, payload, denormalizedLocalResponse, normalizedLocalResponse, normalizedServerResponse, _getState,
+	
+	        // now, remove the objects that look identical to the ones already in the state
+	        // that way, if the incoming entity (eg Person.123) looks exactly like the one already in the store
+	        // we don't have to invalidate and rerender
+	        entities, result, entitiesAndResult, fullNormalizedResponse, _i, _pendingQuery$_i, _op2, _key2, _variables, partialPayload, _payload;
+	
+	        return _regenerator2.default.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                variables = context.variables;
+	                operation = context.operation;
+	                idFieldName = context.idFieldName;
+	                schema = context.schema;
+	                dispatch = this.store.dispatch;
+	                minimizedQueryString = (0, _printMinimalQuery.printMinimalQuery)(operation, idFieldName, variables, op, schema);
+	                // bail if we can't do anything with the variables that we were given
+	
+	                if (minimizedQueryString) {
+	                  _context.next = 8;
+	                  break;
+	                }
+	
+	                return _context.abrupt('return');
+	
+	              case 8:
+	                basePendingQuery = this.pendingQueries[minimizedQueryString];
+	
+	                if (!basePendingQuery) {
+	                  _context.next = 12;
+	                  break;
+	                }
+	
+	                if (!(0, _queryHelpers.equalPendingQueries)(basePendingQuery, { op: op, key: key, variables: variables })) {
+	                  // bounce identical queries for different components
+	                  this.pendingQueries[minimizedQueryString].push({ op: op, key: key, variables: (0, _utils.clone)(variables) });
+	                }
+	                // if it's the same op, it'll get updates when they come
+	                return _context.abrupt('return');
+	
+	              case 12:
+	                pendingQuery = this.pendingQueries[minimizedQueryString] = [{ op: op, key: key, variables: (0, _utils.clone)(variables) }];
+	                _context.next = 15;
+	                return transport.handleQuery({ query: minimizedQueryString, variables: variables });
+	
+	              case 15:
+	                _ref2 = _context.sent;
+	                error = _ref2.error;
+	                data = _ref2.data;
+	
+	                // handle errors coming back from the server
+	
+	                if (!error) {
+	                  _context.next = 23;
+	                  break;
+	                }
+	
+	                ops = {};
+	
+	                for (i = 0; i < pendingQuery.length; i++) {
+	                  _pendingQuery$i = pendingQuery[i];
+	                  _key = _pendingQuery$i.key;
+	                  _op = _pendingQuery$i.op;
+	                  // TODO return new obj?
+	
+	                  this.cachedQueries[_op].responses[_key].error = error;
+	                  ops[_op] = ops[_op] || {};
+	                  ops[_op][_key] = ops[_op][_key] || {};
+	                  ops[_op][_key].error = error;
+	                }
+	                payload = { ops: ops };
+	                return _context.abrupt('return', dispatch({ type: _duck.SET_ERROR, payload: payload }));
+	
+	              case 23:
+	                //re-create the denormalizedPartialResponse because it went stale when we called the server
+	                (0, _denormalizeHelpers.rebuildOriginalArgs)(context.operation);
+	                denormalizedLocalResponse = (0, _denormalizeStore2.default)(context);
+	                normalizedLocalResponse = (0, _normalizeResponse2.default)(denormalizedLocalResponse, context);
+	
+	                // normalize response to get ready to dispatch it into the state tree
+	
+	                normalizedServerResponse = (0, _normalizeResponse2.default)(data, context);
+	
+	                // reset the variables that normalizeResponse mutated TODO no longer necessary?
+	
+	                context.variables = pendingQuery[pendingQuery.length - 1].variables;_getState = this.getState();
+	                entities = _getState.entities;
+	                result = _getState.result;
+	                entitiesAndResult = (0, _queryHelpers.shortenNormalizedResponse)(normalizedServerResponse, { entities: entities, result: result });
+	
+	                // if the server didn't give us any new stuff, we already set the vars, so we're done here
+	
+	                if (entitiesAndResult) {
+	                  _context.next = 34;
+	                  break;
+	                }
+	
+	                return _context.abrupt('return');
+	
+	              case 34:
+	
+	                // combine the partial response with the server response to fully respond to the query
+	                fullNormalizedResponse = (0, _mergeStores2.default)(normalizedLocalResponse, normalizedServerResponse);
+	
+	                // it's possible that we adjusted the arguments for the operation we sent to server
+	                // for example, instead of asking for 20 docs, we asked for 5 at index 15.
+	                // now, we want to ask for the 20 again (but locally)
+	
+	                (0, _denormalizeHelpers.rebuildOriginalArgs)(context.operation);
+	
+	                // since we debounced all duplicate queries, we still have to update all their deps
+	                for (_i = 0; _i < pendingQuery.length; _i++) {
+	                  _pendingQuery$_i = pendingQuery[_i];
+	                  _op2 = _pendingQuery$_i.op;
+	                  _key2 = _pendingQuery$_i.key;
+	                  _variables = _pendingQuery$_i.variables;
+	                  // add denormalizedDeps so we can invalidate when other queries come in
+	                  // add normalizedDeps to find those deps when a denormalizedReponse is mutated
+	                  // the data fetched from server is only part of the story, so we need the full normalized response
+	
+	                  (0, _addDeps2.default)(fullNormalizedResponse, _op2, _key2, this.normalizedDeps, this.denormalizedDeps);
+	
+	                  // remove the responses from this.cachedQueries where necessary
+	                  (0, _flushDependencies2.default)(entitiesAndResult.entities, _op2, _key2, this.denormalizedDeps, this.cachedQueries);
+	
+	                  // only bother merging the first of the possibly many pending queries
+	                  partialPayload = _i === 0 ? entitiesAndResult : {};
+	                  _payload = (0, _extends3.default)({}, partialPayload, {
+	                    ops: (0, _defineProperty3.default)({}, _op2, (0, _defineProperty3.default)({}, _key2, {
+	                      variables: _variables,
+	                      status: 'complete',
+	                      error: null
+	                    }))
+	                  });
+	
+	                  dispatch({
+	                    type: _duck.INSERT_QUERY,
+	                    payload: _payload
+	                  });
+	                }
+	
+	                this.pendingQueries[minimizedQueryString] = undefined;
+	
+	              case 38:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, this);
+	      }));
+	
+	      function queryServer(_x2, _x3, _x4, _x5) {
+	        return ref.apply(this, arguments);
+	      }
+	
+	      return queryServer;
+	    }()
+	  }, {
+	    key: '_prepareMutations',
+	    value: function _prepareMutations(op, opStateVars, _ref3) {
+	      var mutationHandlers = _ref3.mutationHandlers;
+	      var customMutations = _ref3.customMutations;
+	      var mutationSchema = this.schema.mutationSchema;
+	
+	      if (mutationHandlers) {
+	        var mutationHandlerNames = (0, _keys2.default)(mutationHandlers);
+	        for (var i = 0; i < mutationHandlerNames.length; i++) {
+	          var mutationName = mutationHandlerNames[i];
+	          (0, _utils.checkMutationInSchema)(mutationSchema, mutationName);
+	          this.mutationHandlers[mutationName] = this.mutationHandlers[mutationName] || {};
+	          this.mutationHandlers[mutationName][op] = mutationHandlers[mutationName];
+	        }
+	      }
+	      if (customMutations) {
+	        var mutationNames = (0, _keys2.default)(customMutations);
+	        for (var _i2 = 0; _i2 < mutationNames.length; _i2++) {
+	          var _mutationName = mutationNames[_i2];
+	          (0, _utils.checkMutationInSchema)(mutationSchema, _mutationName);
+	          this.cachedMutations[_mutationName] = this.cachedMutations[_mutationName] || new _helperClasses.CachedMutation();
+	          var cachedSingles = this.cachedMutations[_mutationName].singles;
+	          if (!cachedSingles[op]) {
+	            var mutationAST = (0, _utils.parse)(customMutations[_mutationName]);
+	
+	            var _namespaceMutation = (0, _namespaceMutation4.default)(mutationAST, op, opStateVars, this.schema);
+	
+	            var namespaceAST = _namespaceMutation.namespaceAST;
+	            var variableEnhancers = _namespaceMutation.variableEnhancers;
+	
+	            cachedSingles[op] = {
+	              ast: namespaceAST,
+	              variableEnhancers: variableEnhancers
+	            };
+	          }
+	        }
+	      }
+	    }
+	
+	    /**
+	     *
+	     * A mutationName is not unique to a mutation, but a name + possibleComponentsObj is
+	     *
+	     * @param {string} mutationName the name of the mutation, as defined in your GraphQL schema
+	     * @param {Object} options all the options
+	     *
+	     */
+	
+	  }, {
+	    key: 'mutate',
+	    value: function mutate(mutationName) {
+	      var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	      var variables = options.variables;
+	
+	      if (typeof mutationName !== 'string') {
+	        throw new Error('The first argument to \'mutate\' should be the name of the mutation');
+	      }
+	      this.cachedMutations[mutationName] = this.cachedMutations[mutationName] || new _helperClasses.CachedMutation();
+	      var cachedMutation = this.cachedMutations[mutationName];
+	
+	      // update fullMutation, variableSet, and variableEnhancers
+	      this._updateCachedMutation(mutationName, options);
+	
+	      // optimistcally update
+	      this._processMutationHandlers(mutationName, cachedMutation.activeQueries, null, variables);
+	      // if (options.localOnly) return;
+	
+	      // async call the server
+	      var variableEnhancers = this.cachedMutations[mutationName].variableEnhancers;
+	
+	      var namespacedVariables = variableEnhancers.reduce(function (enhancer, reduction) {
+	        return enhancer(reduction);
+	      }, variables);
+	      var newOptions = (0, _extends3.default)({}, options, { variables: namespacedVariables });
+	      return this._mutateServer(mutationName, cachedMutation.activeQueries, cachedMutation.fullMutation, newOptions);
+	    }
+	  }, {
+	    key: '_updateCachedMutation',
+	    value: function _updateCachedMutation(mutationName, options) {
+	      // try to return fast!
+	      var cachedMutation = this.cachedMutations[mutationName];
+	      var variables = options.variables;
+	
+	      if (cachedMutation.fullMutation) {
+	        if ((0, _hasMatchingVariables2.default)(variables, cachedMutation.variableSet)) return;
+	        // variable definitions and args will change, nuke the cached mutation + single ASTs
+	        cachedMutation.clear(true);
+	      } else {
+	        cachedMutation.activeQueries = new _ActiveQueries2.default(mutationName, options.components, this.cachedQueries, this.mutationHandlers);
+	      }
+	      this._createMutationsFromQueries(mutationName, cachedMutation.activeQueries, variables);
+	    }
+	  }, {
+	    key: '_createMutationsFromQueries',
+	    value: function _createMutationsFromQueries(mutationName, activeQueries, variables) {
+	      var cachedMutation = this.cachedMutations[mutationName];
+	      var cachedSingles = cachedMutation.singles;
+	      var cachedSinglesASTs = [];
+	      var newVariableEnhancers = [];
+	      var opsToUpdateKeys = (0, _keys2.default)(activeQueries);
+	      if (!opsToUpdateKeys.length) {
+	        cachedMutation.fullMutation = (0, _createBasicMutation2.default)(mutationName, this.schema, variables);
+	        return;
+	      }
+	      if ((0, _isMutationResponseScalar2.default)(this.schema, mutationName)) {
+	        cachedMutation.fullMutation = (0, _createBasicMutation2.default)(mutationName, this.schema, variables);
+	      } else {
+	        var _cachedMutation$varia;
+	
+	        var cashayState = this.getState();
+	        for (var i = 0; i < opsToUpdateKeys.length; i++) {
+	          var op = opsToUpdateKeys[i];
+	          if (!cachedSingles[op]) {
+	            var queryOperation = this.cachedQueries[op].ast.definitions[0];
+	            var mutationAST = (0, _createMutationFromQuery2.default)(queryOperation, mutationName, variables, this.schema);
+	            //TODO remove safety check, should be sanitized before activeQueries is saved
+	            var key = activeQueries[op] === true ? '' : activeQueries[op];
+	            var stateVars = (0, _utils.getStateVars)(cashayState, op, key);
+	
+	            var _namespaceMutation2 = (0, _namespaceMutation4.default)(mutationAST, op, stateVars, this.schema);
+	
+	            var namespaceAST = _namespaceMutation2.namespaceAST;
+	            var _variableEnhancers = _namespaceMutation2.variableEnhancers;
+	
+	            cachedSingles[op] = {
+	              ast: namespaceAST,
+	              variableEnhancers: _variableEnhancers
+	            };
+	          }
+	          var _cachedSingles$op = cachedSingles[op];
+	          var ast = _cachedSingles$op.ast;
+	          var variableEnhancers = _cachedSingles$op.variableEnhancers;
+	
+	          cachedSinglesASTs.push(ast);
+	          newVariableEnhancers.push.apply(newVariableEnhancers, (0, _toConsumableArray3.default)(variableEnhancers));
+	        }
+	        cachedMutation.fullMutation = (0, _mergeMutations2.default)(cachedSinglesASTs);
+	        (_cachedMutation$varia = cachedMutation.variableEnhancers).push.apply(_cachedMutation$varia, newVariableEnhancers);
+	      }
+	    }
+	  }, {
+	    key: '_mutateServer',
+	    value: function () {
+	      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(mutationName, componentsToUpdateObj, mutationString, options) {
+	        var variables, transport, docFromServer, error, data, payload, queryResponse;
+	        return _regenerator2.default.wrap(function _callee2$(_context2) {
+	          while (1) {
+	            switch (_context2.prev = _context2.next) {
+	              case 0:
+	                variables = options.variables;
+	                transport = this.getTransport(options.transport);
+	                _context2.next = 4;
+	                return transport.handleQuery({ query: mutationString, variables: variables });
+	
+	              case 4:
+	                docFromServer = _context2.sent;
+	                error = docFromServer.error;
+	                data = docFromServer.data;
+	
+	                if (error) {
+	                  payload = { error: error };
+	
+	                  this.store.dispatch({ type: _duck.SET_ERROR, payload: payload });
+	                } else {
+	                  // each mutation should return only 1 response, but it may be aliased
+	                  // TODO remove data[mutationName]
+	                  queryResponse = data[mutationName] || data[(0, _keys2.default)(data)[0]];
+	                  // update state with new doc from server
+	
+	                  this._processMutationHandlers(mutationName, componentsToUpdateObj, queryResponse);
+	                }
+	                return _context2.abrupt('return', docFromServer);
+	
+	              case 9:
+	              case 'end':
+	                return _context2.stop();
+	            }
+	          }
+	        }, _callee2, this);
+	      }));
+	
+	      function _mutateServer(_x7, _x8, _x9, _x10) {
+	        return ref.apply(this, arguments);
+	      }
+	
+	      return _mutateServer;
+	    }()
+	  }, {
+	    key: '_processMutationHandlers',
+	    value: function _processMutationHandlers(mutationName, componentsToUpdateObj, queryResponse, variables) {
+	      var componentHandlers = this.mutationHandlers[mutationName];
+	      var cashayState = this.getState();
+	      var allNormalizedChanges = {};
+	      var ops = {};
+	      var opsToUpdateKeys = (0, _keys2.default)(componentsToUpdateObj);
+	
+	      // for every op that listens the the mutationName
+	      for (var i = 0; i < opsToUpdateKeys.length; i++) {
+	        var op = opsToUpdateKeys[i];
+	        var key = componentsToUpdateObj[op] === true ? '' : componentsToUpdateObj[op];
+	        var componentHandler = componentHandlers[op];
+	
+	        // find current cached result for this particular queryName
+	        var cachedResult = this.cachedQueries[op];
+	        var ast = cachedResult.ast;
+	        var refetch = cachedResult.refetch;
+	        var responses = cachedResult.responses;
+	
+	        var cachedResponse = responses[key];
+	        if (!cachedResponse) {
+	          throw new Error('Cache went stale & wasn\'t recreated. Did you forget to put a redux subscriber on ' + op + '?');
+	        }
+	        var modifiedResponseData = void 0;
+	
+	        // for the denormalized response, mutate it in place or return undefined if no mutation was made
+	        var getType = this._getTypeFactory(op, key);
+	        if (queryResponse) {
+	          // if it's from the server, send the doc we got back
+	          var normalizedQueryResponse = (0, _removeNamespacing2.default)(queryResponse, op);
+	          modifiedResponseData = componentHandler(null, normalizedQueryResponse, cachedResponse.data, getType, this._invalidate);
+	        } else {
+	
+	          // otherwise, treat it as an optimistic update
+	          modifiedResponseData = componentHandler(variables, null, cachedResponse.data, getType, this._invalidate);
+	        }
+	
+	        // there's a possible 3 updates: optimistic, doc from server, full array from server (invalidated)
+	        if (this._willInvalidateListener) {
+	          this._willInvalidateListener = false;
+	          refetch(key);
+	        }
+	
+	        // this must come back after the invalidateListener check because they could invalidate without returning something
+	        if (!modifiedResponseData) {
+	          continue;
+	        }
+	
+	        // create a new object to make sure react-redux's updateStatePropsIfNeeded returns true
+	        // also remove any existing errors since we've now had a successful operation
+	        cachedResult.responses[key] = (0, _utils.makeErrorFreeResponse)(cachedResponse);
+	        var schema = this.schema;
+	        var paginationWords = this.paginationWords;
+	        var idFieldName = this.idFieldName;
+	
+	        var stateVars = (0, _utils.getStateVars)(cashayState, op, key);
+	        var contextVars = stateVars && (0, _utils.clone)(stateVars);
+	        if (stateVars) {
+	          ops[op] = ops[op] || {};
+	          ops[op][key] = ops[op][key] || {};
+	          ops[op][key].variables = contextVars;
+	        }
+	        var context = (0, _utils.buildExecutionContext)(ast, {
+	          variables: contextVars,
+	          paginationWords: paginationWords,
+	          idFieldName: idFieldName,
+	          schema: schema,
+	          cashayState: cashayState
+	        });
+	
+	        var normalizedModifiedResponse = (0, _normalizeResponse2.default)(modifiedResponseData, context);
+	        allNormalizedChanges = (0, _mergeStores2.default)(allNormalizedChanges, normalizedModifiedResponse);
+	        // TODO make sure we don't need to shallow copy this
+	        // allVariables = {...allVariables, ...contextVars};
+	      }
+	      var entities = cashayState.entities;
+	      var result = cashayState.result;
+	
+	      var entitiesAndResult = (0, _queryHelpers.shortenNormalizedResponse)(allNormalizedChanges, { entities: entities, result: result });
+	      if (!entitiesAndResult) return;
+	      var payload = (0, _keys2.default)(ops).length ? (0, _extends3.default)({}, entitiesAndResult, { ops: ops }) : entitiesAndResult;
+	      this.store.dispatch({
+	        type: _duck.INSERT_MUTATION,
+	        payload: payload
+	      });
+	    }
+	  }, {
+	    key: 'subscribe',
+	
+	
+	    /**
+	     *
+	     */
+	    value: function subscribe(subscriptionString, subscriber, options) {
+	      var _this4 = this;
+	
+	      var dep = options.dep;
+	      var _options$op2 = options.op;
+	      var op = _options$op2 === undefined ? subscriptionString : _options$op2;
+	      var _options$key2 = options.key;
+	      var key = _options$key2 === undefined ? '' : _options$key2;
+	      var _options$invalidate = options.invalidate;
+	      var invalidate = _options$invalidate === undefined ? defaultInvalidate : _options$invalidate;
+	
+	      var fastResult = this.cachedSubscriptions[op];
+	      var fastResponse = fastResult && fastResult.responses[key];
+	      if (fastResponse) {
+	        if (dep) {
+	          fastResult.deps[key] = fastResult.deps[key] || {};
+	          fastResult.deps[key][dep] = invalidate;
+	        }
+	        return fastResponse;
+	      }
+	      if (!fastResult) {
+	        // if it's a new op
+	        var initialDeps = dep ? (0, _defineProperty3.default)({}, key, (0, _defineProperty3.default)({}, dep, invalidate)) : (0, _defineProperty3.default)({}, key, {});
+	        this.cachedSubscriptions[op] = new _helperClasses.CachedSubscription(subscriptionString, key, initialDeps);
+	      } else if (!fastResponse && dep) {
+	        // if it's a new key
+	        fastResult.deps[key] = fastResult.deps[key] || {};
+	        fastResult.deps[key][dep] = invalidate;
+	      }
+	      var cachedSubscription = this.cachedSubscriptions[op];
+	      var cashayState = this.getState();
+	      var coerceTypes = this.coerceTypes;
+	      var paginationWords = this.paginationWords;
+	      var idFieldName = this.idFieldName;
+	      var schema = this.schema;
+	
+	      var variables = (0, _utils.getVariables)(options.variables, cashayState, op, key, cachedSubscription.responses[key]);
+	      var context = (0, _utils.buildExecutionContext)(cachedSubscription.ast, {
+	        coerceTypes: coerceTypes,
+	        cashayState: cashayState,
+	        variables: variables,
+	        paginationWords: paginationWords,
+	        idFieldName: idFieldName,
+	        schema: schema
+	      });
+	      var getCachedResult = function getCachedResult() {
+	        return cachedSubscription.responses[key].data;
+	      };
+	      var subscriptionHandlers = this.makeSubscriptionHandlers(op, key, variables);
+	      // const startSubscription = (subVars) => subscriber(subscriptionString, subVars, subscriptionHandlers, getCachedResult);
+	      var promiseStart = function promiseStart(subVars) {
+	        return new _promise2.default(function (resolve) {
+	          setTimeout(function () {
+	            var unsubscribe = subscriber(subscriptionString, subVars, subscriptionHandlers, getCachedResult);
+	            resolve(unsubscribe);
+	          }, 0);
+	        });
+	      };
+	
+	      promiseStart(variables).then(function (socketUnsub) {
+	        cachedSubscription.responses[key] = (0, _extends3.default)({}, cachedSubscription.responses[key], {
+	          status: _utils.READY,
+	          unsubscribe: function unsubscribe() {
+	            socketUnsub();
+	            _this4.store.dispatch({
+	              type: _duck.SET_STATUS,
+	              status: _utils.UNSUBSCRIBED
+	            });
+	          }
+	        });
+	      });
+	
+	      var data = (0, _denormalizeStore2.default)(context, 'subscriptionSchema');
+	      return cachedSubscription.responses[key] = {
+	        data: data,
+	        setVariables: (0, _setSubVariablesFactory2.default)(op, key, this.store.dispatch, this.getState, cachedSubscription, promiseStart),
+	        status: _utils.SUBSCRIBING,
+	        unsubscribe: null
+	      };
+	    }
+	  }, {
+	    key: 'makeSubscriptionHandlers',
+	    value: function makeSubscriptionHandlers(op, key, variables) {
+	      var _this5 = this;
+	
+	      var handleCreateNewData = function handleCreateNewData(handler, document, docId, _ref6) {
+	        var path = _ref6.path;
+	        var _ref6$removeKeys = _ref6.removeKeys;
+	        var removeKeys = _ref6$removeKeys === undefined ? [] : _ref6$removeKeys;
+	
+	        // removeKeys can optionally be `true`, meaning straight up replace the old with the new
+	        var cachedSubscription = _this5.cachedSubscriptions[op];
+	        var cashayState = _this5.getState();
+	        var paginationWords = _this5.paginationWords;
+	        var idFieldName = _this5.idFieldName;
+	        var schema = _this5.schema;
+	
+	        var context = (0, _utils.buildExecutionContext)(cachedSubscription.ast, {
+	          cashayState: cashayState,
+	          variables: variables,
+	          paginationWords: paginationWords,
+	          idFieldName: idFieldName,
+	          schema: schema
+	        });
+	        var operations = context.operation.selectionSet.selections;
+	        var cachedResult = cachedSubscription.responses[key].data;
+	        var subscriptionNames = (0, _keys2.default)(cachedResult);
+	        if (subscriptionNames.length > 1 && !path) {
+	          throw new Error('Your subscription for ' + op + ' has multiple operations, but no path.\n         Include a \'path\' option to determine how to patch in the incoming data.');
+	        }
+	        var pathArray = path ? path.split('.') : subscriptionNames;
+	
+	        var _createNewData = (0, _getNewDenormalizedData2.default)(handler, cachedResult, pathArray, {
+	          document: document,
+	          docId: docId,
+	          idFieldName: idFieldName,
+	          removeKeys: removeKeys,
+	          schema: schema
+	        });
+	
+	        var oldVal = _createNewData.oldVal;
+	        var newVal = _createNewData.newVal;
+	
+	        return { oldVal: oldVal, newVal: newVal, context: context };
+	      };
+	
+	      var mergeNewData = function mergeNewData(actionType, _ref7) {
+	        var oldVal = _ref7.oldVal;
+	        var newVal = _ref7.newVal;
+	        var context = _ref7.context;
+	
+	        var cachedSubscription = _this5.cachedSubscriptions[op];
+	        cachedSubscription.responses[key] = (0, _extends3.default)({}, cachedSubscription.responses[key], {
+	          // handle multiple sub operations inside the same sub
+	          data: (0, _extends3.default)({}, cachedSubscription.responses[key].data, newVal)
+	        });
+	        var normalizedDoc = (0, _normalizeResponse2.default)(newVal, context, true);
+	
+	        var _getState2 = _this5.getState();
+	
+	        var entities = _getState2.entities;
+	        var result = _getState2.result;
+	
+	        var entitiesAndResult = (0, _queryHelpers.shortenNormalizedResponse)(normalizedDoc, { entities: entities, result: result });
+	        if (!entitiesAndResult) return;
+	
+	        // remove the responses from this.cachedQueries where necessary
+	        (0, _flushDependencies2.default)(entitiesAndResult.entities, op, key, _this5.denormalizedDeps, _this5.cachedQueries);
+	
+	        var deps = cachedSubscription.deps && cachedSubscription.deps[key];
+	        if (deps) {
+	          (0, _keys2.default)(deps).forEach(function (depName) {
+	            var invalid = deps[depName](oldVal, newVal);
+	            if (invalid) {
+	              _this5.cachedComputed[depName] = undefined;
+	            }
+	          });
+	        }
+	
+	        // stick normalize data in store and recreate any invalidated denormalized structures
+	        var payload = (0, _extends3.default)({}, entitiesAndResult, {
+	          ops: (0, _defineProperty3.default)({}, op, (0, _defineProperty3.default)({}, key, variables))
+	        });
+	        _this5.store.dispatch({
+	          type: actionType,
+	          payload: payload
+	        });
+	      };
+	
+	      return {
+	        add: function add(document) {
+	          var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	          var docId = document[_this5.idFieldName];
+	          var diffAndContext = handleCreateNewData(_utils.ADD, document, docId, options);
+	          mergeNewData(_duck.ADD_SUBSCRIPTION, diffAndContext);
+	        },
+	        update: function update(document) {
+	          var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	          var docId = document[_this5.idFieldName];
+	          var diffAndContext = handleCreateNewData(_utils.UPDATE, document, docId, options);
+	          mergeNewData(_duck.UPDATE_SUBSCRIPTION, diffAndContext);
+	        },
+	        upsert: function upsert(document) {
+	          var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	          var docId = document[_this5.idFieldName];
+	          var diffAndContext = handleCreateNewData(_utils.UPSERT, document, docId, options);
+	          mergeNewData(_duck.UPDATE_SUBSCRIPTION, diffAndContext);
+	        },
+	        remove: function remove(docId) {
+	          var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	          var diffAndContext = handleCreateNewData(_utils.REMOVE, null, docId, options);
+	          mergeNewData(_duck.REMOVE_SUBSCRIPTION, diffAndContext);
+	        },
+	        setStatus: function setStatus(status) {
+	          var cachedSub = _this5.cachedSubscriptions[op];
+	          cachedSub.responses[key] = (0, _extends3.default)({}, cachedSub.responses[key], {
+	            status: status
+	          });
+	          dispatch({
+	            type: _duck.SET_STATUS,
+	            status: status
+	          });
+	        }
+	      };
+	    }
+	  }, {
+	    key: 'computed',
+	    value: function computed(op) {
+	      var inputs = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+	      var resolve = arguments[2];
+	
+	      var fastResult = this.cachedComputed[op];
+	      if (fastResult) {
+	        var returnFast = true;
+	        for (var i = 0; i < inputs.length; i++) {
+	          if (inputs[i] !== fastResult.inputs[i]) {
+	            returnFast = false;
+	            break;
+	          }
+	        }
+	        if (returnFast) return fastResult.response;
+	      }
+	      var response = resolve.apply(undefined, (0, _toConsumableArray3.default)(inputs));
+	      this.cachedComputed[op] = {
+	        inputs: inputs,
+	        response: response
+	      };
+	      return response;
+	    }
+	  }]);
+	  return Cashay;
+	}();
+	
+	exports.default = new Cashay();
+
+/***/ },
+/* 363 */
+/*!********************************************!*\
+  !*** ./~/babel-runtime/core-js/promise.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(/*! core-js/library/fn/promise */ 364), __esModule: true };
+
+/***/ },
+/* 364 */
+/*!*********************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/fn/promise.js ***!
+  \*********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(/*! ../modules/es6.object.to-string */ 282);
+	__webpack_require__(/*! ../modules/es6.string.iterator */ 267);
+	__webpack_require__(/*! ../modules/web.dom.iterable */ 252);
+	__webpack_require__(/*! ../modules/es6.promise */ 365);
+	module.exports = __webpack_require__(/*! ../modules/_core */ 230).Promise;
+
+/***/ },
+/* 365 */
+/*!******************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/es6.promise.js ***!
+  \******************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var LIBRARY            = __webpack_require__(/*! ./_library */ 258)
+	  , global             = __webpack_require__(/*! ./_global */ 225)
+	  , ctx                = __webpack_require__(/*! ./_ctx */ 231)
+	  , classof            = __webpack_require__(/*! ./_classof */ 271)
+	  , $export            = __webpack_require__(/*! ./_export */ 229)
+	  , isObject           = __webpack_require__(/*! ./_is-object */ 236)
+	  , aFunction          = __webpack_require__(/*! ./_a-function */ 232)
+	  , anInstance         = __webpack_require__(/*! ./_an-instance */ 286)
+	  , forOf              = __webpack_require__(/*! ./_for-of */ 287)
+	  , speciesConstructor = __webpack_require__(/*! ./_species-constructor */ 366)
+	  , task               = __webpack_require__(/*! ./_task */ 367).set
+	  , microtask          = __webpack_require__(/*! ./_microtask */ 369)()
+	  , PROMISE            = 'Promise'
+	  , TypeError          = global.TypeError
+	  , process            = global.process
+	  , $Promise           = global[PROMISE]
+	  , process            = global.process
+	  , isNode             = classof(process) == 'process'
+	  , empty              = function(){ /* empty */ }
+	  , Internal, GenericPromiseCapability, Wrapper;
+	
+	var USE_NATIVE = !!function(){
+	  try {
+	    // correct subclassing with @@species support
+	    var promise     = $Promise.resolve(1)
+	      , FakePromise = (promise.constructor = {})[__webpack_require__(/*! ./_wks */ 265)('species')] = function(exec){ exec(empty, empty); };
+	    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
+	    return (isNode || typeof PromiseRejectionEvent == 'function') && promise.then(empty) instanceof FakePromise;
+	  } catch(e){ /* empty */ }
+	}();
+	
+	// helpers
+	var sameConstructor = function(a, b){
+	  // with library wrapper special case
+	  return a === b || a === $Promise && b === Wrapper;
+	};
+	var isThenable = function(it){
+	  var then;
+	  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
+	};
+	var newPromiseCapability = function(C){
+	  return sameConstructor($Promise, C)
+	    ? new PromiseCapability(C)
+	    : new GenericPromiseCapability(C);
+	};
+	var PromiseCapability = GenericPromiseCapability = function(C){
+	  var resolve, reject;
+	  this.promise = new C(function($$resolve, $$reject){
+	    if(resolve !== undefined || reject !== undefined)throw TypeError('Bad Promise constructor');
+	    resolve = $$resolve;
+	    reject  = $$reject;
+	  });
+	  this.resolve = aFunction(resolve);
+	  this.reject  = aFunction(reject);
+	};
+	var perform = function(exec){
+	  try {
+	    exec();
+	  } catch(e){
+	    return {error: e};
+	  }
+	};
+	var notify = function(promise, isReject){
+	  if(promise._n)return;
+	  promise._n = true;
+	  var chain = promise._c;
+	  microtask(function(){
+	    var value = promise._v
+	      , ok    = promise._s == 1
+	      , i     = 0;
+	    var run = function(reaction){
+	      var handler = ok ? reaction.ok : reaction.fail
+	        , resolve = reaction.resolve
+	        , reject  = reaction.reject
+	        , domain  = reaction.domain
+	        , result, then;
+	      try {
+	        if(handler){
+	          if(!ok){
+	            if(promise._h == 2)onHandleUnhandled(promise);
+	            promise._h = 1;
+	          }
+	          if(handler === true)result = value;
+	          else {
+	            if(domain)domain.enter();
+	            result = handler(value);
+	            if(domain)domain.exit();
+	          }
+	          if(result === reaction.promise){
+	            reject(TypeError('Promise-chain cycle'));
+	          } else if(then = isThenable(result)){
+	            then.call(result, resolve, reject);
+	          } else resolve(result);
+	        } else reject(value);
+	      } catch(e){
+	        reject(e);
+	      }
+	    };
+	    while(chain.length > i)run(chain[i++]); // variable length - can't use forEach
+	    promise._c = [];
+	    promise._n = false;
+	    if(isReject && !promise._h)onUnhandled(promise);
+	  });
+	};
+	var onUnhandled = function(promise){
+	  task.call(global, function(){
+	    var value = promise._v
+	      , abrupt, handler, console;
+	    if(isUnhandled(promise)){
+	      abrupt = perform(function(){
+	        if(isNode){
+	          process.emit('unhandledRejection', value, promise);
+	        } else if(handler = global.onunhandledrejection){
+	          handler({promise: promise, reason: value});
+	        } else if((console = global.console) && console.error){
+	          console.error('Unhandled promise rejection', value);
+	        }
+	      });
+	      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
+	      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
+	    } promise._a = undefined;
+	    if(abrupt)throw abrupt.error;
+	  });
+	};
+	var isUnhandled = function(promise){
+	  if(promise._h == 1)return false;
+	  var chain = promise._a || promise._c
+	    , i     = 0
+	    , reaction;
+	  while(chain.length > i){
+	    reaction = chain[i++];
+	    if(reaction.fail || !isUnhandled(reaction.promise))return false;
+	  } return true;
+	};
+	var onHandleUnhandled = function(promise){
+	  task.call(global, function(){
+	    var handler;
+	    if(isNode){
+	      process.emit('rejectionHandled', promise);
+	    } else if(handler = global.onrejectionhandled){
+	      handler({promise: promise, reason: promise._v});
+	    }
+	  });
+	};
+	var $reject = function(value){
+	  var promise = this;
+	  if(promise._d)return;
+	  promise._d = true;
+	  promise = promise._w || promise; // unwrap
+	  promise._v = value;
+	  promise._s = 2;
+	  if(!promise._a)promise._a = promise._c.slice();
+	  notify(promise, true);
+	};
+	var $resolve = function(value){
+	  var promise = this
+	    , then;
+	  if(promise._d)return;
+	  promise._d = true;
+	  promise = promise._w || promise; // unwrap
+	  try {
+	    if(promise === value)throw TypeError("Promise can't be resolved itself");
+	    if(then = isThenable(value)){
+	      microtask(function(){
+	        var wrapper = {_w: promise, _d: false}; // wrap
+	        try {
+	          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
+	        } catch(e){
+	          $reject.call(wrapper, e);
+	        }
+	      });
+	    } else {
+	      promise._v = value;
+	      promise._s = 1;
+	      notify(promise, false);
+	    }
+	  } catch(e){
+	    $reject.call({_w: promise, _d: false}, e); // wrap
+	  }
+	};
+	
+	// constructor polyfill
+	if(!USE_NATIVE){
+	  // 25.4.3.1 Promise(executor)
+	  $Promise = function Promise(executor){
+	    anInstance(this, $Promise, PROMISE, '_h');
+	    aFunction(executor);
+	    Internal.call(this);
+	    try {
+	      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
+	    } catch(err){
+	      $reject.call(this, err);
+	    }
+	  };
+	  Internal = function Promise(executor){
+	    this._c = [];             // <- awaiting reactions
+	    this._a = undefined;      // <- checked in isUnhandled reactions
+	    this._s = 0;              // <- state
+	    this._d = false;          // <- done
+	    this._v = undefined;      // <- value
+	    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
+	    this._n = false;          // <- notify
+	  };
+	  Internal.prototype = __webpack_require__(/*! ./_redefine-all */ 285)($Promise.prototype, {
+	    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
+	    then: function then(onFulfilled, onRejected){
+	      var reaction    = newPromiseCapability(speciesConstructor(this, $Promise));
+	      reaction.ok     = typeof onFulfilled == 'function' ? onFulfilled : true;
+	      reaction.fail   = typeof onRejected == 'function' && onRejected;
+	      reaction.domain = isNode ? process.domain : undefined;
+	      this._c.push(reaction);
+	      if(this._a)this._a.push(reaction);
+	      if(this._s)notify(this, false);
+	      return reaction.promise;
+	    },
+	    // 25.4.5.1 Promise.prototype.catch(onRejected)
+	    'catch': function(onRejected){
+	      return this.then(undefined, onRejected);
+	    }
+	  });
+	  PromiseCapability = function(){
+	    var promise  = new Internal;
+	    this.promise = promise;
+	    this.resolve = ctx($resolve, promise, 1);
+	    this.reject  = ctx($reject, promise, 1);
+	  };
+	}
+	
+	$export($export.G + $export.W + $export.F * !USE_NATIVE, {Promise: $Promise});
+	__webpack_require__(/*! ./_set-to-string-tag */ 264)($Promise, PROMISE);
+	__webpack_require__(/*! ./_set-species */ 288)(PROMISE);
+	Wrapper = __webpack_require__(/*! ./_core */ 230)[PROMISE];
+	
+	// statics
+	$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
+	  // 25.4.4.5 Promise.reject(r)
+	  reject: function reject(r){
+	    var capability = newPromiseCapability(this)
+	      , $$reject   = capability.reject;
+	    $$reject(r);
+	    return capability.promise;
+	  }
+	});
+	$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
+	  // 25.4.4.6 Promise.resolve(x)
+	  resolve: function resolve(x){
+	    // instanceof instead of internal slot check because we should fix it without replacement native Promise core
+	    if(x instanceof $Promise && sameConstructor(x.constructor, this))return x;
+	    var capability = newPromiseCapability(this)
+	      , $$resolve  = capability.resolve;
+	    $$resolve(x);
+	    return capability.promise;
+	  }
+	});
+	$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(/*! ./_iter-detect */ 279)(function(iter){
+	  $Promise.all(iter)['catch'](empty);
+	})), PROMISE, {
+	  // 25.4.4.1 Promise.all(iterable)
+	  all: function all(iterable){
+	    var C          = this
+	      , capability = newPromiseCapability(C)
+	      , resolve    = capability.resolve
+	      , reject     = capability.reject;
+	    var abrupt = perform(function(){
+	      var values    = []
+	        , index     = 0
+	        , remaining = 1;
+	      forOf(iterable, false, function(promise){
+	        var $index        = index++
+	          , alreadyCalled = false;
+	        values.push(undefined);
+	        remaining++;
+	        C.resolve(promise).then(function(value){
+	          if(alreadyCalled)return;
+	          alreadyCalled  = true;
+	          values[$index] = value;
+	          --remaining || resolve(values);
+	        }, reject);
+	      });
+	      --remaining || resolve(values);
+	    });
+	    if(abrupt)reject(abrupt.error);
+	    return capability.promise;
+	  },
+	  // 25.4.4.4 Promise.race(iterable)
+	  race: function race(iterable){
+	    var C          = this
+	      , capability = newPromiseCapability(C)
+	      , reject     = capability.reject;
+	    var abrupt = perform(function(){
+	      forOf(iterable, false, function(promise){
+	        C.resolve(promise).then(capability.resolve, reject);
+	      });
+	    });
+	    if(abrupt)reject(abrupt.error);
+	    return capability.promise;
+	  }
+	});
+
+/***/ },
+/* 366 */
+/*!***************************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_species-constructor.js ***!
+  \***************************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// 7.3.20 SpeciesConstructor(O, defaultConstructor)
+	var anObject  = __webpack_require__(/*! ./_an-object */ 235)
+	  , aFunction = __webpack_require__(/*! ./_a-function */ 232)
+	  , SPECIES   = __webpack_require__(/*! ./_wks */ 265)('species');
+	module.exports = function(O, D){
+	  var C = anObject(O).constructor, S;
+	  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
+	};
+
+/***/ },
+/* 367 */
+/*!************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_task.js ***!
+  \************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var ctx                = __webpack_require__(/*! ./_ctx */ 231)
+	  , invoke             = __webpack_require__(/*! ./_invoke */ 368)
+	  , html               = __webpack_require__(/*! ./_html */ 263)
+	  , cel                = __webpack_require__(/*! ./_dom-create */ 240)
+	  , global             = __webpack_require__(/*! ./_global */ 225)
+	  , process            = global.process
+	  , setTask            = global.setImmediate
+	  , clearTask          = global.clearImmediate
+	  , MessageChannel     = global.MessageChannel
+	  , counter            = 0
+	  , queue              = {}
+	  , ONREADYSTATECHANGE = 'onreadystatechange'
+	  , defer, channel, port;
+	var run = function(){
+	  var id = +this;
+	  if(queue.hasOwnProperty(id)){
+	    var fn = queue[id];
+	    delete queue[id];
+	    fn();
+	  }
+	};
+	var listener = function(event){
+	  run.call(event.data);
+	};
+	// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
+	if(!setTask || !clearTask){
+	  setTask = function setImmediate(fn){
+	    var args = [], i = 1;
+	    while(arguments.length > i)args.push(arguments[i++]);
+	    queue[++counter] = function(){
+	      invoke(typeof fn == 'function' ? fn : Function(fn), args);
+	    };
+	    defer(counter);
+	    return counter;
+	  };
+	  clearTask = function clearImmediate(id){
+	    delete queue[id];
+	  };
+	  // Node.js 0.8-
+	  if(__webpack_require__(/*! ./_cof */ 218)(process) == 'process'){
+	    defer = function(id){
+	      process.nextTick(ctx(run, id, 1));
+	    };
+	  // Browsers with MessageChannel, includes WebWorkers
+	  } else if(MessageChannel){
+	    channel = new MessageChannel;
+	    port    = channel.port2;
+	    channel.port1.onmessage = listener;
+	    defer = ctx(port.postMessage, port, 1);
+	  // Browsers with postMessage, skip WebWorkers
+	  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
+	  } else if(global.addEventListener && typeof postMessage == 'function' && !global.importScripts){
+	    defer = function(id){
+	      global.postMessage(id + '', '*');
+	    };
+	    global.addEventListener('message', listener, false);
+	  // IE8-
+	  } else if(ONREADYSTATECHANGE in cel('script')){
+	    defer = function(id){
+	      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function(){
+	        html.removeChild(this);
+	        run.call(id);
+	      };
+	    };
+	  // Rest old browsers
+	  } else {
+	    defer = function(id){
+	      setTimeout(ctx(run, id, 1), 0);
+	    };
+	  }
+	}
+	module.exports = {
+	  set:   setTask,
+	  clear: clearTask
+	};
+
+/***/ },
+/* 368 */
+/*!**************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_invoke.js ***!
+  \**************************************************************/
+/***/ function(module, exports) {
+
+	// fast apply, http://jsperf.lnkit.com/fast-apply/5
+	module.exports = function(fn, args, that){
+	  var un = that === undefined;
+	  switch(args.length){
+	    case 0: return un ? fn()
+	                      : fn.call(that);
+	    case 1: return un ? fn(args[0])
+	                      : fn.call(that, args[0]);
+	    case 2: return un ? fn(args[0], args[1])
+	                      : fn.call(that, args[0], args[1]);
+	    case 3: return un ? fn(args[0], args[1], args[2])
+	                      : fn.call(that, args[0], args[1], args[2]);
+	    case 4: return un ? fn(args[0], args[1], args[2], args[3])
+	                      : fn.call(that, args[0], args[1], args[2], args[3]);
+	  } return              fn.apply(that, args);
+	};
+
+/***/ },
+/* 369 */
+/*!*****************************************************************!*\
+  !*** ./~/babel-runtime/~/core-js/library/modules/_microtask.js ***!
+  \*****************************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	var global    = __webpack_require__(/*! ./_global */ 225)
+	  , macrotask = __webpack_require__(/*! ./_task */ 367).set
+	  , Observer  = global.MutationObserver || global.WebKitMutationObserver
+	  , process   = global.process
+	  , Promise   = global.Promise
+	  , isNode    = __webpack_require__(/*! ./_cof */ 218)(process) == 'process';
+	
+	module.exports = function(){
+	  var head, last, notify;
+	
+	  var flush = function(){
+	    var parent, fn;
+	    if(isNode && (parent = process.domain))parent.exit();
+	    while(head){
+	      fn   = head.fn;
+	      head = head.next;
+	      try {
+	        fn();
+	      } catch(e){
+	        if(head)notify();
+	        else last = undefined;
+	        throw e;
+	      }
+	    } last = undefined;
+	    if(parent)parent.enter();
+	  };
+	
+	  // Node.js
+	  if(isNode){
+	    notify = function(){
+	      process.nextTick(flush);
+	    };
+	  // browsers with MutationObserver
+	  } else if(Observer){
+	    var toggle = true
+	      , node   = document.createTextNode('');
+	    new Observer(flush).observe(node, {characterData: true}); // eslint-disable-line no-new
+	    notify = function(){
+	      node.data = toggle = !toggle;
+	    };
+	  // environments with maybe non-completely correct, but existent Promise
+	  } else if(Promise && Promise.resolve){
+	    var promise = Promise.resolve();
+	    notify = function(){
+	      promise.then(flush);
+	    };
+	  // for other environments - macrotask based on:
+	  // - setImmediate
+	  // - MessageChannel
+	  // - window.postMessag
+	  // - onreadystatechange
+	  // - setTimeout
+	  } else {
+	    notify = function(){
+	      // strange IE + webpack dev server bug - use .call(global)
+	      macrotask.call(global, flush);
+	    };
+	  }
+	
+	  return function(fn){
+	    var task = {fn: fn, next: undefined};
+	    if(last)last.next = task;
+	    if(!head){
+	      head = task;
+	      notify();
+	    } last = task;
+	  };
+	};
+
+/***/ },
+/* 370 */
+/*!**********************************************!*\
+  !*** ./~/babel-runtime/regenerator/index.js ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(/*! regenerator-runtime */ 371);
+
+
+/***/ },
+/* 371 */
+/*!*************************************************!*\
+  !*** ./~/regenerator-runtime/runtime-module.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {// This method of obtaining a reference to the global object needs to be
+	// kept identical to the way it is obtained in runtime.js
+	var g =
+	  typeof global === "object" ? global :
+	  typeof window === "object" ? window :
+	  typeof self === "object" ? self : this;
+	
+	// Use `getOwnPropertyNames` because not all browsers support calling
+	// `hasOwnProperty` on the global `self` object in a worker. See #183.
+	var hadRuntime = g.regeneratorRuntime &&
+	  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
+	
+	// Save the old regeneratorRuntime in case it needs to be restored later.
+	var oldRuntime = hadRuntime && g.regeneratorRuntime;
+	
+	// Force reevalutation of runtime.js.
+	g.regeneratorRuntime = undefined;
+	
+	module.exports = __webpack_require__(/*! ./runtime */ 372);
+	
+	if (hadRuntime) {
+	  // Restore the original runtime.
+	  g.regeneratorRuntime = oldRuntime;
+	} else {
+	  // Remove the global property added by runtime.js.
+	  try {
+	    delete g.regeneratorRuntime;
+	  } catch(e) {
+	    g.regeneratorRuntime = undefined;
+	  }
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 372 */
+/*!******************************************!*\
+  !*** ./~/regenerator-runtime/runtime.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global, process) {/**
+	 * Copyright (c) 2014, Facebook, Inc.
+	 * All rights reserved.
+	 *
+	 * This source code is licensed under the BSD-style license found in the
+	 * https://raw.github.com/facebook/regenerator/master/LICENSE file. An
+	 * additional grant of patent rights can be found in the PATENTS file in
+	 * the same directory.
+	 */
+	
+	!(function(global) {
+	  "use strict";
+	
+	  var hasOwn = Object.prototype.hasOwnProperty;
+	  var undefined; // More compressible than void 0.
+	  var $Symbol = typeof Symbol === "function" ? Symbol : {};
+	  var iteratorSymbol = $Symbol.iterator || "@@iterator";
+	  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+	
+	  var inModule = typeof module === "object";
+	  var runtime = global.regeneratorRuntime;
+	  if (runtime) {
+	    if (inModule) {
+	      // If regeneratorRuntime is defined globally and we're in a module,
+	      // make the exports object identical to regeneratorRuntime.
+	      module.exports = runtime;
+	    }
+	    // Don't bother evaluating the rest of this file if the runtime was
+	    // already defined globally.
+	    return;
+	  }
+	
+	  // Define the runtime globally (as expected by generated code) as either
+	  // module.exports (if we're in a module) or a new, empty object.
+	  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
+	
+	  function wrap(innerFn, outerFn, self, tryLocsList) {
+	    // If outerFn provided, then outerFn.prototype instanceof Generator.
+	    var generator = Object.create((outerFn || Generator).prototype);
+	    var context = new Context(tryLocsList || []);
+	
+	    // The ._invoke method unifies the implementations of the .next,
+	    // .throw, and .return methods.
+	    generator._invoke = makeInvokeMethod(innerFn, self, context);
+	
+	    return generator;
+	  }
+	  runtime.wrap = wrap;
+	
+	  // Try/catch helper to minimize deoptimizations. Returns a completion
+	  // record like context.tryEntries[i].completion. This interface could
+	  // have been (and was previously) designed to take a closure to be
+	  // invoked without arguments, but in all the cases we care about we
+	  // already have an existing method we want to call, so there's no need
+	  // to create a new function object. We can even get away with assuming
+	  // the method takes exactly one argument, since that happens to be true
+	  // in every case, so we don't have to touch the arguments object. The
+	  // only additional allocation required is the completion record, which
+	  // has a stable shape and so hopefully should be cheap to allocate.
+	  function tryCatch(fn, obj, arg) {
+	    try {
+	      return { type: "normal", arg: fn.call(obj, arg) };
+	    } catch (err) {
+	      return { type: "throw", arg: err };
+	    }
+	  }
+	
+	  var GenStateSuspendedStart = "suspendedStart";
+	  var GenStateSuspendedYield = "suspendedYield";
+	  var GenStateExecuting = "executing";
+	  var GenStateCompleted = "completed";
+	
+	  // Returning this object from the innerFn has the same effect as
+	  // breaking out of the dispatch switch statement.
+	  var ContinueSentinel = {};
+	
+	  // Dummy constructor functions that we use as the .constructor and
+	  // .constructor.prototype properties for functions that return Generator
+	  // objects. For full spec compliance, you may wish to configure your
+	  // minifier not to mangle the names of these two functions.
+	  function Generator() {}
+	  function GeneratorFunction() {}
+	  function GeneratorFunctionPrototype() {}
+	
+	  var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype;
+	  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
+	  GeneratorFunctionPrototype.constructor = GeneratorFunction;
+	  GeneratorFunctionPrototype[toStringTagSymbol] = GeneratorFunction.displayName = "GeneratorFunction";
+	
+	  // Helper for defining the .next, .throw, and .return methods of the
+	  // Iterator interface in terms of a single ._invoke method.
+	  function defineIteratorMethods(prototype) {
+	    ["next", "throw", "return"].forEach(function(method) {
+	      prototype[method] = function(arg) {
+	        return this._invoke(method, arg);
+	      };
+	    });
+	  }
+	
+	  runtime.isGeneratorFunction = function(genFun) {
+	    var ctor = typeof genFun === "function" && genFun.constructor;
+	    return ctor
+	      ? ctor === GeneratorFunction ||
+	        // For the native GeneratorFunction constructor, the best we can
+	        // do is to check its .name property.
+	        (ctor.displayName || ctor.name) === "GeneratorFunction"
+	      : false;
+	  };
+	
+	  runtime.mark = function(genFun) {
+	    if (Object.setPrototypeOf) {
+	      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
+	    } else {
+	      genFun.__proto__ = GeneratorFunctionPrototype;
+	      if (!(toStringTagSymbol in genFun)) {
+	        genFun[toStringTagSymbol] = "GeneratorFunction";
+	      }
+	    }
+	    genFun.prototype = Object.create(Gp);
+	    return genFun;
+	  };
+	
+	  // Within the body of any async function, `await x` is transformed to
+	  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
+	  // `value instanceof AwaitArgument` to determine if the yielded value is
+	  // meant to be awaited. Some may consider the name of this method too
+	  // cutesy, but they are curmudgeons.
+	  runtime.awrap = function(arg) {
+	    return new AwaitArgument(arg);
+	  };
+	
+	  function AwaitArgument(arg) {
+	    this.arg = arg;
+	  }
+	
+	  function AsyncIterator(generator) {
+	    function invoke(method, arg, resolve, reject) {
+	      var record = tryCatch(generator[method], generator, arg);
+	      if (record.type === "throw") {
+	        reject(record.arg);
+	      } else {
+	        var result = record.arg;
+	        var value = result.value;
+	        if (value instanceof AwaitArgument) {
+	          return Promise.resolve(value.arg).then(function(value) {
+	            invoke("next", value, resolve, reject);
+	          }, function(err) {
+	            invoke("throw", err, resolve, reject);
+	          });
+	        }
+	
+	        return Promise.resolve(value).then(function(unwrapped) {
+	          // When a yielded Promise is resolved, its final value becomes
+	          // the .value of the Promise<{value,done}> result for the
+	          // current iteration. If the Promise is rejected, however, the
+	          // result for this iteration will be rejected with the same
+	          // reason. Note that rejections of yielded Promises are not
+	          // thrown back into the generator function, as is the case
+	          // when an awaited Promise is rejected. This difference in
+	          // behavior between yield and await is important, because it
+	          // allows the consumer to decide what to do with the yielded
+	          // rejection (swallow it and continue, manually .throw it back
+	          // into the generator, abandon iteration, whatever). With
+	          // await, by contrast, there is no opportunity to examine the
+	          // rejection reason outside the generator function, so the
+	          // only option is to throw it from the await expression, and
+	          // let the generator function handle the exception.
+	          result.value = unwrapped;
+	          resolve(result);
+	        }, reject);
+	      }
+	    }
+	
+	    if (typeof process === "object" && process.domain) {
+	      invoke = process.domain.bind(invoke);
+	    }
+	
+	    var previousPromise;
+	
+	    function enqueue(method, arg) {
+	      function callInvokeWithMethodAndArg() {
+	        return new Promise(function(resolve, reject) {
+	          invoke(method, arg, resolve, reject);
+	        });
+	      }
+	
+	      return previousPromise =
+	        // If enqueue has been called before, then we want to wait until
+	        // all previous Promises have been resolved before calling invoke,
+	        // so that results are always delivered in the correct order. If
+	        // enqueue has not been called before, then it is important to
+	        // call invoke immediately, without waiting on a callback to fire,
+	        // so that the async generator function has the opportunity to do
+	        // any necessary setup in a predictable way. This predictability
+	        // is why the Promise constructor synchronously invokes its
+	        // executor callback, and why async functions synchronously
+	        // execute code before the first await. Since we implement simple
+	        // async functions in terms of async generators, it is especially
+	        // important to get this right, even though it requires care.
+	        previousPromise ? previousPromise.then(
+	          callInvokeWithMethodAndArg,
+	          // Avoid propagating failures to Promises returned by later
+	          // invocations of the iterator.
+	          callInvokeWithMethodAndArg
+	        ) : callInvokeWithMethodAndArg();
+	    }
+	
+	    // Define the unified helper method that is used to implement .next,
+	    // .throw, and .return (see defineIteratorMethods).
+	    this._invoke = enqueue;
+	  }
+	
+	  defineIteratorMethods(AsyncIterator.prototype);
+	
+	  // Note that simple async functions are implemented on top of
+	  // AsyncIterator objects; they just return a Promise for the value of
+	  // the final result produced by the iterator.
+	  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
+	    var iter = new AsyncIterator(
+	      wrap(innerFn, outerFn, self, tryLocsList)
+	    );
+	
+	    return runtime.isGeneratorFunction(outerFn)
+	      ? iter // If outerFn is a generator, return the full iterator.
+	      : iter.next().then(function(result) {
+	          return result.done ? result.value : iter.next();
+	        });
+	  };
+	
+	  function makeInvokeMethod(innerFn, self, context) {
+	    var state = GenStateSuspendedStart;
+	
+	    return function invoke(method, arg) {
+	      if (state === GenStateExecuting) {
+	        throw new Error("Generator is already running");
+	      }
+	
+	      if (state === GenStateCompleted) {
+	        if (method === "throw") {
+	          throw arg;
+	        }
+	
+	        // Be forgiving, per 25.3.3.3.3 of the spec:
+	        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
+	        return doneResult();
+	      }
+	
+	      while (true) {
+	        var delegate = context.delegate;
+	        if (delegate) {
+	          if (method === "return" ||
+	              (method === "throw" && delegate.iterator[method] === undefined)) {
+	            // A return or throw (when the delegate iterator has no throw
+	            // method) always terminates the yield* loop.
+	            context.delegate = null;
+	
+	            // If the delegate iterator has a return method, give it a
+	            // chance to clean up.
+	            var returnMethod = delegate.iterator["return"];
+	            if (returnMethod) {
+	              var record = tryCatch(returnMethod, delegate.iterator, arg);
+	              if (record.type === "throw") {
+	                // If the return method threw an exception, let that
+	                // exception prevail over the original return or throw.
+	                method = "throw";
+	                arg = record.arg;
+	                continue;
+	              }
+	            }
+	
+	            if (method === "return") {
+	              // Continue with the outer return, now that the delegate
+	              // iterator has been terminated.
+	              continue;
+	            }
+	          }
+	
+	          var record = tryCatch(
+	            delegate.iterator[method],
+	            delegate.iterator,
+	            arg
+	          );
+	
+	          if (record.type === "throw") {
+	            context.delegate = null;
+	
+	            // Like returning generator.throw(uncaught), but without the
+	            // overhead of an extra function call.
+	            method = "throw";
+	            arg = record.arg;
+	            continue;
+	          }
+	
+	          // Delegate generator ran and handled its own exceptions so
+	          // regardless of what the method was, we continue as if it is
+	          // "next" with an undefined arg.
+	          method = "next";
+	          arg = undefined;
+	
+	          var info = record.arg;
+	          if (info.done) {
+	            context[delegate.resultName] = info.value;
+	            context.next = delegate.nextLoc;
+	          } else {
+	            state = GenStateSuspendedYield;
+	            return info;
+	          }
+	
+	          context.delegate = null;
+	        }
+	
+	        if (method === "next") {
+	          // Setting context._sent for legacy support of Babel's
+	          // function.sent implementation.
+	          context.sent = context._sent = arg;
+	
+	        } else if (method === "throw") {
+	          if (state === GenStateSuspendedStart) {
+	            state = GenStateCompleted;
+	            throw arg;
+	          }
+	
+	          if (context.dispatchException(arg)) {
+	            // If the dispatched exception was caught by a catch block,
+	            // then let that catch block handle the exception normally.
+	            method = "next";
+	            arg = undefined;
+	          }
+	
+	        } else if (method === "return") {
+	          context.abrupt("return", arg);
+	        }
+	
+	        state = GenStateExecuting;
+	
+	        var record = tryCatch(innerFn, self, context);
+	        if (record.type === "normal") {
+	          // If an exception is thrown from innerFn, we leave state ===
+	          // GenStateExecuting and loop back for another invocation.
+	          state = context.done
+	            ? GenStateCompleted
+	            : GenStateSuspendedYield;
+	
+	          var info = {
+	            value: record.arg,
+	            done: context.done
+	          };
+	
+	          if (record.arg === ContinueSentinel) {
+	            if (context.delegate && method === "next") {
+	              // Deliberately forget the last sent value so that we don't
+	              // accidentally pass it on to the delegate.
+	              arg = undefined;
+	            }
+	          } else {
+	            return info;
+	          }
+	
+	        } else if (record.type === "throw") {
+	          state = GenStateCompleted;
+	          // Dispatch the exception by looping back around to the
+	          // context.dispatchException(arg) call above.
+	          method = "throw";
+	          arg = record.arg;
+	        }
+	      }
+	    };
+	  }
+	
+	  // Define Generator.prototype.{next,throw,return} in terms of the
+	  // unified ._invoke helper method.
+	  defineIteratorMethods(Gp);
+	
+	  Gp[iteratorSymbol] = function() {
+	    return this;
+	  };
+	
+	  Gp[toStringTagSymbol] = "Generator";
+	
+	  Gp.toString = function() {
+	    return "[object Generator]";
+	  };
+	
+	  function pushTryEntry(locs) {
+	    var entry = { tryLoc: locs[0] };
+	
+	    if (1 in locs) {
+	      entry.catchLoc = locs[1];
+	    }
+	
+	    if (2 in locs) {
+	      entry.finallyLoc = locs[2];
+	      entry.afterLoc = locs[3];
+	    }
+	
+	    this.tryEntries.push(entry);
+	  }
+	
+	  function resetTryEntry(entry) {
+	    var record = entry.completion || {};
+	    record.type = "normal";
+	    delete record.arg;
+	    entry.completion = record;
+	  }
+	
+	  function Context(tryLocsList) {
+	    // The root entry object (effectively a try statement without a catch
+	    // or a finally block) gives us a place to store values thrown from
+	    // locations where there is no enclosing try statement.
+	    this.tryEntries = [{ tryLoc: "root" }];
+	    tryLocsList.forEach(pushTryEntry, this);
+	    this.reset(true);
+	  }
+	
+	  runtime.keys = function(object) {
+	    var keys = [];
+	    for (var key in object) {
+	      keys.push(key);
+	    }
+	    keys.reverse();
+	
+	    // Rather than returning an object with a next method, we keep
+	    // things simple and return the next function itself.
+	    return function next() {
+	      while (keys.length) {
+	        var key = keys.pop();
+	        if (key in object) {
+	          next.value = key;
+	          next.done = false;
+	          return next;
+	        }
+	      }
+	
+	      // To avoid creating an additional object, we just hang the .value
+	      // and .done properties off the next function object itself. This
+	      // also ensures that the minifier will not anonymize the function.
+	      next.done = true;
+	      return next;
+	    };
+	  };
+	
+	  function values(iterable) {
+	    if (iterable) {
+	      var iteratorMethod = iterable[iteratorSymbol];
+	      if (iteratorMethod) {
+	        return iteratorMethod.call(iterable);
+	      }
+	
+	      if (typeof iterable.next === "function") {
+	        return iterable;
+	      }
+	
+	      if (!isNaN(iterable.length)) {
+	        var i = -1, next = function next() {
+	          while (++i < iterable.length) {
+	            if (hasOwn.call(iterable, i)) {
+	              next.value = iterable[i];
+	              next.done = false;
+	              return next;
+	            }
+	          }
+	
+	          next.value = undefined;
+	          next.done = true;
+	
+	          return next;
+	        };
+	
+	        return next.next = next;
+	      }
+	    }
+	
+	    // Return an iterator with no values.
+	    return { next: doneResult };
+	  }
+	  runtime.values = values;
+	
+	  function doneResult() {
+	    return { value: undefined, done: true };
+	  }
+	
+	  Context.prototype = {
+	    constructor: Context,
+	
+	    reset: function(skipTempReset) {
+	      this.prev = 0;
+	      this.next = 0;
+	      // Resetting context._sent for legacy support of Babel's
+	      // function.sent implementation.
+	      this.sent = this._sent = undefined;
+	      this.done = false;
+	      this.delegate = null;
+	
+	      this.tryEntries.forEach(resetTryEntry);
+	
+	      if (!skipTempReset) {
+	        for (var name in this) {
+	          // Not sure about the optimal order of these conditions:
+	          if (name.charAt(0) === "t" &&
+	              hasOwn.call(this, name) &&
+	              !isNaN(+name.slice(1))) {
+	            this[name] = undefined;
+	          }
+	        }
+	      }
+	    },
+	
+	    stop: function() {
+	      this.done = true;
+	
+	      var rootEntry = this.tryEntries[0];
+	      var rootRecord = rootEntry.completion;
+	      if (rootRecord.type === "throw") {
+	        throw rootRecord.arg;
+	      }
+	
+	      return this.rval;
+	    },
+	
+	    dispatchException: function(exception) {
+	      if (this.done) {
+	        throw exception;
+	      }
+	
+	      var context = this;
+	      function handle(loc, caught) {
+	        record.type = "throw";
+	        record.arg = exception;
+	        context.next = loc;
+	        return !!caught;
+	      }
+	
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        var record = entry.completion;
+	
+	        if (entry.tryLoc === "root") {
+	          // Exception thrown outside of any try block that could handle
+	          // it, so set the completion value of the entire function to
+	          // throw the exception.
+	          return handle("end");
+	        }
+	
+	        if (entry.tryLoc <= this.prev) {
+	          var hasCatch = hasOwn.call(entry, "catchLoc");
+	          var hasFinally = hasOwn.call(entry, "finallyLoc");
+	
+	          if (hasCatch && hasFinally) {
+	            if (this.prev < entry.catchLoc) {
+	              return handle(entry.catchLoc, true);
+	            } else if (this.prev < entry.finallyLoc) {
+	              return handle(entry.finallyLoc);
+	            }
+	
+	          } else if (hasCatch) {
+	            if (this.prev < entry.catchLoc) {
+	              return handle(entry.catchLoc, true);
+	            }
+	
+	          } else if (hasFinally) {
+	            if (this.prev < entry.finallyLoc) {
+	              return handle(entry.finallyLoc);
+	            }
+	
+	          } else {
+	            throw new Error("try statement without catch or finally");
+	          }
+	        }
+	      }
+	    },
+	
+	    abrupt: function(type, arg) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.tryLoc <= this.prev &&
+	            hasOwn.call(entry, "finallyLoc") &&
+	            this.prev < entry.finallyLoc) {
+	          var finallyEntry = entry;
+	          break;
+	        }
+	      }
+	
+	      if (finallyEntry &&
+	          (type === "break" ||
+	           type === "continue") &&
+	          finallyEntry.tryLoc <= arg &&
+	          arg <= finallyEntry.finallyLoc) {
+	        // Ignore the finally entry if control is not jumping to a
+	        // location outside the try/catch block.
+	        finallyEntry = null;
+	      }
+	
+	      var record = finallyEntry ? finallyEntry.completion : {};
+	      record.type = type;
+	      record.arg = arg;
+	
+	      if (finallyEntry) {
+	        this.next = finallyEntry.finallyLoc;
+	      } else {
+	        this.complete(record);
+	      }
+	
+	      return ContinueSentinel;
+	    },
+	
+	    complete: function(record, afterLoc) {
+	      if (record.type === "throw") {
+	        throw record.arg;
+	      }
+	
+	      if (record.type === "break" ||
+	          record.type === "continue") {
+	        this.next = record.arg;
+	      } else if (record.type === "return") {
+	        this.rval = record.arg;
+	        this.next = "end";
+	      } else if (record.type === "normal" && afterLoc) {
+	        this.next = afterLoc;
+	      }
+	    },
+	
+	    finish: function(finallyLoc) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.finallyLoc === finallyLoc) {
+	          this.complete(entry.completion, entry.afterLoc);
+	          resetTryEntry(entry);
+	          return ContinueSentinel;
+	        }
+	      }
+	    },
+	
+	    "catch": function(tryLoc) {
+	      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
+	        var entry = this.tryEntries[i];
+	        if (entry.tryLoc === tryLoc) {
+	          var record = entry.completion;
+	          if (record.type === "throw") {
+	            var thrown = record.arg;
+	            resetTryEntry(entry);
+	          }
+	          return thrown;
+	        }
+	      }
+	
+	      // The context.catch method must only be called with a location
+	      // argument that corresponds to a known catch block.
+	      throw new Error("illegal catch attempt");
+	    },
+	
+	    delegateYield: function(iterable, resultName, nextLoc) {
+	      this.delegate = {
+	        iterator: values(iterable),
+	        resultName: resultName,
+	        nextLoc: nextLoc
+	      };
+	
+	      return ContinueSentinel;
+	    }
+	  };
+	})(
+	  // Among the various tricks for obtaining a reference to the global
+	  // object, this seems to be the most reliable technique that does not
+	  // use indirect eval (which violates Content Security Policy).
+	  typeof global === "object" ? global :
+	  typeof window === "object" ? window :
+	  typeof self === "object" ? self : this
+	);
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(/*! ./~/process/browser.js */ 4)))
+
+/***/ },
+/* 373 */
+/*!***************************************************!*\
+  !*** ./~/babel-runtime/helpers/defineProperty.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _defineProperty = __webpack_require__(/*! ../core-js/object/define-property */ 331);
+	
+	var _defineProperty2 = _interopRequireDefault(_defineProperty);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (obj, key, value) {
+	  if (key in obj) {
+	    (0, _defineProperty2.default)(obj, key, {
+	      value: value,
+	      enumerable: true,
+	      configurable: true,
+	      writable: true
+	    });
+	  } else {
+	    obj[key] = value;
+	  }
+	
+	  return obj;
+	};
+
+/***/ },
+/* 374 */
+/*!*****************************************************!*\
+  !*** ./~/babel-runtime/helpers/asyncToGenerator.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	exports.__esModule = true;
+	
+	var _promise = __webpack_require__(/*! ../core-js/promise */ 363);
+	
+	var _promise2 = _interopRequireDefault(_promise);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function (fn) {
+	  return function () {
+	    var gen = fn.apply(this, arguments);
+	    return new _promise2.default(function (resolve, reject) {
+	      function step(key, arg) {
+	        try {
+	          var info = gen[key](arg);
+	          var value = info.value;
+	        } catch (error) {
+	          reject(error);
+	          return;
+	        }
+	
+	        if (info.done) {
+	          resolve(value);
+	        } else {
+	          return _promise2.default.resolve(value).then(function (value) {
+	            return step("next", value);
+	          }, function (err) {
+	            return step("throw", err);
+	          });
+	        }
+	      }
+	
+	      return step("next");
+	    });
+	  };
+	};
+
+/***/ },
+/* 375 */
+/*!****************************************************!*\
+  !*** ./~/cashay/lib/normalize/denormalizeStore.js ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = denormalizeStore;
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _denormalizeHelpers = __webpack_require__(/*! ./denormalizeHelpers */ 376);
+	
+	var _getFieldState = __webpack_require__(/*! ./getFieldState */ 377);
+	
+	var _getFieldState2 = _interopRequireDefault(_getFieldState);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UNION = _introspection.TypeKind.UNION;
+	var LIST = _introspection.TypeKind.LIST;
+	var OBJECT = _introspection.TypeKind.OBJECT;
+	
+	
+	var arrayMetadata = ['BOF', 'EOF', 'count'];
+	
+	var visitObject = function visitObject() {
+	  var subState = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var reqAST = arguments[1];
+	  var subSchema = arguments[2];
+	  var context = arguments[3];
+	  var baseReduction = arguments.length <= 4 || arguments[4] === undefined ? {} : arguments[4];
+	
+	  return reqAST.selectionSet.selections.reduce(function (reduction, field) {
+	    if (field.kind === _kinds.INLINE_FRAGMENT) {
+	      // TODO handle null typeCondition?
+	      if (field.typeCondition.name.value === subSchema.name) {
+	        // only follow through if it's the correct union subtype
+	        visitObject(subState, field, subSchema, context, reduction);
+	      }
+	    } else if (field.name.value === _utils.TYPENAME) {
+	      reduction[_utils.TYPENAME] = subSchema.name;
+	    } else {
+	      var fieldName = field.name.value;
+	      var aliasOrFieldName = field.alias && field.alias.value || fieldName;
+	      var fieldSchema = subSchema.fields[fieldName];
+	      if (!fieldSchema) {
+	        throw new Error('No schema found for field: ' + fieldName + '. Did you update your schema?');
+	      }
+	      var hasData = subState.hasOwnProperty(fieldName);
+	
+	      if (hasData) {
+	        var fieldState = subState[fieldName];
+	        if (fieldSchema.args) {
+	          fieldState = (0, _getFieldState2.default)(fieldState, fieldSchema, field, context);
+	        }
+	        reduction[aliasOrFieldName] = visit(fieldState, field, fieldSchema, context);
+	        if (field.selectionSet) {
+	          (0, _denormalizeHelpers.calculateSendToServer)(field, context.idFieldName);
+	        }
+	      } else {
+	        reduction[aliasOrFieldName] = (0, _denormalizeHelpers.handleMissingData)(visit, aliasOrFieldName, field, fieldSchema, context);
+	      }
+	    }
+	    return reduction;
+	  }, baseReduction);
+	};
+	
+	var visitNormalizedString = function visitNormalizedString(subState, reqAST, subSchema, context) {
+	  var _getDocFromNormalStri = (0, _denormalizeHelpers.getDocFromNormalString)(subState);
+	
+	  var typeName = _getDocFromNormalStri.typeName;
+	  var docId = _getDocFromNormalStri.docId;
+	
+	  var doc = context.cashayState.entities[typeName][docId];
+	  var fieldSchema = context.schema.types[typeName];
+	  return visit(doc, reqAST, fieldSchema, context);
+	};
+	
+	var visitIterable = function visitIterable(subState, reqAST, subSchema, context) {
+	
+	  // recurse into the root type, since it could be nonnull(list(nonnull(rootType))). Doesn't work with list of lists
+	  var fieldType = (0, _utils.ensureRootType)(subSchema.type);
+	
+	  if (Array.isArray(subState)) {
+	    // get the schema for the root type, could be a union
+	    var fieldSchema = context.schema.types[fieldType.name];
+	
+	    // for each value in the array, get the denormalized item
+	    var mappedState = [];
+	    for (var i = 0; i < subState.length; i++) {
+	      var res = subState[i];
+	      mappedState[i] = visit(res, reqAST, fieldSchema, context);
+	    }
+	    for (var _i = 0; _i < arrayMetadata.length; _i++) {
+	      var metadataName = arrayMetadata[_i];
+	      if (subState[metadataName]) {
+	        mappedState[metadataName] = subState[metadataName];
+	      }
+	    }
+	    return mappedState;
+	  }
+	  // recursively climb down the tree, flagging each branch with sendToServer
+	  (0, _denormalizeHelpers.sendChildrenToServer)(reqAST);
+	
+	  // return an empty array as a placeholder for the data that will come from the server
+	  return [];
+	};
+	
+	var visitScalar = function visitScalar(subState, scalarType, coerceTypes) {
+	  var coercion = coerceTypes[scalarType];
+	  return coercion ? coercion(subState) : subState;
+	};
+	
+	var visit = function visit(subState, reqAST, subSchema, context) {
+	  // By implementing a ternary here, we can get rid of a pointless O(n) find in visitObject
+	  var objectType = subSchema.kind ? subSchema.kind : subSchema.type.kind;
+	  switch (objectType) {
+	    case OBJECT:
+	      if (typeof subState === 'string') {
+	        return visitNormalizedString(subState, reqAST, subSchema, context);
+	      }
+	      return visitObject(subState, reqAST, subSchema, context);
+	    case UNION:
+	      return visitNormalizedString(subState, reqAST, subSchema, context);
+	    case LIST:
+	      return visitIterable(subState, reqAST, subSchema, context);
+	    default:
+	      var name = subSchema.name ? subSchema.name : subSchema.type.name;
+	      return visitScalar(subState, name, context.coerceTypes);
+	  }
+	};
+	
+	function denormalizeStore(context) {
+	  var schemaName = arguments.length <= 1 || arguments[1] === undefined ? 'querySchema' : arguments[1];
+	
+	  // Lookup the root schema for the operationType (hardcoded name in the return of the introspection query)
+	  var schema = context.schema[schemaName];
+	
+	  // a query operation can have multiple queries, gotta catch 'em all
+	  var queryReduction = context.operation.selectionSet.selections.reduce(function (reduction, selection) {
+	    var queryName = selection.name.value;
+	
+	    // aliases are common for executing the same query twice (eg getPerson(id:1) getPerson(id:2))
+	    var aliasOrName = selection.alias && selection.alias.value || queryName;
+	
+	    // get the query schema to know the expected type and args
+	    var queryFieldSchema = schema.fields[queryName];
+	    if (!queryFieldSchema) {
+	      throw new Error('Could not find ' + queryName + ' in your ' + schemaName + '.\n      Did you add it to your GraphQL schema?');
+	    }
+	
+	    // look into the current redux state to see if we can borrow any data from it
+	    var queryInState = context.cashayState.result[queryName];
+	
+	    // if there's no results stored or being fetched, save some time & don't bother with the args
+	    var fieldState = (0, _getFieldState2.default)(queryInState, queryFieldSchema, selection, context);
+	
+	    // get the expected return value, devs can be silly, so if the had the return value in a nonnull, remove it.
+	    var nonNullQueryFieldSchemaType = (0, _utils.ensureTypeFromNonNull)(queryFieldSchema.type);
+	    var subSchema = nonNullQueryFieldSchemaType.kind === LIST ? queryFieldSchema : (0, _utils.ensureTypeFromNonNull)(context.schema.types[nonNullQueryFieldSchemaType.name]);
+	
+	    // recursively visit each branch, flag missing branches with a sendToServer flag
+	    reduction[aliasOrName] = visit(fieldState, selection, subSchema, context);
+	
+	    // ugly code that's necessary in case the selection is a scalar. TODO clean!
+	    if (selection.selectionSet) {
+	      //shallowly climb the tree checking for the sendToServer flag. if it's present on a child, add it to the parent.
+	      (0, _denormalizeHelpers.calculateSendToServer)(selection, context.idFieldName);
+	    } else if (reduction[aliasOrName] === undefined) {
+	      selection.sendToServer = true;
+	    }
+	    return reduction;
+	  }, {});
+	
+	  // add a sendToServerFlag to the operation if any of the queries need data from the server
+	  (0, _denormalizeHelpers.calculateSendToServer)(context.operation, context.idFieldName);
+	
+	  // return what the user expects GraphQL to return
+	
+	  return queryReduction;
+	};
+
+/***/ },
+/* 376 */
+/*!******************************************************!*\
+  !*** ./~/cashay/lib/normalize/denormalizeHelpers.js ***!
+  \******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getDocFromNormalString = exports.rebuildOriginalArgs = exports.sendChildrenToServer = exports.calculateSendToServer = exports.handleMissingData = undefined;
+	
+	var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ 244);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UNION = _introspection.TypeKind.UNION;
+	var LIST = _introspection.TypeKind.LIST;
+	var SCALAR = _introspection.TypeKind.SCALAR;
+	var ENUM = _introspection.TypeKind.ENUM;
+	var handleMissingData = exports.handleMissingData = function handleMissingData(visit, aliasOrFieldName, field, fieldSchema, context) {
+	  sendChildrenToServer(field);
+	  var fieldType = (0, _utils.ensureTypeFromNonNull)(fieldSchema.type);
+	  if (fieldType.kind === SCALAR) {
+	    return null;
+	  } else if (fieldType.kind === LIST) {
+	    return [];
+	  } else if (fieldType.kind === ENUM) {
+	    return '';
+	  } else {
+	    var newFieldSchema = context.schema.types[fieldType.name];
+	    if (fieldType.kind === UNION) {
+	      // since we don't know what the shape will look like, make it look like everything
+	      // that way, we don't have to code defensively in the view layer
+	      var possibleTypes = newFieldSchema.possibleTypes;
+	
+	      var possibleTypesKeys = (0, _keys2.default)(possibleTypes);
+	      var unionResponse = {};
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        for (var _iterator = (0, _getIterator3.default)(possibleTypesKeys), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var possibleTypeKey = _step.value;
+	
+	          var objType = possibleTypes[possibleTypeKey];
+	          var _newFieldSchema = context.schema.types[objType.name];
+	          (0, _assign2.default)(unionResponse, visit(unionResponse, field, _newFieldSchema, context), { __typename: null });
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	
+	      return unionResponse;
+	    }
+	    return visit({}, field, newFieldSchema, context);
+	  }
+	};
+	
+	var calculateSendToServer = exports.calculateSendToServer = function calculateSendToServer(field, idFieldName) {
+	  var selections = field.selectionSet.selections;
+	
+	  for (var i = 0; i < selections.length; i++) {
+	    var selection = selections[i];
+	    if (selection.kind === _kinds.INLINE_FRAGMENT) {
+	      calculateSendToServer(selection, idFieldName);
+	    }
+	    if (selection.sendToServer) {
+	      field.sendToServer = true;
+	    }
+	  }
+	};
+	
+	var sendChildrenToServer = exports.sendChildrenToServer = function sendChildrenToServer(reqAST) {
+	  reqAST.sendToServer = true;
+	  if (!reqAST.selectionSet) {
+	    return;
+	  }
+	  reqAST.selectionSet.selections.forEach(function (child) {
+	    sendChildrenToServer(child);
+	  });
+	};
+	
+	var rebuildOriginalArgs = exports.rebuildOriginalArgs = function rebuildOriginalArgs(reqAST) {
+	  if (reqAST.originalArguments) {
+	    reqAST.arguments = reqAST.originalArguments;
+	  }
+	  if (!reqAST.selectionSet) {
+	    return;
+	  }
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+	
+	  try {
+	    for (var _iterator2 = (0, _getIterator3.default)(reqAST.selectionSet.selections), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var child = _step2.value;
+	
+	      rebuildOriginalArgs(child);
+	    }
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+	};
+	
+	var getDocFromNormalString = exports.getDocFromNormalString = function getDocFromNormalString(normalString) {
+	  var splitPoint = normalString.indexOf(_utils.NORM_DELIMITER);
+	  var typeName = normalString.substr(0, splitPoint);
+	  var docId = normalString.substr(splitPoint + _utils.NORM_DELIMITER.length);
+	  return { typeName: typeName, docId: docId };
+	};
+
+/***/ },
+/* 377 */
+/*!*************************************************!*\
+  !*** ./~/cashay/lib/normalize/getFieldState.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ 244);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	exports.default = getFieldState;
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _separateArgs2 = __webpack_require__(/*! ./separateArgs */ 378);
+	
+	var _separateArgs3 = _interopRequireDefault(_separateArgs2);
+	
+	var _denormalizeHelpers = __webpack_require__(/*! ./denormalizeHelpers */ 376);
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * given a parent field state & some args, drill down to the data using the args as a map
+	 *
+	 * @param {object} fieldState the parent field in the redux state.
+	 * @param {object} fieldSchema the portion of the clientSchema relating to the fieldState
+	 * @param {object} selection the original query AST that holds the arguments
+	 * @param {object} context
+	 *
+	 * @returns {*} an object, or array, or scalar from the normalized store
+	 * */
+	function getFieldState(fieldState, fieldSchema, selection, context) {
+	  if (!(0, _utils.isObject)(fieldState)) return fieldState;
+	  var subState = fieldState;
+	  var skipTransform = context.skipTransform;
+	  var paginationWords = context.paginationWords;
+	  var variables = context.variables;
+	  var fieldArgs = selection.arguments;
+	
+	  var _separateArgs = (0, _separateArgs3.default)(fieldSchema, fieldArgs, paginationWords, variables);
+	
+	  var regularArgs = _separateArgs.regularArgs;
+	  var paginationArgs = _separateArgs.paginationArgs;
+	
+	  if (regularArgs) {
+	    var regularArgsString = (0, _utils.getRegularArgsKey)(regularArgs);
+	    subState = subState[regularArgsString];
+	  }
+	  if (paginationArgs) {
+	    var arrType = subState[_utils.FULL] ? _utils.FULL : paginationArgs[paginationWords.last] ? _utils.BACK : _utils.FRONT;
+	    subState = handlePaginationArgs(paginationArgs, subState[arrType]);
+	
+	    // reduce the ask from the server
+	    if (arrType !== _utils.FULL && !skipTransform) {
+	      reducePaginationRequest(paginationArgs, subState, fieldSchema, selection, context);
+	    }
+	  }
+	  return subState;
+	};
+	
+	/**
+	 * Provide a subset of the array of documents in the state
+	 * @param {Object} paginationArgs an object with only 1 field: FIRST or LAST
+	 * @param {Array} usefulArray the array of document corresponding to the FIRST or LAST
+	 * */
+	var handlePaginationArgs = function handlePaginationArgs(paginationArgs, usefulArray) {
+	  var first = paginationArgs.first;
+	  var last = paginationArgs.last;
+	
+	  // try to use the full array. if it doesn't exist, see if we're going backwards & use the back array, else front
+	
+	  var count = last || first;
+	
+	  // if last is provided, then first is not and we need to go from last to first
+	  var slicedArr = void 0;
+	  if (last) {
+	    var firstNonNullIdx = countLeftPadding(usefulArray);
+	    var firstDesiredDocIdx = usefulArray.length - last;
+	    var startIdx = Math.max(firstNonNullIdx, firstDesiredDocIdx);
+	    slicedArr = usefulArray.slice(startIdx, usefulArray.length);
+	  } else {
+	    var lastNonNullIdx = countRightPadding(usefulArray);
+	    var lastDesiredDocIdx = first - 1;
+	    var sliceThrough = Math.min(lastNonNullIdx, lastDesiredDocIdx);
+	    slicedArr = usefulArray.slice(0, sliceThrough + 1);
+	  }
+	
+	  // assign BOF and EOF to the array, similar to hasPreviousPage, hasNextPage
+	  assignFieldStateMeta(slicedArr, usefulArray, count);
+	  return slicedArr;
+	};
+	
+	var reducePaginationRequest = function reducePaginationRequest(paginationArgs, usefulArray, fieldSchema, selection, context) {
+	  var first = paginationArgs.first;
+	  var last = paginationArgs.last;
+	
+	  var count = last || first;
+	  var fieldArgs = selection.arguments;
+	  var paginationWords = context.paginationWords;
+	
+	  var countWord = last ? paginationWords.last : paginationWords.first;
+	
+	  var missingDocCount = count - usefulArray.length;
+	  // if we have a partial response & the backend accepts a cursor, only ask for the missing pieces
+	  if (missingDocCount > 0 && missingDocCount < count) {
+	    var cursorWord = last ? paginationWords.before : paginationWords.after;
+	    if (!fieldSchema.args[cursorWord]) {
+	      throw new Error('Your schema does not accept an argument for your cursor named ' + cursorWord + '.');
+	    }
+	    // flag all AST children with sendToServer = true
+	    // TODO why is this necessary if we're just reducing the request?
+	    (0, _denormalizeHelpers.sendChildrenToServer)(selection);
+	    // TODO when to remove doWarn?
+	    var doWarn = true;
+	
+	    var _getBestCursor = getBestCursor(first, usefulArray, context.cashayState.entities, doWarn);
+	
+	    var bestCursor = _getBestCursor.bestCursor;
+	    var cursorIdx = _getBestCursor.cursorIdx;
+	
+	    var desiredDocCount = count - (cursorIdx + 1);
+	
+	    // save the original arguments, we'll overwrite them with efficient ones for the server,
+	    // but need them later to create the denormaliezd response
+	    selection.originalArguments = fieldArgs.slice();
+	
+	    //get the index of the count argument so we can replace it with the new one
+	    var countArgIdx = fieldArgs.findIndex(function (arg) {
+	      return arg.name.value === countWord;
+	    });
+	
+	    //  create a new count arg & override the old one
+	    fieldArgs[countArgIdx] = makeCountArg(countWord, desiredDocCount);
+	
+	    // make a new cursor argument
+	    var newCursorArg = makeCursorArg(cursorWord, bestCursor);
+	    fieldArgs.push(newCursorArg);
+	  }
+	};
+	
+	var getBestCursor = function getBestCursor(first, usefulArray, entities, doWarn) {
+	  var storedDoc = void 0;
+	  var i = void 0;
+	  if (first) {
+	    for (i = usefulArray.length - 1; i >= 0; i--) {
+	      // given something like `Post:123`, return the document from the store
+	
+	      var _getDocFromNormalStri = (0, _denormalizeHelpers.getDocFromNormalString)(usefulArray[i]);
+	
+	      var typeName = _getDocFromNormalStri.typeName;
+	      var docId = _getDocFromNormalStri.docId;
+	
+	      storedDoc = entities[typeName][docId];
+	      if (storedDoc.cursor) break;
+	    }
+	  } else {
+	    for (i = 0; i < usefulArray.length; i++) {
+	      var _getDocFromNormalStri2 = (0, _denormalizeHelpers.getDocFromNormalString)(usefulArray[i]);
+	
+	      var typeName = _getDocFromNormalStri2.typeName;
+	      var docId = _getDocFromNormalStri2.docId;
+	
+	      storedDoc = entities[typeName][docId];
+	      if (storedDoc.cursor) break;
+	    }
+	  }
+	
+	  // TODO this is incorrect, I think it should be length -1 and break this into 2 functions
+	  if (i >= 0 && i < usefulArray.length) {
+	    return { bestCursor: storedDoc.cursor, cursorIdx: i };
+	  } else if (doWarn) {
+	    console.warn('No cursor was included for the following docs: ' + usefulArray + '. \n        Include the \'cursor\' field for those docs');
+	  }
+	};
+	
+	var countLeftPadding = function countLeftPadding(array) {
+	  for (var i = 0; i < array.length; i++) {
+	    if (array[i]) {
+	      return i;
+	    }
+	  }
+	};
+	
+	var countRightPadding = function countRightPadding(array) {
+	  for (var i = array.length - 1; i >= 0; i--) {
+	    if (array[i]) {
+	      return i;
+	    }
+	  }
+	};
+	
+	/**
+	 * Assign metadata to the array.
+	 * The EOF, BOF are useful to the front-end developer if they want to know if there are more docs available
+	 * The count is useful internally to mutations so we know how a certain query has been mutated
+	 * @param {Array} slicedArray the subset of the usefulArray
+	 * @param {Array} usefulArray all the documents in that direction that are available on the client
+	 * @param {Number} count the number of documents desired by the front-end
+	 * */
+	var assignFieldStateMeta = function assignFieldStateMeta(slicedArray, usefulArray, count) {
+	  (0, _assign2.default)(slicedArray, {
+	    EOF: slicedArray[slicedArray.length - 1] === usefulArray[usefulArray.length - 1],
+	    BOF: slicedArray[0] === usefulArray[0],
+	    count: count
+	  });
+	};
+	
+	var makeCursorArg = function makeCursorArg(cursorName, cursorValue) {
+	  return new _helperClasses.RequestArgument(cursorName, _kinds.STRING, cursorValue);
+	};
+	var makeCountArg = function makeCountArg(countName, countValue) {
+	  return new _helperClasses.RequestArgument(countName, _kinds.INT, countValue);
+	};
+
+/***/ },
+/* 378 */
+/*!************************************************!*\
+  !*** ./~/cashay/lib/normalize/separateArgs.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = separateArgs;
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LIST = _introspection.TypeKind.LIST;
+	
+	
+	var acceptsArgs = function acceptsArgs(fieldSchema, paginationWords, paginationWordKeys) {
+	  var acceptsPaginationArgs = false;
+	  var acceptsRegularArgs = false;
+	  for (var i = 0; i < paginationWordKeys.length; i++) {
+	    var key = paginationWordKeys[i];
+	    var pageWord = paginationWords[key];
+	    if (fieldSchema.args[pageWord]) {
+	      acceptsPaginationArgs = true;
+	    } else {
+	      acceptsRegularArgs = true;
+	    }
+	  }
+	  return { acceptsPaginationArgs: acceptsPaginationArgs, acceptsRegularArgs: acceptsRegularArgs };
+	};
+	/**
+	 * Determine whether the arguments provided are going to be used for pagination
+	 * @param {Object} fieldSchema a piece of the GraphQL client schema for the particular field
+	 * @param {Array} reqASTArgs the arguments coming from the request AST
+	 * @param {Object} paginationWords an object containing the 4 pagination meanings & the user-defined words they use
+	 * @param {Object} variables the variables to forward onto the GraphQL server
+	 * */
+	function separateArgs(fieldSchema, reqASTArgs, paginationWords, variables) {
+	  if (!fieldSchema.args) throw new Error(fieldSchema.name + ' does not support arguments. Check your GraphQL query.');
+	  var responseType = (0, _utils.ensureTypeFromNonNull)(fieldSchema.type);
+	  var regularArgs = {};
+	  var paginationArgs = {};
+	  var paginationWordKeys = (0, _keys2.default)(paginationWords);
+	
+	  var _acceptsArgs = acceptsArgs(fieldSchema, paginationWords, paginationWordKeys);
+	
+	  var acceptsPaginationArgs = _acceptsArgs.acceptsPaginationArgs;
+	  var acceptsRegularArgs = _acceptsArgs.acceptsRegularArgs;
+	
+	  var hasPagination = false;
+	
+	  var _loop = function _loop(i) {
+	    var arg = reqASTArgs[i];
+	    var argName = arg.name.value;
+	    if (!fieldSchema.args[argName]) {
+	      throw new Error(fieldSchema.name + ' does not support ' + argName);
+	    }
+	    var argValue = arg.value.kind === _kinds.VARIABLE ? variables[arg.value.name.value] : arg.value.value;
+	    if (argValue === undefined) return 'continue';
+	    var paginationMeaning = paginationWordKeys.find(function (pageWord) {
+	      return paginationWords[pageWord] === argName;
+	    });
+	    if (paginationMeaning) {
+	      if (paginationMeaning === _utils.BEFORE || paginationMeaning === _utils.AFTER) {
+	        throw new Error('Supplying pagination cursors to cashay is not supported. ' + variables);
+	      }
+	      if (hasPagination === true) {
+	        throw new Error('Only one pagination argument can be supplied at a time. ' + variables);
+	      }
+	      if (responseType.kind !== LIST) {
+	        throw new Error(fieldSchema.name + ' is not a List. ' + variables + ' should not contain pagination args');
+	      }
+	      paginationArgs[paginationMeaning] = +argValue;
+	      hasPagination = true;
+	    } else {
+	      regularArgs[argName] = argValue;
+	    }
+	  };
+	
+	  for (var i = 0; i < reqASTArgs.length; i++) {
+	    var _ret = _loop(i);
+	
+	    if (_ret === 'continue') continue;
+	  }
+	  return {
+	    regularArgs: acceptsRegularArgs && regularArgs,
+	    paginationArgs: acceptsPaginationArgs && paginationArgs
+	  };
+	};
+
+/***/ },
+/* 379 */
+/*!***************************************!*\
+  !*** ./~/cashay/lib/helperClasses.js ***!
+  \***************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.VariableDefinition = exports.RequestArgument = exports.MutationShell = exports.Field = exports.Name = exports.CachedQuery = exports.CachedSubscription = exports.CachedMutation = undefined;
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _set = __webpack_require__(/*! babel-runtime/core-js/set */ 280);
+	
+	var _set2 = _interopRequireDefault(_set);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 330);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _duck = __webpack_require__(/*! ./normalize/duck */ 206);
+	
+	var _denormalizeStore = __webpack_require__(/*! ./normalize/denormalizeStore */ 375);
+	
+	var _denormalizeStore2 = _interopRequireDefault(_denormalizeStore);
+	
+	var _parseAndInitializeQuery = __webpack_require__(/*! ./query/parseAndInitializeQuery */ 380);
+	
+	var _parseAndInitializeQuery2 = _interopRequireDefault(_parseAndInitializeQuery);
+	
+	var _utils = __webpack_require__(/*! ./utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LIST = _introspection.TypeKind.LIST;
+	var NON_NULL = _introspection.TypeKind.NON_NULL;
+	
+	var CachedMutation = exports.CachedMutation = function () {
+	  function CachedMutation() {
+	    (0, _classCallCheck3.default)(this, CachedMutation);
+	
+	    this.fullMutation = undefined;
+	    this.activeQueries = {};
+	    this.variableEnhancers = [];
+	    this.variableSet = new _set2.default();
+	    this.singles = {};
+	  }
+	
+	  (0, _createClass3.default)(CachedMutation, [{
+	    key: 'clear',
+	    value: function clear(clearSingles) {
+	      this.fullMutation = undefined;
+	      this.variableEnhancers = [];
+	      this.variableSet.clear();
+	      if (clearSingles) {
+	        this.singles = {};
+	      }
+	    }
+	  }]);
+	  return CachedMutation;
+	}();
+	
+	var CachedSubscription = exports.CachedSubscription = function CachedSubscription(subscriptionString, key, deps) {
+	  (0, _classCallCheck3.default)(this, CachedSubscription);
+	
+	  this.ast = (0, _utils.parse)(subscriptionString);
+	  this.deps = deps;
+	  this.responses = (0, _defineProperty3.default)({}, key, {});
+	};
+	
+	var CachedQuery = exports.CachedQuery = function () {
+	  function CachedQuery(queryString, schema, idFieldName, refetch, key) {
+	    (0, _classCallCheck3.default)(this, CachedQuery);
+	
+	    this.ast = (0, _parseAndInitializeQuery2.default)(queryString, schema, idFieldName);
+	    this.refetch = refetch;
+	    this.responses = (0, _defineProperty3.default)({}, key, {});
+	  }
+	
+	  /**
+	   * create a denormalized document from local data
+	   * it also turns frags to inline, and flags missing objects and variableDefinitions in context.operation
+	   */
+	
+	
+	  (0, _createClass3.default)(CachedQuery, [{
+	    key: 'createResponse',
+	    value: function createResponse(context, op, key, dispatch, getState, forceFetch) {
+	      var data = (0, _denormalizeStore2.default)(context);
+	      var isComplete = !forceFetch && !context.operation.sendToServer;
+	      this.responses[key] = {
+	        data: data,
+	        setVariables: this.setVariablesFactory(op, key, dispatch, getState),
+	        status: isComplete ? _utils.COMPLETE : _utils.LOADING
+	      };
+	    }
+	  }, {
+	    key: 'setVariablesFactory',
+	    value: function setVariablesFactory(op, key, dispatch, getState) {
+	      var _this = this;
+	
+	      return function (cb) {
+	        // trigger an invalidation
+	        _this.responses[key] = undefined;
+	        var cashayState = getState();
+	        var stateVars = (0, _utils.getStateVars)(cashayState, op, key) || {};
+	        var variables = (0, _extends3.default)({}, stateVars, cb(stateVars));
+	        var payload = { ops: (0, _defineProperty3.default)({}, op, (0, _defineProperty3.default)({}, key, { variables: variables })) };
+	
+	        // trigger a recompute
+	        dispatch({
+	          type: _duck.SET_VARIABLES,
+	          payload: payload
+	        });
+	      };
+	    }
+	  }]);
+	  return CachedQuery;
+	}();
+	
+	var SelectionSet = function SelectionSet() {
+	  var selections = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+	  (0, _classCallCheck3.default)(this, SelectionSet);
+	
+	  this.kind = _kinds.SELECTION_SET;
+	  this.selections = selections;
+	};
+	
+	var Name = exports.Name = function Name(value) {
+	  (0, _classCallCheck3.default)(this, Name);
+	
+	  this.kind = _kinds.NAME;
+	  this.value = value;
+	};
+	
+	var Field = exports.Field = function Field(_ref) {
+	  var alias = _ref.alias;
+	  var args = _ref.args;
+	  var directives = _ref.directives;
+	  var name = _ref.name;
+	  var selections = _ref.selections;
+	  (0, _classCallCheck3.default)(this, Field);
+	
+	  this.kind = _kinds.FIELD;
+	  this.alias = alias;
+	  this.arguments = args;
+	  this.directives = directives;
+	  this.name = new Name(name);
+	  this.selectionSet = selections ? new SelectionSet(selections) : null;
+	};
+	
+	var MutationShell = exports.MutationShell = function MutationShell(mutationName) {
+	  var mutationArgs = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+	  var variableDefinitions = arguments.length <= 2 || arguments[2] === undefined ? [] : arguments[2];
+	  var isEmpty = arguments[3];
+	  (0, _classCallCheck3.default)(this, MutationShell);
+	
+	  this.kind = _kinds.DOCUMENT;
+	  this.definitions = [{
+	    kind: _kinds.OPERATION_DEFINITION,
+	    operation: 'mutation',
+	    variableDefinitions: variableDefinitions,
+	    directives: [],
+	    selectionSet: new SelectionSet([new Field({
+	      args: mutationArgs,
+	      name: mutationName,
+	      selections: isEmpty ? null : []
+	    })])
+	  }];
+	};
+	
+	var RequestArgument = exports.RequestArgument = function RequestArgument(nameValue, valueKind, valueValue) {
+	  (0, _classCallCheck3.default)(this, RequestArgument);
+	
+	  this.kind = _kinds.ARGUMENT;
+	  this.name = new Name(nameValue);
+	  this.value = {
+	    kind: valueKind
+	  };
+	  if (valueKind === _kinds.VARIABLE) {
+	    this.value.name = new Name(valueValue);
+	  } else {
+	    this.value.value = valueValue;
+	  }
+	};
+	
+	var VariableDefinition = exports.VariableDefinition = function VariableDefinition(variableName, argType) {
+	  (0, _classCallCheck3.default)(this, VariableDefinition);
+	
+	  this.kind = _kinds.VARIABLE_DEFINITION;
+	  this.type = processArgType(argType);
+	  this.variable = {
+	    kind: _kinds.VARIABLE,
+	    name: new Name(variableName)
+	  };
+	};
+	
+	var processArgType = function processArgType(argType) {
+	  var vardefType = {};
+	  if (argType.kind === NON_NULL) {
+	    vardefType.kind = _kinds.NON_NULL_TYPE;
+	    vardefType.type = processArgType(argType.ofType);
+	  } else if (argType.kind === LIST) {
+	    vardefType.kind = _kinds.LIST_TYPE;
+	    vardefType.type = processArgType(argType.ofType);
+	  } else {
+	    vardefType.kind = _kinds.NAMED_TYPE;
+	    vardefType.name = new Name(argType.name);
+	  }
+	  return vardefType;
+	};
+
+/***/ },
+/* 380 */
+/*!*******************************************************!*\
+  !*** ./~/cashay/lib/query/parseAndInitializeQuery.js ***!
+  \*******************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	exports.default = parseAndInitializeQuery;
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UNION = _introspection.TypeKind.UNION;
+	
+	
+	var initializeQueryAST = function initializeQueryAST(operationSelections, fragments, fieldSchema, schema, idFieldName) {
+	  for (var i = 0; i < operationSelections.length; i++) {
+	    // convert fragment spreads into inline so we can minimize queries later
+	    var selection = operationSelections[i];
+	    var catalogFields = [idFieldName, _utils.TYPENAME];
+	    if (selection.kind === _kinds.FRAGMENT_SPREAD) {
+	      var fragment = (0, _utils.clone)(fragments[selection.name.value]);
+	      selection = operationSelections[i] = (0, _utils.convertFragmentToInline)(fragment);
+	    }
+	    // if it's an inline fragment, set schema to the typecondition, or fieldSchema if null
+	    if (selection.kind === _kinds.INLINE_FRAGMENT) {
+	      var subSchema = selection.typeCondition ? schema.types[selection.typeCondition.name.value] : fieldSchema;
+	      var children = selection.selectionSet.selections;
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        var _loop = function _loop() {
+	          var fieldToRemove = _step.value;
+	
+	          var idx = children.findIndex(function (child) {
+	            return child.name && child.name.value === fieldToRemove;
+	          });
+	          if (idx !== -1) {
+	            children.splice(idx, 1);
+	          }
+	        };
+	
+	        for (var _iterator = (0, _getIterator3.default)(catalogFields), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          _loop();
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	
+	      initializeQueryAST(selection.selectionSet.selections, fragments, subSchema, schema, idFieldName);
+	    } else {
+	      var selectionName = selection.name.value;
+	      if (selection.arguments && selection.arguments.length) {
+	        selection.arguments.sort(function (a, b) {
+	          return a.name.value > b.name.value;
+	        });
+	      }
+	      if (selection.selectionSet) {
+	        var _children = selection.selectionSet.selections;
+	        var typeSchema = fieldSchema.fields[selectionName];
+	        if (!typeSchema) {
+	          throw new Error(selectionName + ' isn\'t in the schema. Did you update your client schema?');
+	        }
+	        var rootFieldSchema = (0, _utils.ensureRootType)(typeSchema.type);
+	        var _subSchema = schema.types[rootFieldSchema.name];
+	        var fieldsToAdd = _subSchema.kind === UNION ? catalogFields : _subSchema.fields[idFieldName] ? [idFieldName] : [];
+	        var _iteratorNormalCompletion2 = true;
+	        var _didIteratorError2 = false;
+	        var _iteratorError2 = undefined;
+	
+	        try {
+	          var _loop2 = function _loop2() {
+	            var fieldToAdd = _step2.value;
+	
+	            var child = _children.find(function (child) {
+	              return child.name && child.name.value === fieldToAdd;
+	            });
+	            if (!child) {
+	              _children.push(new _helperClasses.Field({ name: fieldToAdd }));
+	            }
+	          };
+	
+	          for (var _iterator2 = (0, _getIterator3.default)(fieldsToAdd), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	            _loop2();
+	          }
+	        } catch (err) {
+	          _didIteratorError2 = true;
+	          _iteratorError2 = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	              _iterator2.return();
+	            }
+	          } finally {
+	            if (_didIteratorError2) {
+	              throw _iteratorError2;
+	            }
+	          }
+	        }
+	
+	        initializeQueryAST(selection.selectionSet.selections, fragments, _subSchema, schema, idFieldName);
+	      }
+	    }
+	  }
+	};
+	
+	function parseAndInitializeQuery(queryString, schema, idFieldName) {
+	  var ast = (0, _utils.parse)(queryString);
+	
+	  var _teardownDocumentAST = (0, _utils.teardownDocumentAST)(ast.definitions);
+	
+	  var operation = _teardownDocumentAST.operation;
+	  var fragments = _teardownDocumentAST.fragments;
+	
+	  initializeQueryAST(operation.selectionSet.selections, fragments, schema.querySchema, schema, idFieldName);
+	  ast.definitions = [operation];
+	  return ast;
+	};
+
+/***/ },
+/* 381 */
+/*!*****************************************************!*\
+  !*** ./~/cashay/lib/normalize/normalizeResponse.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _mergeStores = __webpack_require__(/*! ./mergeStores */ 207);
+	
+	var _mergeStores2 = _interopRequireDefault(_mergeStores);
+	
+	var _separateArgs2 = __webpack_require__(/*! ./separateArgs */ 378);
+	
+	var _separateArgs3 = _interopRequireDefault(_separateArgs2);
+	
+	var _getSubReqAST = __webpack_require__(/*! ./getSubReqAST */ 382);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UNION = _introspection.TypeKind.UNION;
+	
+	
+	var mapResponseToResult = function mapResponseToResult(nestedResult, response, fieldSchema, reqASTArgs, context) {
+	  var paginationWords = context.paginationWords;
+	  var variables = context.variables;
+	
+	  var _separateArgs = (0, _separateArgs3.default)(fieldSchema, reqASTArgs, paginationWords, variables);
+	
+	  var regularArgs = _separateArgs.regularArgs;
+	  var paginationArgs = _separateArgs.paginationArgs;
+	
+	  if (paginationArgs) {
+	    var first = paginationArgs.first;
+	    var last = paginationArgs.last;
+	
+	    var arrName = first ? _utils.FRONT : last ? _utils.BACK : _utils.FULL;
+	    response = (0, _defineProperty3.default)({}, arrName, response);
+	  }
+	  if (regularArgs === false) {
+	    return response;
+	  } else {
+	    var regularArgsString = (0, _utils.getRegularArgsKey)(regularArgs);
+	    var resultObj = (0, _defineProperty3.default)({}, regularArgsString, response);
+	    return (0, _utils.isObject)(nestedResult) && !Array.isArray(nestedResult) ? (0, _mergeStores2.default)(nestedResult, resultObj) : resultObj;
+	  }
+	};
+	
+	var visitObject = function visitObject(bag, subResponse, reqAST, subSchema, context) {
+	  return (0, _keys2.default)(subResponse).reduce(function (reduction, key) {
+	    if (key.startsWith('__')) return reduction;
+	    var subReqAST = (0, _getSubReqAST.getSubReqAST)(key, reqAST, context.fragments);
+	    var name = subReqAST.name.value;
+	    var field = subSchema.fields[name];
+	    if (!field) {
+	      throw new Error('No field exists for ' + name + '. Did you update your schema?');
+	    }
+	    var fieldType = (0, _utils.ensureRootType)(field.type);
+	    var fieldSchema = context.schema.types[fieldType.name];
+	    // handle first recursion where things are stored in the query
+	    fieldSchema = fieldSchema || subSchema.types[fieldType.name];
+	    var normalizedResponse = visit(bag, subResponse[key], subReqAST, fieldSchema, context);
+	    if (field.args) {
+	      reduction[name] = mapResponseToResult(reduction[name], normalizedResponse, field, subReqAST.arguments, context);
+	    } else {
+	      reduction[name] = normalizedResponse;
+	    }
+	    return reduction;
+	  }, {});
+	};
+	var visitEntity = function visitEntity(bag, subResponse, reqAST, subSchema, context, id) {
+	  var entityKey = subSchema.name;
+	  bag[entityKey] = bag[entityKey] || {};
+	  bag[entityKey][id] = bag[entityKey][id] || {};
+	  var normalized = visitObject(bag, subResponse, reqAST, subSchema, context);
+	  bag[entityKey][id] = (0, _mergeStores2.default)(bag[entityKey][id], normalized);
+	  return '' + entityKey + _utils.NORM_DELIMITER + id;
+	};
+	
+	var visitIterable = function visitIterable(bag, subResponse, reqAST, subSchema, context) {
+	  var normalizedSubResponse = subResponse.map(function (res) {
+	    return visit(bag, res, reqAST, subSchema, context);
+	  });
+	  if (reqAST.arguments && reqAST.arguments.length) {
+	    var _context$paginationWo = context.paginationWords;
+	    var first = _context$paginationWo.first;
+	    var last = _context$paginationWo.last;
+	
+	    var paginationFlags = [{ word: first, flag: 'EOF' }, { word: last, flag: 'BOF' }];
+	
+	    var _loop = function _loop(i) {
+	      var _paginationFlags$i = paginationFlags[i];
+	      var word = _paginationFlags$i.word;
+	      var flag = _paginationFlags$i.flag;
+	
+	      var count = reqAST.arguments.find(function (arg) {
+	        return arg.name.value === word;
+	      });
+	      // allow count === 0
+	      if (count !== undefined) {
+	        var countVal = void 0;
+	        if (count.value.kind === _kinds.VARIABLE) {
+	          var variableDefName = count.value.name.value;
+	          countVal = +context.variables[variableDefName];
+	
+	          // pass the count onto the normalized response to perform a slice during the state merge
+	          normalizedSubResponse.count = subResponse.count;
+	
+	          // MUTATES CONTEXT VARIABLES. update the difference in the variables (passed on to redux state)
+	          context.variables[variableDefName] = subResponse.length;
+	
+	          // MUTATES ORIGINAL DENORMALIZED RESPONSE. kinda ugly, but saves an additional tree walk.
+	          subResponse.count = subResponse.length;
+	        } else {
+	          countVal = +count.value.value;
+	        }
+	        if (normalizedSubResponse.length < countVal) {
+	          normalizedSubResponse[flag] = true;
+	        }
+	        return 'break';
+	      }
+	    };
+	
+	    for (var i = 0; i < paginationFlags.length; i++) {
+	      var _ret = _loop(i);
+	
+	      if (_ret === 'break') break;
+	    }
+	  }
+	  return normalizedSubResponse;
+	};
+	
+	var visitUnion = function visitUnion(bag, subResponse, reqAST, subSchema, context) {
+	  var concreteSubScema = context.schema.types[subResponse.__typename];
+	  return visit(bag, subResponse, reqAST, concreteSubScema, context);
+	};
+	
+	var visit = function visit(bag, subResponse, reqAST, subSchema, context) {
+	  if (!(0, _utils.isObject)(subResponse) || subResponse instanceof Date) {
+	    return subResponse;
+	  }
+	  if (Array.isArray(subResponse)) {
+	    return visitIterable(bag, subResponse, reqAST, subSchema, context);
+	  }
+	  if (subSchema.kind === UNION) {
+	    return visitUnion(bag, subResponse, reqAST, subSchema, context);
+	  }
+	  var idFieldName = context.idFieldName;
+	
+	  if (subSchema.fields[idFieldName]) {
+	    var id = subResponse[idFieldName];
+	    return visitEntity(bag, subResponse, reqAST, subSchema, context, id);
+	  }
+	  return visitObject(bag, subResponse, reqAST, subSchema, context);
+	};
+	
+	exports.default = function (response, context, isSubscription) {
+	  var schema = isSubscription ? context.schema.subscriptionSchema : context.schema.querySchema;
+	  var entities = {};
+	  var result = visit(entities, response, context.operation, schema, context);
+	  return {
+	    entities: entities,
+	    result: result
+	  };
+	};
+
+/***/ },
+/* 382 */
+/*!************************************************!*\
+  !*** ./~/cashay/lib/normalize/getSubReqAST.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getSubReqAST = undefined;
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var getSubReqAST = exports.getSubReqAST = function getSubReqAST(key, reqAST, fragments) {
+	  var subReqAST = void 0;
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = (0, _getIterator3.default)(reqAST.selectionSet.selections), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var selection = _step.value;
+	
+	      if (selection.kind === _kinds.INLINE_FRAGMENT) {
+	        subReqAST = getSubReqAST(key, selection, fragments);
+	      } else if (selection.alias && selection.alias.value === key || selection.name.value === key) {
+	        subReqAST = selection;
+	      }
+	      if (subReqAST) {
+	        return subReqAST;
+	      }
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	
+	  throw new Error(key + ' was found in the query response, but not the request.\n    Did you optimistically add more fields than you originally requested?');
+	};
+
+/***/ },
+/* 383 */
+/*!*************************************************!*\
+  !*** ./~/cashay/lib/query/printMinimalQuery.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.printMinimalQuery = undefined;
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _printer = __webpack_require__(/*! graphql/language/printer */ 355);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _queryHelpers = __webpack_require__(/*! ./queryHelpers */ 384);
+	
+	var _createVariableDefinitions = __webpack_require__(/*! ../createVariableDefinitions */ 385);
+	
+	var _createVariableDefinitions2 = _interopRequireDefault(_createVariableDefinitions);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var printMinimalQuery = exports.printMinimalQuery = function printMinimalQuery(reqAST, idFieldName, variables, op, schema) {
+	  var context = {
+	    op: op,
+	    schema: schema
+	  };
+	  reqAST.variableDefinitions = minimizeQueryAST(reqAST, idFieldName, variables, schema.querySchema, [], context);
+	  return (0, _printer.print)(reqAST);
+	};
+	
+	// mutates initialVariableDefinitions
+	var minimizeQueryAST = function minimizeQueryAST(reqAST, idFieldName, variables, subSchema) {
+	  var initialVariableDefinitions = arguments.length <= 4 || arguments[4] === undefined ? [] : arguments[4];
+	  var context = arguments[5];
+	  var selections = reqAST.selectionSet.selections;
+	
+	  for (var i = 0; i < selections.length; i++) {
+	    var field = selections[i];
+	    // if it has to go to the server, create some variable definitions and remove the pieces that don't have the required vars
+	    if (field.sendToServer) {
+	      var fieldSchema = subSchema.fields[field.name.value];
+	      if (field.arguments && field.arguments.length) {
+	        var createVarDefContext = (0, _extends3.default)({}, context, { initialVariableDefinitions: initialVariableDefinitions });
+	
+	        var _createVariableDefini = (0, _createVariableDefinitions2.default)(field.arguments, fieldSchema, false, createVarDefContext);
+	
+	        var variableDefinitions = _createVariableDefini.variableDefinitions;
+	
+	        var allVarDefs = [].concat((0, _toConsumableArray3.default)(initialVariableDefinitions), (0, _toConsumableArray3.default)(variableDefinitions));
+	        var missingRequiredVars = (0, _queryHelpers.getMissingRequiredVariables)(allVarDefs, variables);
+	        var hasMissingVar = findMissingVar(field.arguments, missingRequiredVars);
+	        if (hasMissingVar) {
+	          // remove fields that aren't given the vars they need to be successful
+	          selections[i] = undefined;
+	          continue;
+	        } else {
+	          // MUTATIVE
+	          initialVariableDefinitions.push.apply(initialVariableDefinitions, (0, _toConsumableArray3.default)(variableDefinitions));
+	        }
+	      }
+	      if (field.selectionSet) {
+	        var fieldSchemaType = (0, _utils.ensureRootType)(fieldSchema.type);
+	        var nextSchema = context.schema.types[fieldSchemaType.name];
+	        // mutates initialVariableDefinitions
+	        minimizeQueryAST(field, idFieldName, variables, nextSchema, initialVariableDefinitions, context);
+	      }
+	    } else if (field.name.value !== idFieldName) {
+	      selections[i] = undefined;
+	    }
+	  }
+	  // clean up unnecessary children
+	  var minimizedFields = selections.filter(Boolean);
+	
+	  // if there aren't any fields or maybe just an unnecessary id field, remove the req
+	  var firstField = minimizedFields[0];
+	  if (!firstField || minimizedFields.length === 1 && !firstField.sendToServer && firstField.name && firstField.name.value === idFieldName) {
+	    reqAST.selectionSet = null;
+	  } else {
+	    reqAST.selectionSet.selections = minimizedFields;
+	  }
+	  // length will be >= than how it started
+	  return initialVariableDefinitions;
+	};
+	
+	var findMissingVar = function findMissingVar(fieldArgs, missingRequiredVars) {
+	  for (var i = 0; i < fieldArgs.length; i++) {
+	    var fieldArg = fieldArgs[i];
+	    if (fieldArg.value.kind === _kinds.VARIABLE) {
+	      if (missingRequiredVars.includes(fieldArg.name.value)) {
+	        return true;
+	      }
+	    }
+	  }
+	};
+
+/***/ },
+/* 384 */
+/*!********************************************!*\
+  !*** ./~/cashay/lib/query/queryHelpers.js ***!
+  \********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.equalPendingQueries = exports.getMissingRequiredVariables = exports.invalidateMutationsOnNewQuery = exports.shortenNormalizedResponse = undefined;
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/*
+	 * reduce the fields to merge into the state
+	 * doing this here means a smaller flushSet and fewer invalidations
+	 * currently we mutate normalizedResponse. it may be worthwhile to make this pure
+	 * */
+	var shortenNormalizedResponse = exports.shortenNormalizedResponse = function shortenNormalizedResponse(normalizedResponse, cashayState) {
+	  // TODO rewrite by recurisvely finding the outer join
+	  // const {entities} = normalizedResponse;
+	  // const diff = {};
+	  // if (!entities) return;
+	  // const typeKeys = Object.keys(entities);
+	  // for (let i = 0; i < typeKeys.length; i++) {
+	  //   const typeName = typeKeys[i];
+	  //   const typeInResponse = entities[typeName];
+	  //   const typeInState = cashayState.entities[typeName];
+	  //   // const typeInDiff = diff[typeName];
+	  //   if (!typeInState) {
+	  //     diff[typeName] = typeInResponse;
+	  //     continue;
+	  //   }
+	  //   diff[typeName] = diff[typeName] || {};
+	  //   const typeInDiff = diff[typeName];
+	  //   const typeKeys = Object.keys(typeInResponse);
+	  //   for (let j = 0; j < typeKeys.length; j++) {
+	  //     const entityName = typeKeys[j];
+	  //     const entityInState = typeInState[entityName];
+	  //     const entityInRespose = typeInResponse[entityName];
+	  //     if (!entityInState) {
+	  //       typeInDiff[entityName] = entityInRespose;
+	  //       continue;
+	  //     }
+	  //     diff[entityName] = diff[entityName]
+	  //     const newEntity = typeInResponse[entityName];
+	  //     // entityInState could be a superset of newEntity and we'd still want to remove newEntity
+	  //     // so, we can't use a single stringify comparison, we have to walk each item in newEntity
+	  //     // and remove items that are deepEqual (since an entity can have a nested array or object)
+	  //     const reducedNewEntity = deepEqualAndReduce(entityInState, newEntity);
+	  //   }
+	  // }
+	  return (0, _keys2.default)(normalizedResponse).length && normalizedResponse;
+	};
+	
+	/*
+	 * Returns a copy of the newEntity that does not include any props where the value of both are equal
+	 */
+	var deepEqualAndReduce = function deepEqualAndReduce(state, newEntity) {
+	  var reducedNewItem = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+	  var propsToCheck = (0, _keys2.default)(newEntity);
+	  for (var i = 0; i < propsToCheck.length; i++) {
+	    var propName = propsToCheck[i];
+	    var newEntityProp = newEntity[propName];
+	
+	    // it the prop doesn't exist in state, put it there
+	    if (!state.hasOwnProperty(propName)) {
+	      reducedNewItem[propName] = newEntityProp;
+	      continue;
+	    }
+	
+	    // strict-equal must come after hasOwnProperty because the two could be null
+	    var stateProp = state[propName];
+	    if (stateProp === newEntityProp) {
+	      continue;
+	    }
+	
+	    // if they're not equal, it could be an array, object, or scalar
+	    if (Array.isArray(newEntityProp)) {
+	      if (Array.isArray(stateProp) && newEntityProp.length === stateProp.length) {
+	        //  an array of objects here is wrong. Better to be performant for those who play by the rules
+	        var isShallowEqual = true;
+	        for (var _i = 0; _i < newEntityProp.length; _i++) {
+	          if (newEntityProp[_i] !== stateProp[_i]) {
+	            isShallowEqual = false;
+	            break;
+	          }
+	        }
+	        if (!isShallowEqual) {
+	          // TODO either recurse or jsonEquals this
+	          reducedNewItem[propName] = newEntityProp;
+	        }
+	      } else {
+	        reducedNewItem[propName] = newEntityProp;
+	      }
+	    } else if ((0, _utils.isObject)(newEntityProp)) {
+	      if ((0, _utils.isObject)(stateProp)) {
+	        // they're both objects, we must go deeper
+	        reducedNewItem[propName] = deepEqualAndReduce(stateProp, newEntityProp);
+	      } else {
+	        reducedNewItem[propName] = newEntityProp;
+	      }
+	    } else {
+	      // they're non-equal scalars
+	      reducedNewItem[propName] = newEntityProp;
+	    }
+	  }
+	  return reducedNewItem;
+	};
+	
+	/**
+	 * Mutation ASTs are generated, aggregated, printed, and cached for performance.
+	 * When a new query comes along, the mutation might need to request additional fields for it
+	 * If this happens, we need to invalidate the cached mutation
+	 *
+	 * @param {String} op the query operation that is affecting the mutation
+	 * @param {Object} cachedMutations the mutations that are cached in the singleton
+	 *
+	 */
+	var invalidateMutationsOnNewQuery = exports.invalidateMutationsOnNewQuery = function invalidateMutationsOnNewQuery(op, cachedMutations) {
+	  var activeMutations = (0, _keys2.default)(cachedMutations);
+	  for (var i = 0; i < activeMutations.length; i++) {
+	    var mutationName = activeMutations[i];
+	    var mutation = cachedMutations[mutationName];
+	    // TODO handle logic for keys?
+	    if (mutation.activeQueries[op]) {
+	      mutation.clear();
+	    }
+	  }
+	};
+	
+	var getMissingRequiredVariables = exports.getMissingRequiredVariables = function getMissingRequiredVariables(variableDefinitions, variables) {
+	  var missingVars = [];
+	  for (var i = 0; i < variableDefinitions.length; i++) {
+	    var def = variableDefinitions[i];
+	    if (def.type.kind === _kinds.NON_NULL_TYPE) {
+	      var defKey = def.variable.name.value;
+	      if (!variables[defKey]) {
+	        missingVars.push(defKey);
+	      }
+	    }
+	  }
+	  return missingVars;
+	};
+	
+	var equalPendingQueries = exports.equalPendingQueries = function equalPendingQueries(baseQuery, _ref) {
+	  var op = _ref.op;
+	  var key = _ref.key;
+	  var variables = _ref.variables;
+	  var baseComponent = baseQuery.op;
+	  var baseKey = baseQuery.key;
+	  var baseVariables = baseQuery.variables;
+	
+	  if (baseComponent !== op) return false;
+	  if (key !== baseKey) return false;
+	  var baseVariablesKeys = (0, _keys2.default)(baseVariables);
+	  var variablesKeys = (0, _keys2.default)(variables);
+	  if (baseVariablesKeys.length !== variablesKeys.length) return false;
+	  // this is just a heuristic that doesn't check variable values.
+	  // that's OK because unique queries with unique variables shouldn't share the same op name
+	  // Also, calling a query twice with different vars before you get the results of the first is an unsupported anti-pattern
+	  return true;
+	};
+
+/***/ },
+/* 385 */
+/*!***************************************************!*\
+  !*** ./~/cashay/lib/createVariableDefinitions.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _extends3 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends4 = _interopRequireDefault(_extends3);
+	
+	exports.default = createVariableDefinitions;
+	
+	var _utils = __webpack_require__(/*! ./utils */ 298);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _helperClasses = __webpack_require__(/*! ./helperClasses */ 379);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function createVariableDefinitions(argsToDefine, fieldSchema, isNamespaced, context) {
+	  var initialVariableDefinitions = context.initialVariableDefinitions;
+	  var op = context.op;
+	  var opStateVars = context.opStateVars;
+	  var schema = context.schema;
+	
+	  var variableDefinitions = [];
+	  var variableEnhancers = [];
+	  var bagArgs = function bagArgs(argsToDefine, fieldSchema) {
+	    for (var i = 0; i < argsToDefine.length; i++) {
+	      var arg = argsToDefine[i];
+	      var argName = arg.name.value;
+	      var argKind = arg.value.kind;
+	      if (argKind === _kinds.VARIABLE) {
+	        (function () {
+	          var variableName = arg.value.name.value;
+	          var variableDefOfArg = initialVariableDefinitions.find(function (def) {
+	            return def.variable.name.value === variableName;
+	          });
+	          if (isNamespaced) {
+	            // namespace the variable definitions & create the enhancer for each
+	            var namespaceKey = (0, _utils.makeNamespaceString)(op, variableName);
+	            if (!variableDefOfArg) {
+	              var newVariableDef = makeVariableDefinition(argName, namespaceKey, fieldSchema);
+	              variableDefinitions.push(newVariableDef);
+	            }
+	            var variableEnhancer = enhancerFactory(opStateVars, variableName, namespaceKey);
+	            variableEnhancers.push(variableEnhancer);
+	          } else if (!variableDefOfArg) {
+	            var _newVariableDef = makeVariableDefinition(argName, variableName, fieldSchema);
+	            variableDefinitions.push(_newVariableDef);
+	          }
+	        })();
+	      } else if (argKind === _kinds.OBJECT) {
+	        var argSchema = fieldSchema.args[argName];
+	        var rootArgType = (0, _utils.ensureRootType)(argSchema.type);
+	        var subSchema = schema.types[rootArgType.name];
+	        bagArgs(arg.value.fields, subSchema);
+	      }
+	    }
+	  };
+	  bagArgs(argsToDefine, fieldSchema);
+	  return { variableDefinitions: variableDefinitions, variableEnhancers: variableEnhancers };
+	};
+	
+	var makeVariableDefinition = function makeVariableDefinition(argName, variableName, fieldSchema) {
+	  // we're not sure whether we're inside an arg or an input object
+	  var fields = fieldSchema.args || fieldSchema.inputFields;
+	  var argSchema = fields[argName];
+	  if (!argSchema) {
+	    throw new Error('Invalid argument: ' + argName);
+	  }
+	  return new _helperClasses.VariableDefinition(variableName, argSchema.type);
+	};
+	
+	var enhancerFactory = function enhancerFactory(opStateVars, variableName, namespaceKey) {
+	  return function (variablesObj) {
+	    return (0, _extends4.default)({}, variablesObj, (0, _defineProperty3.default)({}, namespaceKey, opStateVars[variableName]));
+	  };
+	};
+
+/***/ },
+/* 386 */
+/*!*************************************************!*\
+  !*** ./~/cashay/lib/query/flushDependencies.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _set = __webpack_require__(/*! babel-runtime/core-js/set */ 280);
+	
+	var _set2 = _interopRequireDefault(_set);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = flushDependencies;
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	/**
+	 * walk the normalized response & grab the deps for each entity. put em all in a Set & flush it down the toilet
+	 */
+	function flushDependencies(entitiesDiff, op, key, denormalizedDeps, cachedQueries) {
+	  var keyFlush = makeFlushSet(entitiesDiff, op, key, denormalizedDeps);
+	  var componentKeys = (0, _keys2.default)(keyFlush);
+	  for (var i = 0; i < componentKeys.length; i++) {
+	    var componentKey = componentKeys[i];
+	    var keysToFlush = keyFlush[componentKey];
+	    var cachedComponentQuery = cachedQueries[componentKey];
+	    if (cachedComponentQuery) {
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        for (var _iterator = (0, _getIterator3.default)(keysToFlush), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var flushedKey = _step.value;
+	
+	          cachedComponentQuery.responses[flushedKey] = undefined;
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    }
+	  }
+	}
+	
+	/**
+	 * Crawl the dependency tree snagging up everything that will be invalidated
+	 * Safety checks required because subs affect queries, but not the other way around
+	 *
+	 */
+	var makeFlushSet = function makeFlushSet(entitiesDiff, op, key, denormalizedDeps) {
+	  var keyFlush = {};
+	  var typeKeys = (0, _keys2.default)(entitiesDiff);
+	  for (var i = 0; i < typeKeys.length; i++) {
+	    var typeName = typeKeys[i];
+	    var typeInDependencyTree = denormalizedDeps[typeName];
+	    if (!typeInDependencyTree) continue;
+	    var newType = entitiesDiff[typeName];
+	    var entityKeys = (0, _keys2.default)(newType);
+	    for (var j = 0; j < entityKeys.length; j++) {
+	      var entityName = entityKeys[j];
+	      var entityInDependencyTree = typeInDependencyTree[entityName];
+	      if (!entityInDependencyTree) continue;
+	      var entityInDependencyTreeKeys = (0, _keys2.default)(entityInDependencyTree);
+	      for (var k = 0; k < entityInDependencyTreeKeys.length; k++) {
+	        var dependentComponent = entityInDependencyTreeKeys[k];
+	        var newDependencyKeySet = entityInDependencyTree[dependentComponent];
+	        var incumbant = keyFlush[dependentComponent] || new _set2.default();
+	        keyFlush[dependentComponent] = new _set2.default([].concat((0, _toConsumableArray3.default)(incumbant), (0, _toConsumableArray3.default)(newDependencyKeySet)));
+	      }
+	    }
+	  }
+	
+	  // ensure flushing the callee (if it's a sub it'll just get ignored later)
+	  if (!keyFlush[op]) {
+	    keyFlush[op] = new _set2.default();
+	  }
+	  keyFlush[op].add(key);
+	  return keyFlush;
+	};
+
+/***/ },
+/* 387 */
+/*!**************************************************!*\
+  !*** ./~/cashay/lib/mutate/namespaceMutation.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	exports.default = namespaceMutation;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	var _createVariableDefinitions = __webpack_require__(/*! ../createVariableDefinitions */ 385);
+	
+	var _createVariableDefinitions2 = _interopRequireDefault(_createVariableDefinitions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function namespaceMutation(mutationAST, op) {
+	  var opStateVars = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	  var schema = arguments[3];
+	
+	  var _teardownDocumentAST = (0, _utils.teardownDocumentAST)(mutationAST.definitions);
+	
+	  var operation = _teardownDocumentAST.operation;
+	  var fragments = _teardownDocumentAST.fragments;
+	
+	  var mainMutation = operation.selectionSet.selections[0];
+	  var fieldSchema = schema.mutationSchema.fields[mainMutation.name.value];
+	  var startingContext = { op: op, opStateVars: opStateVars, schema: schema, fragments: fragments, initialVariableDefinitions: [] };
+	  // query-level fields are joined, not namespaced, so we have to treat them differently
+	
+	  var _createVariableDefini = (0, _createVariableDefinitions2.default)(mainMutation.arguments, fieldSchema, false, startingContext);
+	
+	  var initialVariableDefinitions = _createVariableDefini.variableDefinitions;
+	  var variableEnhancers = _createVariableDefini.variableEnhancers;
+	
+	  var context = (0, _extends3.default)({}, startingContext, { fragments: fragments, initialVariableDefinitions: initialVariableDefinitions });
+	  operation.variableDefinitions = initialVariableDefinitions;
+	  var rootSchemaType = (0, _utils.ensureRootType)(fieldSchema.type);
+	  var subSchema = schema.types[rootSchemaType.name];
+	  if (mainMutation.selectionSet) {
+	    // MUTATES SELECTIONS, CONTEXT VARIABLE DEFS, AND VARIABLE ENHANCERS. AND IT'S REALLY HARD TO MAKE IT FUNCTIONAL & PERFORMANT
+	    namespaceAndInlineFrags(mainMutation.selectionSet.selections, subSchema, variableEnhancers, context);
+	  }
+	
+	  // just take the operation & leave behind the fragment spreads, since we inlined them
+	  mutationAST.definitions = [operation];
+	  return { namespaceAST: mutationAST, variableEnhancers: variableEnhancers };
+	};
+	
+	var namespaceAndInlineFrags = function namespaceAndInlineFrags(fieldSelections, typeSchema, variableEnhancers, context) {
+	  for (var i = 0; i < fieldSelections.length; i++) {
+	    var selection = fieldSelections[i];
+	    if (selection.kind === _kinds.FRAGMENT_SPREAD) {
+	      var fragment = (0, _utils.clone)(context.fragments[selection.name.value]);
+	      fieldSelections[i] = selection = (0, _utils.convertFragmentToInline)(fragment);
+	    }
+	    if (selection.kind === _kinds.INLINE_FRAGMENT) {
+	      // if the fragment is unnecessary, remove it
+	      if (selection.typeCondition === null) {
+	        fieldSelections.push.apply(fieldSelections, (0, _toConsumableArray3.default)(selection.selectionSet.selections));
+	        // since we're pushing to the looped array, going in reverse won't save us from not having to change i
+	        fieldSelections.splice(i--, 1);
+	      } else {
+	        namespaceAndInlineFrags(selection.selectionSet.selections, typeSchema, variableEnhancers, context);
+	      }
+	      continue;
+	    }
+	    var selectionName = selection.name.value;
+	    if (selectionName.startsWith('__')) continue;
+	    var fieldSchema = typeSchema.fields[selectionName];
+	    if (selection.arguments && selection.arguments.length) {
+	      var _context$initialVaria;
+	
+	      var aliasOrFieldName = selection.alias && selection.alias.value || selection.name.value;
+	      var namespaceAlias = (0, _utils.makeNamespaceString)(context.op, aliasOrFieldName);
+	      selection.alias = new _helperClasses.Name(namespaceAlias);
+	      var mutations = (0, _createVariableDefinitions2.default)(selection.arguments, fieldSchema, true, context);
+	      (_context$initialVaria = context.initialVariableDefinitions).push.apply(_context$initialVaria, (0, _toConsumableArray3.default)(mutations.variableDefinitions));
+	      variableEnhancers.push.apply(variableEnhancers, (0, _toConsumableArray3.default)(mutations.variableEnhancers));
+	    } else {
+	      // guarantee that props without args are also without aliases
+	      // that way, we can share fields across mutations & not make the server repeat the same action twice
+	      selection.alias = null;
+	    }
+	    if (selection.selectionSet) {
+	      var fieldType = (0, _utils.ensureRootType)(fieldSchema.type);
+	      var subSchema = context.schema.types[fieldType.name];
+	      namespaceAndInlineFrags(selection.selectionSet.selections, subSchema, variableEnhancers, context);
+	    }
+	  }
+	};
+
+/***/ },
+/* 388 */
+/*!********************************************************!*\
+  !*** ./~/cashay/lib/mutate/createMutationFromQuery.js ***!
+  \********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = createMutationFromQuery;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	var _mergeMutations = __webpack_require__(/*! ./mergeMutations */ 389);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _findTypeInQuery = __webpack_require__(/*! ./findTypeInQuery */ 390);
+	
+	var _findTypeInQuery2 = _interopRequireDefault(_findTypeInQuery);
+	
+	var _makeArgsFromVars = __webpack_require__(/*! ./makeArgsFromVars */ 391);
+	
+	var _makeArgsFromVars2 = _interopRequireDefault(_makeArgsFromVars);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var SCALAR = _introspection.TypeKind.SCALAR;
+	function createMutationFromQuery(operation, mutationName) {
+	  var mutationVariables = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	  var schema = arguments[3];
+	
+	  var mutationFieldSchema = schema.mutationSchema.fields[mutationName];
+	  var mutationResponseType = (0, _utils.ensureRootType)(mutationFieldSchema.type);
+	  var mutationResponseSchema = schema.types[mutationResponseType.name];
+	
+	  // generating a mutation string requires guessing at what field arguments to pass in
+	  // if the variables object includes something with the same name as the arg name, that's probably a fair heuristic
+	  var mutationArgs = (0, _makeArgsFromVars2.default)(mutationFieldSchema, mutationVariables);
+	  var mutationAST = new _helperClasses.MutationShell(mutationName, mutationArgs);
+	
+	  // Assume the mutationResponseSchema is a single type (opposed to a payload full of many types)
+	  var simpleSelections = trySimplePayload(mutationResponseSchema.name, operation, schema);
+	  if (simpleSelections) {
+	    mutationAST.definitions[0].selectionSet.selections[0].selectionSet.selections = simpleSelections;
+	    return mutationAST;
+	  }
+	
+	  // guess it's full of many types!
+	  return tryComplexPayload(mutationAST, operation, mutationResponseSchema, schema);
+	};
+	
+	var trySimplePayload = function trySimplePayload(typeName, operation, schema) {
+	  var selectionsInQuery = (0, _findTypeInQuery2.default)(typeName, operation, schema);
+	  if (selectionsInQuery.length) {
+	    var allSelections = flattenFoundSelections(selectionsInQuery);
+	    // TODO for simple payloads, I think pushing a clone of allSelections is good enough
+	    return createMergedCopy(allSelections);
+	  }
+	};
+	
+	var tryComplexPayload = function tryComplexPayload(mutationAST, operation, mutationResponseSchema, schema) {
+	  var atLeastOne = false;
+	
+	  // the payload itself isn't used, since it's just a shell for the many fields inside
+	  // technically, this could (should?) be recursive, but cashay enforces best practices
+	  // and putting an abstract inside an abstract is wrong
+	  var payloadFieldKeys = (0, _keys2.default)(mutationResponseSchema.fields);
+	
+	  for (var i = 0; i < payloadFieldKeys.length; i++) {
+	    var payloadFieldKey = payloadFieldKeys[i];
+	    var payloadField = mutationResponseSchema.fields[payloadFieldKey];
+	    var rootPayloadFieldType = (0, _utils.ensureRootType)(payloadField.type);
+	
+	    // For scalars, make sure the names match (don't want a million strings in the mutation request)
+	    var matchName = rootPayloadFieldType.kind === SCALAR && payloadField.name;
+	    var selectionsInQuery = (0, _findTypeInQuery2.default)(rootPayloadFieldType.name, operation, schema, matchName);
+	    if (selectionsInQuery.length) {
+	      atLeastOne = true;
+	      var allSelections = matchName ? selectionsInQuery : flattenFoundSelections(selectionsInQuery);
+	      var mutationField = void 0;
+	      if (matchName) {
+	        mutationField = new _helperClasses.Field({ name: matchName });
+	      } else {
+	        var newSelections = createMergedCopy(allSelections);
+	        // make a payload field into a mutation field
+	        mutationField = new _helperClasses.Field({ name: payloadFieldKey, selections: newSelections });
+	      }
+	      mutationAST.definitions[0].selectionSet.selections[0].selectionSet.selections.push(mutationField);
+	    }
+	  }
+	  if (!atLeastOne) {
+	    throw new Error('Could not generate a mutation from ' + operation.selectionSet.selections[0].name.value + '. \n    Verify that ' + mutationResponseSchema.name + ' is correct and the schema is updated. \n    If it includes scalars, make sure those are aliased in the query.');
+	  }
+	  return mutationAST;
+	};
+	
+	var flattenFoundSelections = function flattenFoundSelections(selectionsInQuery) {
+	  var allSelections = [];
+	  for (var i = 0; i < selectionsInQuery.length; i++) {
+	    var selections = selectionsInQuery[i].selectionSet.selections;
+	
+	    allSelections.push.apply(allSelections, (0, _toConsumableArray3.default)(selections));
+	  }
+	  return allSelections;
+	};
+	
+	var createMergedCopy = function createMergedCopy(allSelections) {
+	  var firstSelection = allSelections.pop();
+	  if (!firstSelection) return;
+	  var targetSelections = [(0, _utils.clone)(firstSelection)];
+	  (0, _mergeMutations.mergeSelections)(targetSelections, allSelections);
+	  return targetSelections;
+	};
+
+/***/ },
+/* 389 */
+/*!***********************************************!*\
+  !*** ./~/cashay/lib/mutate/mergeMutations.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.mergeSelections = undefined;
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	exports.default = mergeMutations;
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _printer = __webpack_require__(/*! graphql/language/printer */ 355);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function mergeMutations(cachedSingles) {
+	  var firstSingle = cachedSingles.pop();
+	
+	  // deep copy to create the base AST (slow, but faster than a parse!)
+	  var mergedAST = (0, _utils.clone)(firstSingle);
+	  var mainOperation = mergedAST.definitions[0];
+	  var mainMutation = mainOperation.selectionSet.selections[0];
+	
+	  // now add the new ASTs one-by-one
+	  for (var i = 0; i < cachedSingles.length; i++) {
+	    var single = cachedSingles[i];
+	    var nextOperation = single.definitions[0];
+	    var nextMutation = nextOperation.selectionSet.selections[0];
+	    mergeVariableDefinitions(mainOperation.variableDefinitions, nextOperation.variableDefinitions);
+	    mergeNewAST(mainMutation, nextMutation);
+	  }
+	  return (0, _printer.print)(mergedAST);
+	};
+	
+	var mergeVariableDefinitions = function mergeVariableDefinitions(mainVarDefs, nextVarDefs) {
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    var _loop = function _loop() {
+	      var varDef = _step.value;
+	
+	      var nextName = varDef.variable.name.value;
+	      var varDefInMain = mainVarDefs.find(function (def) {
+	        return def.variable.name.value === nextName;
+	      });
+	      if (!varDefInMain) {
+	        mainVarDefs.push(varDef);
+	      }
+	    };
+	
+	    for (var _iterator = (0, _getIterator3.default)(nextVarDefs), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      _loop();
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	};
+	
+	var mergeNewAST = function mergeNewAST(target, src) {
+	  if (target.name.value !== src.name.value) {
+	    throw new Error('Cannot merge two different mutations: \n    ' + target.name.value + ' and ' + src.name.value + '.\n    Did you include the wrong componentId in the mutation call?\n    Make sure each mutation operation only calls a single mutation \n    and that customMutations are correct.');
+	  }
+	  mergeMutationArgs(target.arguments, src.arguments);
+	  mergeSelections(target.selectionSet.selections, src.selectionSet.selections);
+	};
+	
+	/**
+	 * Mutates the targetSelections by adding srcSelections & excluding the duplicates
+	 */
+	var mergeSelections = exports.mergeSelections = function mergeSelections(targetSelections, srcSelections) {
+	  for (var i = 0; i < srcSelections.length; i++) {
+	    var selection = srcSelections[i];
+	    mergeSingleProp(targetSelections, selection);
+	  }
+	};
+	
+	var mergeSingleProp = function mergeSingleProp(targetSelections, srcProp) {
+	  if (srcProp.kind === _kinds.INLINE_FRAGMENT) {
+	    var _ret2 = function () {
+	      // typeCondition is guaranteed to exist thanks to namespaceMutation
+	      var srcTypeCondition = srcProp.typeCondition.name.value;
+	      var targetFragment = targetSelections.find(function (field) {
+	        return field.kind === _kinds.INLINE_FRAGMENT && field.typeCondition.name.value === srcTypeCondition;
+	      });
+	      if (!targetFragment) {
+	        // by pushing a clone, we don't have to clone the srcProp beforehand, making for the smallest amount of cloning possible
+	        targetSelections.push((0, _utils.clone)(srcProp));
+	      } else {
+	        mergeSelections(targetFragment.selectionSet.selections, srcProp.selectionSet.selections);
+	      }
+	      return {
+	        v: void 0
+	      };
+	    }();
+	
+	    if ((typeof _ret2 === 'undefined' ? 'undefined' : (0, _typeof3.default)(_ret2)) === "object") return _ret2.v;
+	  }
+	  if (srcProp.alias) {
+	    // alias infers args, which means we can't join anything
+	    targetSelections.push((0, _utils.clone)(srcProp));
+	  } else {
+	    (function () {
+	      var propName = srcProp.name.value;
+	      var propInTarget = targetSelections.find(function (selection) {
+	        return !selection.alias && selection.name.value === propName;
+	      });
+	      if (propInTarget) {
+	        if (propInTarget.selectionSet) {
+	          mergeSelections(propInTarget.selectionSet.selections, srcProp.selectionSet.selections);
+	        }
+	      } else {
+	        targetSelections.push((0, _utils.clone)(srcProp));
+	      }
+	    })();
+	  }
+	};
+	
+	/**
+	 * For the mutation itself, try to merge args
+	 * but for children of the mutation, don't
+	 */
+	var mergeMutationArgs = function mergeMutationArgs(targetArgs, srcArgs) {
+	  var _loop2 = function _loop2(i) {
+	    var srcArg = srcArgs[i];
+	    var targetArg = targetArgs.find(function (arg) {
+	      return arg.name.value === srcArg.name.value;
+	    });
+	    if (targetArg) {
+	      if (targetArg.value.kind === _kinds.OBJECT) {
+	        if (srcArg.value.kind === _kinds.OBJECT) {
+	          // handle input objects
+	          mergeMutationArgs(targetArg.value.fields, srcArg.value.fields);
+	        } else {
+	          throw new Error('Conflicting kind for argument: ' + targetArg.name.value);
+	        }
+	      } else if (targetArg.value.value !== srcArg.value.value) {
+	        throw new Error('Conflicting values for argument: ' + targetArg.name.value);
+	      }
+	    } else {
+	      targetArgs.push((0, _utils.clone)(srcArg));
+	    }
+	  };
+	
+	  for (var i = 0; i < srcArgs.length; i++) {
+	    _loop2(i);
+	  }
+	};
+
+/***/ },
+/* 390 */
+/*!************************************************!*\
+  !*** ./~/cashay/lib/mutate/findTypeInQuery.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = findTypeInQuery;
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	/**
+	 * Traverses a query AST operation looking for a specific type (for objects) or name (for scalars)
+	 * Uses a BFS since return values are likely high up the tree & scalars can break as soon as a matching name is found
+	 *
+	 * @param {String} typeName the type of GraphQL object to look for
+	 * @param {Object} operation the request AST's definition to traverse
+	 * @param {Object} schema the cashay client schema
+	 * @param {String} [matchName] if provided, it will match by typeName AND matchName (used for scalars)
+	 *
+	 * @returns {Array} a bag full of selections whose children will be added to the mutation response
+	 */
+	function findTypeInQuery(typeName, operation, schema, matchName) {
+	  var bag = [];
+	  var queue = [];
+	  var next = {
+	    operation: operation,
+	    typeSchema: schema.querySchema
+	  };
+	  while (next) {
+	    var _next = next;
+	    var _operation = _next.operation;
+	    var typeSchema = _next.typeSchema;
+	
+	    if (_operation.selectionSet) {
+	      var selections = _operation.selectionSet.selections;
+	
+	      for (var i = 0; i < selections.length; i++) {
+	        var selection = selections[i];
+	        var subSchema = void 0;
+	        if (selection.kind === _kinds.INLINE_FRAGMENT) {
+	          subSchema = typeSchema;
+	        } else {
+	          var selectionName = selection.name.value;
+	          var fieldSchema = typeSchema.fields[selectionName];
+	          var rootFieldType = (0, _utils.ensureRootType)(fieldSchema.type);
+	          subSchema = (0, _utils.ensureRootType)(schema.types[rootFieldType.name]);
+	          if (subSchema.name === typeName) {
+	            if (matchName) {
+	              var fieldNameOrAlias = selection.alias && selection.alias.value || selectionName;
+	              if (matchName === fieldNameOrAlias) {
+	                bag[0] = selection;
+	                return bag;
+	              }
+	            } else {
+	              bag.push(selection);
+	            }
+	          }
+	        }
+	        queue.push({
+	          operation: selection,
+	          typeSchema: subSchema
+	        });
+	      }
+	    }
+	    next = queue.shift();
+	  }
+	  return bag;
+	};
+
+/***/ },
+/* 391 */
+/*!*************************************************!*\
+  !*** ./~/cashay/lib/mutate/makeArgsFromVars.js ***!
+  \*************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = makeArgsFromVars;
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	var _kinds = __webpack_require__(/*! graphql/language/kinds */ 316);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function makeArgsFromVars(mutationFieldSchema, variables) {
+	  var mutationArgs = [];
+	  var argKeys = (0, _keys2.default)(mutationFieldSchema.args);
+	  for (var i = 0; i < argKeys.length; i++) {
+	    var argKey = argKeys[i];
+	    var schemaArg = mutationFieldSchema.args[argKey];
+	    if (variables.hasOwnProperty(schemaArg.name)) {
+	      var newArg = new _helperClasses.RequestArgument(schemaArg.name, _kinds.VARIABLE, schemaArg.name);
+	      mutationArgs.push(newArg);
+	    }
+	  }
+	  return mutationArgs;
+	};
+
+/***/ },
+/* 392 */
+/*!**************************************************!*\
+  !*** ./~/cashay/lib/mutate/removeNamespacing.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ 357);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = removeNamespacing;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function removeNamespacing(dataObj, componentId) {
+	  if (!(0, _utils.isObject)(dataObj)) {
+	    return dataObj;
+	  }
+	  var normalizedData = removeNamespacedFields(dataObj, componentId);
+	  var queryKeys = (0, _keys2.default)(normalizedData);
+	  for (var i = 0; i < queryKeys.length; i++) {
+	    var queryKey = queryKeys[i];
+	    var normalizedProp = normalizedData[queryKey];
+	    if ((0, _utils.isObject)(normalizedProp)) {
+	      if (Array.isArray(normalizedProp)) {
+	        normalizedData[queryKey] = normalizedProp.map(function (prop) {
+	          return removeNamespacing(prop, componentId);
+	        });
+	      } else {
+	        normalizedData[queryKey] = removeNamespacing(normalizedProp, componentId);
+	      }
+	    }
+	  }
+	  return normalizedData;
+	}
+	
+	var removeNamespacedFields = function removeNamespacedFields(dataObj, componentId) {
+	  var normalizedData = (0, _extends3.default)({}, dataObj);
+	  var queryKeys = (0, _keys2.default)(normalizedData);
+	  for (var i = 0; i < queryKeys.length; i++) {
+	    var queryKey = queryKeys[i];
+	
+	    var _queryKey$split = queryKey.split(_utils.DELIMITER);
+	
+	    var _queryKey$split2 = (0, _slicedToArray3.default)(_queryKey$split, 3);
+	
+	    var prefix = _queryKey$split2[0];
+	    var fieldComponentId = _queryKey$split2[1];
+	    var fieldNameOrAlias = _queryKey$split2[2];
+	
+	    if (prefix === _utils.CASHAY) {
+	      if (fieldComponentId === componentId) {
+	        normalizedData[fieldNameOrAlias] = normalizedData[queryKey];
+	      }
+	      delete normalizedData[queryKey];
+	    }
+	  }
+	  return normalizedData;
+	};
+
+/***/ },
+/* 393 */
+/*!**************************************************!*\
+  !*** ./~/cashay/lib/mutate/makeFriendlyStore.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = makeFriendlyStore;
+	
+	var _findTypeInQuery = __webpack_require__(/*! ./findTypeInQuery */ 390);
+	
+	var _findTypeInQuery2 = _interopRequireDefault(_findTypeInQuery);
+	
+	var _getFieldState = __webpack_require__(/*! ../normalize/getFieldState */ 377);
+	
+	var _getFieldState2 = _interopRequireDefault(_getFieldState);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function makeFriendlyStore(rawState, typeName, context) {
+	  var operation = context.operation;
+	  var schema = context.schema;
+	
+	  var recurseRawStore = function recurseRawStore(subStore, typeToFind) {
+	    var friendlyStore = {};
+	    var typeKeys = (0, _keys2.default)(subStore);
+	    var fieldSchema = schema.types[typeToFind];
+	    for (var i = 0; i < typeKeys.length; i++) {
+	      var typeKey = typeKeys[i];
+	      var rawFieldState = subStore[typeKey];
+	      var selection = (0, _findTypeInQuery2.default)(typeToFind, operation, schema);
+	      var fieldState = (0, _getFieldState2.default)(rawFieldState, fieldSchema, selection, context);
+	      if ((0, _utils.isObject)(fieldState) && schema.types[typeKey]) {
+	        fieldState[typeKey] = recurseRawStore(rawFieldState, typeKey);
+	      }
+	      friendlyStore[typeKey] = fieldState;
+	    }
+	    return friendlyStore;
+	  };
+	  recurseRawStore(rawState, typeName);
+	};
+
+/***/ },
+/* 394 */
+/*!*******************************************!*\
+  !*** ./~/cashay/lib/normalize/addDeps.js ***!
+  \*******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ 357);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _set = __webpack_require__(/*! babel-runtime/core-js/set */ 280);
+	
+	var _set2 = _interopRequireDefault(_set);
+	
+	exports.default = addDeps;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function addDeps(normalizedResponse, op, key, normalizedDeps, denormalizedDeps) {
+	  // get the previous set
+	  // create a Set of normalized locations in entities (eg 'Post.123')
+	  var newNormalizedDeps = makeNormalizedDeps(normalizedResponse.entities);
+	  var oldNormalizedDeps = void 0;
+	  normalizedDeps[op] = normalizedDeps[op] || {};
+	  var opDeps = normalizedDeps[op];
+	  oldNormalizedDeps = opDeps[key];
+	  opDeps[key] = newNormalizedDeps;
+	  var newUniques = void 0;
+	  if (!oldNormalizedDeps) {
+	    newUniques = newNormalizedDeps;
+	  } else {
+	    // create 2 Sets that are the left/right diff of old and new
+	    newUniques = new _set2.default();
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+	
+	    try {
+	      for (var _iterator = (0, _getIterator3.default)(newNormalizedDeps), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	        var dep = _step.value;
+	
+	        if (oldNormalizedDeps.has(dep)) {
+	          oldNormalizedDeps.delete(dep);
+	        } else {
+	          newUniques.add(dep);
+	        }
+	      }
+	
+	      // remove old deps
+	    } catch (err) {
+	      _didIteratorError = true;
+	      _iteratorError = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion && _iterator.return) {
+	          _iterator.return();
+	        }
+	      } finally {
+	        if (_didIteratorError) {
+	          throw _iteratorError;
+	        }
+	      }
+	    }
+	
+	    var _iteratorNormalCompletion2 = true;
+	    var _didIteratorError2 = false;
+	    var _iteratorError2 = undefined;
+	
+	    try {
+	      for (var _iterator2 = (0, _getIterator3.default)(oldNormalizedDeps), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	        var _dep = _step2.value;
+	
+	        var _dep$split = _dep.split(_utils.DELIMITER);
+	
+	        var _dep$split2 = (0, _slicedToArray3.default)(_dep$split, 2);
+	
+	        var typeName = _dep$split2[0];
+	        var entityName = _dep$split2[1];
+	
+	        var entityDep = denormalizedDeps[typeName][entityName];
+	        entityDep[op].delete(key);
+	      }
+	    } catch (err) {
+	      _didIteratorError2 = true;
+	      _iteratorError2 = err;
+	    } finally {
+	      try {
+	        if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	          _iterator2.return();
+	        }
+	      } finally {
+	        if (_didIteratorError2) {
+	          throw _iteratorError2;
+	        }
+	      }
+	    }
+	  }
+	
+	  // add new deps
+	  var _iteratorNormalCompletion3 = true;
+	  var _didIteratorError3 = false;
+	  var _iteratorError3 = undefined;
+	
+	  try {
+	    for (var _iterator3 = (0, _getIterator3.default)(newUniques), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	      var _dep2 = _step3.value;
+	
+	      var _dep2$split = _dep2.split(_utils.DELIMITER);
+	
+	      var _dep2$split2 = (0, _slicedToArray3.default)(_dep2$split, 2);
+	
+	      var typeName = _dep2$split2[0];
+	      var entityName = _dep2$split2[1];
+	
+	      denormalizedDeps[typeName] = denormalizedDeps[typeName] || {};
+	      denormalizedDeps[typeName][entityName] = denormalizedDeps[typeName][entityName] || {};
+	      denormalizedDeps[typeName][entityName][op] = denormalizedDeps[typeName][entityName][op] || new _set2.default();
+	      denormalizedDeps[typeName][entityName][op].add(key);
+	    }
+	  } catch (err) {
+	    _didIteratorError3 = true;
+	    _iteratorError3 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	        _iterator3.return();
+	      }
+	    } finally {
+	      if (_didIteratorError3) {
+	        throw _iteratorError3;
+	      }
+	    }
+	  }
+	}
+	
+	var makeNormalizedDeps = function makeNormalizedDeps(entities) {
+	  var typeKeys = (0, _keys2.default)(entities);
+	  var normalizedDeps = new _set2.default();
+	  for (var i = 0; i < typeKeys.length; i++) {
+	    var typeName = typeKeys[i];
+	    var entityKeys = (0, _keys2.default)(entities[typeName]);
+	    for (var j = 0; j < entityKeys.length; j++) {
+	      var entityName = entityKeys[j];
+	      var dep = '' + typeName + _utils.DELIMITER + entityName;
+	      normalizedDeps.add(dep);
+	    }
+	  }
+	  return normalizedDeps;
+	};
+
+/***/ },
+/* 395 */
+/*!**********************************************!*\
+  !*** ./~/cashay/lib/mutate/ActiveQueries.js ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 330);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var ActiveQueries = function () {
+	  function ActiveQueries(mutationName, possibleComponentObj, cachedQueries, mutationHandlers) {
+	    (0, _classCallCheck3.default)(this, ActiveQueries);
+	
+	    (0, _utils.isObject)(possibleComponentObj) ? this.makeDefinedComponentsToUpdate(cachedQueries, possibleComponentObj) : this.makeDefaultComponentsToUpdate(cachedQueries, mutationName, mutationHandlers);
+	  }
+	
+	  (0, _createClass3.default)(ActiveQueries, [{
+	    key: 'makeDefinedComponentsToUpdate',
+	    value: function makeDefinedComponentsToUpdate(cachedQueries, possibleComponentObj) {
+	      var possibleComponentKeys = (0, _keys2.default)(possibleComponentObj);
+	      for (var i = 0; i < possibleComponentKeys.length; i++) {
+	        var op = possibleComponentKeys[i];
+	        if (cachedQueries[op]) {
+	          // remove falsy values, bring over the key or true
+	          this[op] = possibleComponentObj[op];
+	        }
+	      }
+	    }
+	  }, {
+	    key: 'makeDefaultComponentsToUpdate',
+	    value: function makeDefaultComponentsToUpdate(cachedQueries, mutationName, mutationHandlers) {
+	      var mutationHandlerObj = mutationHandlers[mutationName] || {};
+	      // if (!mutationHandlerObj) {
+	      //   throw new Error(`Did you forget to add mutation handlers to your queries for ${mutationName}?`)
+	      // }
+	      var handlerComponents = (0, _keys2.default)(mutationHandlerObj);
+	      var defaultKey = '';
+	      for (var i = 0; i < handlerComponents.length; i++) {
+	        var op = handlerComponents[i];
+	        if (cachedQueries[op]) {
+	          // duck-type to see whether we should dive into the key or not
+	          if (cachedQueries[op].responses[defaultKey]) {
+	            this[op] = defaultKey;
+	          } else {
+	            throw new Error(op + ' has more than 1 instance.\n          For ' + mutationName + ', please include a components object in your options');
+	          }
+	        }
+	      }
+	    }
+	  }]);
+	  return ActiveQueries;
+	}();
+	
+	exports.default = ActiveQueries;
+	;
+
+/***/ },
+/* 396 */
+/*!****************************************************!*\
+  !*** ./~/cashay/lib/mutate/createBasicMutation.js ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = createBasicMutation;
+	
+	var _printer = __webpack_require__(/*! graphql/language/printer */ 355);
+	
+	var _makeArgsFromVars = __webpack_require__(/*! ./makeArgsFromVars */ 391);
+	
+	var _makeArgsFromVars2 = _interopRequireDefault(_makeArgsFromVars);
+	
+	var _helperClasses = __webpack_require__(/*! ../helperClasses */ 379);
+	
+	var _createVariableDefinitions = __webpack_require__(/*! ../createVariableDefinitions */ 385);
+	
+	var _createVariableDefinitions2 = _interopRequireDefault(_createVariableDefinitions);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function createBasicMutation(mutationName, schema, variables) {
+	  var mutationFieldSchema = schema.mutationSchema.fields[mutationName];
+	  if (!mutationFieldSchema) {
+	    throw new Error(mutationName + ' not found in your mutation schema! Did you include it?');
+	  }
+	  var mutationArgs = (0, _makeArgsFromVars2.default)(mutationFieldSchema, variables);
+	  var context = { schema: schema, initialVariableDefinitions: [] };
+	
+	  var _createVariableDefini = (0, _createVariableDefinitions2.default)(mutationArgs, mutationFieldSchema, false, context);
+	
+	  var variableDefinitions = _createVariableDefini.variableDefinitions;
+	
+	  var mutationAST = new _helperClasses.MutationShell(mutationName, mutationArgs, variableDefinitions, true);
+	  return (0, _printer.print)(mutationAST);
+	}
+
+/***/ },
+/* 397 */
+/*!**********************************************************!*\
+  !*** ./~/cashay/lib/subscribe/setSubVariablesFactory.js ***!
+  \**********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ 370);
+	
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ 244);
+	
+	var _assign2 = _interopRequireDefault(_assign);
+	
+	var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ 374);
+	
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+	
+	exports.default = setSubVariablesFactory;
+	
+	var _duck = __webpack_require__(/*! ../normalize/duck */ 206);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function setSubVariablesFactory(op, key, dispatch, getState, cachedSubscription, promiseStart) {
+	  var _this = this;
+	
+	  return function () {
+	    var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(cb) {
+	      var cashayState, stateVars, resolvedVariables, payload;
+	      return _regenerator2.default.wrap(function _callee$(_context) {
+	        while (1) {
+	          switch (_context.prev = _context.next) {
+	            case 0:
+	              cashayState = _this.getState();
+	              stateVars = (0, _utils.getStateVars)(cashayState, op, key) || {};
+	              resolvedVariables = (0, _assign2.default)({}, stateVars, cb(stateVars));
+	              payload = { ops: (0, _defineProperty3.default)({}, op, (0, _defineProperty3.default)({}, key, resolvedVariables)) };
+	
+	              // stop the old sub
+	
+	              cachedSubscription.unsubscribe();
+	
+	              //start the new sub
+	              _context.next = 7;
+	              return promiseStart(stateVars);
+	
+	            case 7:
+	              cachedSubscription.unsubscribe = _context.sent;
+	
+	
+	              // store the vars in the store so we can restart the sub from a peristed state
+	              dispatch({
+	                type: _duck.SET_VARIABLES,
+	                payload: payload
+	              });
+	
+	            case 9:
+	            case 'end':
+	              return _context.stop();
+	          }
+	        }
+	      }, _callee, _this);
+	    }));
+	    return function (_x) {
+	      return ref.apply(this, arguments);
+	    };
+	  }();
+	};
+
+/***/ },
+/* 398 */
+/*!*****************************************************!*\
+  !*** ./~/cashay/lib/mutate/hasMatchingVariables.js ***!
+  \*****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	exports.default = hasMatchingVariables;
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function hasMatchingVariables() {
+	  var variables = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	  var matchingSet = arguments[1];
+	
+	  var varKeys = (0, _keys2.default)(variables);
+	  if (varKeys.length !== matchingSet.size) return false;
+	  for (var i = 0; i < varKeys.length; i++) {
+	    var varKey = varKeys[i];
+	    if (!matchingSet.has(varKey)) return false;
+	  }
+	  return true;
+	};
+
+/***/ },
+/* 399 */
+/*!**********************************************************!*\
+  !*** ./~/cashay/lib/subscribe/getNewDenormalizedData.js ***!
+  \**********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ 373);
+	
+	var _defineProperty3 = _interopRequireDefault(_defineProperty2);
+	
+	var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ 272);
+	
+	var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
+	
+	var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ 357);
+	
+	var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+	
+	exports.default = createNewData;
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var LIST = _introspection.TypeKind.LIST;
+	
+	
+	var splitPathPiece = function splitPathPiece(piece) {
+	  var _piece$split = piece.split('[');
+	
+	  var _piece$split2 = (0, _slicedToArray3.default)(_piece$split, 2);
+	
+	  var identifier = _piece$split2[0];
+	  var rawIndexer = _piece$split2[1];
+	
+	  var indexer = rawIndexer && rawIndexer.substr(0, rawIndexer.length - 1);
+	  return { identifier: identifier, indexer: indexer };
+	};
+	
+	var getSafeHandler = function getSafeHandler(handler, idxInCache) {
+	  if (handler !== _utils.UPSERT) return handler;
+	  return idxInCache === -1 ? _utils.ADD : _utils.UPDATE;
+	};
+	
+	function createNewData(handler, cachedResult, pathArray, context) {
+	  var document = context.document;
+	  var docId = context.docId;
+	  var schema = context.schema;
+	  var idFieldName = context.idFieldName;
+	  var removeKeys = context.removeKeys;
+	
+	  var subSchema = schema.subscriptionSchema;
+	  var walkPathRecursion = function walkPathRecursion(cachedResult, pathArray, subSchema) {
+	    var _splitPathPiece = splitPathPiece(pathArray[0]);
+	
+	    var identifier = _splitPathPiece.identifier;
+	    var indexer = _splitPathPiece.indexer;
+	
+	    var fieldSchemaType = (0, _utils.ensureTypeFromNonNull)(subSchema.fields[identifier].type);
+	    var isList = fieldSchemaType.kind === LIST;
+	    if (indexer && !isList) {
+	      throw new Error('Expected an array, but ' + fieldSchemaType.name + ' is an ' + fieldSchemaType.kind + '. \n      Do not provide an indexer (eg \'[123]\') for adding/removing. Array of arrays are not supported');
+	    }
+	    if (pathArray.length === 1) {
+	      var oldVal = void 0;
+	      var newVal = void 0;
+	      if (isList) {
+	        var returnField = cachedResult[identifier] || [];
+	        var idxInCache = returnField.findIndex(function (doc) {
+	          return doc[idFieldName] === docId;
+	        });
+	        var safeHandler = getSafeHandler(handler, idxInCache);
+	        oldVal = idxInCache === -1 ? null : returnField[idxInCache];
+	        if (safeHandler === _utils.ADD) {
+	          newVal = (0, _defineProperty3.default)({}, identifier, [].concat((0, _toConsumableArray3.default)(returnField), [document]));
+	        } else if (safeHandler === _utils.REMOVE) {
+	          newVal = (0, _defineProperty3.default)({}, identifier, [].concat((0, _toConsumableArray3.default)(returnField.slice(0, idxInCache)), (0, _toConsumableArray3.default)(returnField.slice(idxInCache + 1))));
+	        } else if (safeHandler === _utils.UPDATE) {
+	          (function () {
+	            var oldDoc = returnField[idxInCache];
+	            var updatedDoc = void 0;
+	            if ((0, _utils.isObject)(oldDoc) && removeKeys !== true) {
+	              updatedDoc = (0, _extends3.default)({}, oldDoc, document);
+	              removeKeys.forEach(function (key) {
+	                return delete updatedDoc[key];
+	              });
+	            } else {
+	              updatedDoc = document;
+	            }
+	            newVal = (0, _defineProperty3.default)({}, identifier, [].concat((0, _toConsumableArray3.default)(returnField.slice(0, idxInCache)), [updatedDoc], (0, _toConsumableArray3.default)(returnField.slice(idxInCache + 1))));
+	          })();
+	        }
+	      } else {
+	        oldVal = cachedResult[identifier];
+	        // pointfeed subscriptions
+	        var _safeHandler = handler === _utils.UPSERT ? _utils.UPDATE : handler;
+	        if (_safeHandler === _utils.ADD || removeKeys === true) {
+	          newVal = (0, _defineProperty3.default)({}, identifier, document);
+	        }
+	        if (_safeHandler === _utils.UPDATE) {
+	          (function () {
+	            var updatedDoc = (0, _extends3.default)({}, cachedResult[identifier], document);
+	            removeKeys.forEach(function (key) {
+	              return delete updatedDoc[key];
+	            });
+	            newVal = (0, _defineProperty3.default)({}, identifier, updatedDoc);
+	          })();
+	        }
+	        if (_safeHandler === _utils.REMOVE) {
+	          // this will probably never happen, but give en an object so they don't code defensively
+	          newVal = (0, _utils.isObject)(cachedResult[identifier]) ? {} : null;
+	        }
+	      }
+	      return { oldVal: oldVal, newVal: newVal };
+	    }
+	    // TODO THIS IS ALL UNTESTED
+	    var rootFieldSchemaType = (0, _utils.ensureRootType)(fieldSchemaType);
+	    var typeSchema = schema.types[rootFieldSchemaType.name];
+	    var nextObj = cachedResult[identifier];
+	    if (Array.isArray(nextObj) && !indexer) {
+	      throw new Error(pathArray + ' does not include an indexer, but ' + nextObj + ' is an array. Include an indexer.');
+	    } else if (!Array.isArray(nextObj) && indexer) {
+	      throw new Error('An indexer was provided: ' + indexer + ' but the object is not an array: ' + nextObj + '. Don\'t include the indexer');
+	    }
+	    var field = indexer ? nextObj.find(function (obj) {
+	      return obj.id === indexer;
+	    }) : nextObj;
+	    var fieldResult = walkPathRecursion(field, pathArray.slice(1), typeSchema);
+	    return (0, _extends3.default)({}, field, fieldResult);
+	  };
+	  return walkPathRecursion(cachedResult, pathArray, subSchema);
+	};
+
+/***/ },
+/* 400 */
+/*!*********************************************************!*\
+  !*** ./~/cashay/lib/mutate/isMutationResponseScalar.js ***!
+  \*********************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = isMutationResponseScalar;
+	
+	var _utils = __webpack_require__(/*! ../utils */ 298);
+	
+	var _introspection = __webpack_require__(/*! graphql/type/introspection */ 317);
+	
+	var SCALAR = _introspection.TypeKind.SCALAR;
+	function isMutationResponseScalar(schema, mutationName) {
+	  var mutationFieldSchema = schema.mutationSchema.fields[mutationName];
+	  var mutationResponseType = (0, _utils.ensureRootType)(mutationFieldSchema.type);
+	  var mutationResponseSchema = schema.types[mutationResponseType.name];
+	  return mutationResponseSchema.kind === SCALAR;
+	}
+
+/***/ },
+/* 401 */
+/*!**************************************************!*\
+  !*** ./~/cashay/lib/transports/HTTPTransport.js ***!
+  \**************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ 370);
+	
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+	
+	var _stringify = __webpack_require__(/*! babel-runtime/core-js/json/stringify */ 314);
+	
+	var _stringify2 = _interopRequireDefault(_stringify);
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 243);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ 374);
+	
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 341);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 344);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 345);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _isomorphicFetch = __webpack_require__(/*! isomorphic-fetch */ 402);
+	
+	var _isomorphicFetch2 = _interopRequireDefault(_isomorphicFetch);
+	
+	var _defaultHandleErrors = __webpack_require__(/*! ./defaultHandleErrors */ 404);
+	
+	var _defaultHandleErrors2 = _interopRequireDefault(_defaultHandleErrors);
+	
+	var _Transport2 = __webpack_require__(/*! ./Transport */ 405);
+	
+	var _Transport3 = _interopRequireDefault(_Transport2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var HTTPTransport = function (_Transport) {
+	  (0, _inherits3.default)(HTTPTransport, _Transport);
+	
+	  function HTTPTransport() {
+	    var uri = arguments.length <= 0 || arguments[0] === undefined ? '/graphql' : arguments[0];
+	
+	    var _this2 = this;
+	
+	    var init = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	    var handleErrors = arguments.length <= 2 || arguments[2] === undefined ? _defaultHandleErrors2.default : arguments[2];
+	    (0, _classCallCheck3.default)(this, HTTPTransport);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(HTTPTransport).call(this));
+	
+	    _this.uri = uri;
+	    _this.init = init;
+	    _this.handleErrors = handleErrors;
+	    _this.sendToServer = function () {
+	      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(request) {
+	        var payload, result, status, statusText;
+	        return _regenerator2.default.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                payload = (0, _extends3.default)({}, _this.init, {
+	                  body: (0, _stringify2.default)(request),
+	                  headers: (0, _extends3.default)({}, _this.init.headers, {
+	                    'Accept': '*/*',
+	                    'Content-Type': 'application/json'
+	                  }),
+	                  method: 'POST'
+	                });
+	                _context.next = 3;
+	                return (0, _isomorphicFetch2.default)(_this.uri, payload);
+	
+	              case 3:
+	                result = _context.sent;
+	                status = result.status;
+	                statusText = result.statusText;
+	
+	                if (!(status >= 200 && status < 300)) {
+	                  _context.next = 12;
+	                  break;
+	                }
+	
+	                _context.next = 9;
+	                return result.json();
+	
+	              case 9:
+	                return _context.abrupt('return', _context.sent);
+	
+	              case 12:
+	                return _context.abrupt('return', {
+	                  data: null,
+	                  errors: [{ _error: statusText, status: status }]
+	                });
+	
+	              case 13:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, _this2);
+	      }));
+	      return function (_x4) {
+	        return ref.apply(this, arguments);
+	      };
+	    }();
+	    return _this;
+	  }
+	
+	  return HTTPTransport;
+	}(_Transport3.default);
+	
+	exports.default = HTTPTransport;
+
+/***/ },
+/* 402 */
+/*!****************************************************!*\
+  !*** ./~/isomorphic-fetch/fetch-npm-browserify.js ***!
+  \****************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	// the whatwg-fetch polyfill installs the fetch() function
+	// on the global object (window or self)
+	//
+	// Return that as the export for use in Webpack, Browserify etc.
+	__webpack_require__(/*! whatwg-fetch */ 403);
+	module.exports = self.fetch.bind(self);
+
+
+/***/ },
+/* 403 */
+/*!*********************************!*\
+  !*** ./~/whatwg-fetch/fetch.js ***!
+  \*********************************/
+/***/ function(module, exports) {
+
+	(function(self) {
+	  'use strict';
+	
+	  if (self.fetch) {
+	    return
+	  }
+	
+	  var support = {
+	    searchParams: 'URLSearchParams' in self,
+	    iterable: 'Symbol' in self && 'iterator' in Symbol,
+	    blob: 'FileReader' in self && 'Blob' in self && (function() {
+	      try {
+	        new Blob()
+	        return true
+	      } catch(e) {
+	        return false
+	      }
+	    })(),
+	    formData: 'FormData' in self,
+	    arrayBuffer: 'ArrayBuffer' in self
+	  }
+	
+	  function normalizeName(name) {
+	    if (typeof name !== 'string') {
+	      name = String(name)
+	    }
+	    if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+	      throw new TypeError('Invalid character in header field name')
+	    }
+	    return name.toLowerCase()
+	  }
+	
+	  function normalizeValue(value) {
+	    if (typeof value !== 'string') {
+	      value = String(value)
+	    }
+	    return value
+	  }
+	
+	  // Build a destructive iterator for the value list
+	  function iteratorFor(items) {
+	    var iterator = {
+	      next: function() {
+	        var value = items.shift()
+	        return {done: value === undefined, value: value}
+	      }
+	    }
+	
+	    if (support.iterable) {
+	      iterator[Symbol.iterator] = function() {
+	        return iterator
+	      }
+	    }
+	
+	    return iterator
+	  }
+	
+	  function Headers(headers) {
+	    this.map = {}
+	
+	    if (headers instanceof Headers) {
+	      headers.forEach(function(value, name) {
+	        this.append(name, value)
+	      }, this)
+	
+	    } else if (headers) {
+	      Object.getOwnPropertyNames(headers).forEach(function(name) {
+	        this.append(name, headers[name])
+	      }, this)
+	    }
+	  }
+	
+	  Headers.prototype.append = function(name, value) {
+	    name = normalizeName(name)
+	    value = normalizeValue(value)
+	    var list = this.map[name]
+	    if (!list) {
+	      list = []
+	      this.map[name] = list
+	    }
+	    list.push(value)
+	  }
+	
+	  Headers.prototype['delete'] = function(name) {
+	    delete this.map[normalizeName(name)]
+	  }
+	
+	  Headers.prototype.get = function(name) {
+	    var values = this.map[normalizeName(name)]
+	    return values ? values[0] : null
+	  }
+	
+	  Headers.prototype.getAll = function(name) {
+	    return this.map[normalizeName(name)] || []
+	  }
+	
+	  Headers.prototype.has = function(name) {
+	    return this.map.hasOwnProperty(normalizeName(name))
+	  }
+	
+	  Headers.prototype.set = function(name, value) {
+	    this.map[normalizeName(name)] = [normalizeValue(value)]
+	  }
+	
+	  Headers.prototype.forEach = function(callback, thisArg) {
+	    Object.getOwnPropertyNames(this.map).forEach(function(name) {
+	      this.map[name].forEach(function(value) {
+	        callback.call(thisArg, value, name, this)
+	      }, this)
+	    }, this)
+	  }
+	
+	  Headers.prototype.keys = function() {
+	    var items = []
+	    this.forEach(function(value, name) { items.push(name) })
+	    return iteratorFor(items)
+	  }
+	
+	  Headers.prototype.values = function() {
+	    var items = []
+	    this.forEach(function(value) { items.push(value) })
+	    return iteratorFor(items)
+	  }
+	
+	  Headers.prototype.entries = function() {
+	    var items = []
+	    this.forEach(function(value, name) { items.push([name, value]) })
+	    return iteratorFor(items)
+	  }
+	
+	  if (support.iterable) {
+	    Headers.prototype[Symbol.iterator] = Headers.prototype.entries
+	  }
+	
+	  function consumed(body) {
+	    if (body.bodyUsed) {
+	      return Promise.reject(new TypeError('Already read'))
+	    }
+	    body.bodyUsed = true
+	  }
+	
+	  function fileReaderReady(reader) {
+	    return new Promise(function(resolve, reject) {
+	      reader.onload = function() {
+	        resolve(reader.result)
+	      }
+	      reader.onerror = function() {
+	        reject(reader.error)
+	      }
+	    })
+	  }
+	
+	  function readBlobAsArrayBuffer(blob) {
+	    var reader = new FileReader()
+	    reader.readAsArrayBuffer(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function readBlobAsText(blob) {
+	    var reader = new FileReader()
+	    reader.readAsText(blob)
+	    return fileReaderReady(reader)
+	  }
+	
+	  function Body() {
+	    this.bodyUsed = false
+	
+	    this._initBody = function(body) {
+	      this._bodyInit = body
+	      if (typeof body === 'string') {
+	        this._bodyText = body
+	      } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+	        this._bodyBlob = body
+	      } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+	        this._bodyFormData = body
+	      } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+	        this._bodyText = body.toString()
+	      } else if (!body) {
+	        this._bodyText = ''
+	      } else if (support.arrayBuffer && ArrayBuffer.prototype.isPrototypeOf(body)) {
+	        // Only support ArrayBuffers for POST method.
+	        // Receiving ArrayBuffers happens via Blobs, instead.
+	      } else {
+	        throw new Error('unsupported BodyInit type')
+	      }
+	
+	      if (!this.headers.get('content-type')) {
+	        if (typeof body === 'string') {
+	          this.headers.set('content-type', 'text/plain;charset=UTF-8')
+	        } else if (this._bodyBlob && this._bodyBlob.type) {
+	          this.headers.set('content-type', this._bodyBlob.type)
+	        } else if (support.searchParams && URLSearchParams.prototype.isPrototypeOf(body)) {
+	          this.headers.set('content-type', 'application/x-www-form-urlencoded;charset=UTF-8')
+	        }
+	      }
+	    }
+	
+	    if (support.blob) {
+	      this.blob = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return Promise.resolve(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as blob')
+	        } else {
+	          return Promise.resolve(new Blob([this._bodyText]))
+	        }
+	      }
+	
+	      this.arrayBuffer = function() {
+	        return this.blob().then(readBlobAsArrayBuffer)
+	      }
+	
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        if (rejected) {
+	          return rejected
+	        }
+	
+	        if (this._bodyBlob) {
+	          return readBlobAsText(this._bodyBlob)
+	        } else if (this._bodyFormData) {
+	          throw new Error('could not read FormData body as text')
+	        } else {
+	          return Promise.resolve(this._bodyText)
+	        }
+	      }
+	    } else {
+	      this.text = function() {
+	        var rejected = consumed(this)
+	        return rejected ? rejected : Promise.resolve(this._bodyText)
+	      }
+	    }
+	
+	    if (support.formData) {
+	      this.formData = function() {
+	        return this.text().then(decode)
+	      }
+	    }
+	
+	    this.json = function() {
+	      return this.text().then(JSON.parse)
+	    }
+	
+	    return this
+	  }
+	
+	  // HTTP methods whose capitalization should be normalized
+	  var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+	
+	  function normalizeMethod(method) {
+	    var upcased = method.toUpperCase()
+	    return (methods.indexOf(upcased) > -1) ? upcased : method
+	  }
+	
+	  function Request(input, options) {
+	    options = options || {}
+	    var body = options.body
+	    if (Request.prototype.isPrototypeOf(input)) {
+	      if (input.bodyUsed) {
+	        throw new TypeError('Already read')
+	      }
+	      this.url = input.url
+	      this.credentials = input.credentials
+	      if (!options.headers) {
+	        this.headers = new Headers(input.headers)
+	      }
+	      this.method = input.method
+	      this.mode = input.mode
+	      if (!body) {
+	        body = input._bodyInit
+	        input.bodyUsed = true
+	      }
+	    } else {
+	      this.url = input
+	    }
+	
+	    this.credentials = options.credentials || this.credentials || 'omit'
+	    if (options.headers || !this.headers) {
+	      this.headers = new Headers(options.headers)
+	    }
+	    this.method = normalizeMethod(options.method || this.method || 'GET')
+	    this.mode = options.mode || this.mode || null
+	    this.referrer = null
+	
+	    if ((this.method === 'GET' || this.method === 'HEAD') && body) {
+	      throw new TypeError('Body not allowed for GET or HEAD requests')
+	    }
+	    this._initBody(body)
+	  }
+	
+	  Request.prototype.clone = function() {
+	    return new Request(this)
+	  }
+	
+	  function decode(body) {
+	    var form = new FormData()
+	    body.trim().split('&').forEach(function(bytes) {
+	      if (bytes) {
+	        var split = bytes.split('=')
+	        var name = split.shift().replace(/\+/g, ' ')
+	        var value = split.join('=').replace(/\+/g, ' ')
+	        form.append(decodeURIComponent(name), decodeURIComponent(value))
+	      }
+	    })
+	    return form
+	  }
+	
+	  function headers(xhr) {
+	    var head = new Headers()
+	    var pairs = (xhr.getAllResponseHeaders() || '').trim().split('\n')
+	    pairs.forEach(function(header) {
+	      var split = header.trim().split(':')
+	      var key = split.shift().trim()
+	      var value = split.join(':').trim()
+	      head.append(key, value)
+	    })
+	    return head
+	  }
+	
+	  Body.call(Request.prototype)
+	
+	  function Response(bodyInit, options) {
+	    if (!options) {
+	      options = {}
+	    }
+	
+	    this.type = 'default'
+	    this.status = options.status
+	    this.ok = this.status >= 200 && this.status < 300
+	    this.statusText = options.statusText
+	    this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+	    this.url = options.url || ''
+	    this._initBody(bodyInit)
+	  }
+	
+	  Body.call(Response.prototype)
+	
+	  Response.prototype.clone = function() {
+	    return new Response(this._bodyInit, {
+	      status: this.status,
+	      statusText: this.statusText,
+	      headers: new Headers(this.headers),
+	      url: this.url
+	    })
+	  }
+	
+	  Response.error = function() {
+	    var response = new Response(null, {status: 0, statusText: ''})
+	    response.type = 'error'
+	    return response
+	  }
+	
+	  var redirectStatuses = [301, 302, 303, 307, 308]
+	
+	  Response.redirect = function(url, status) {
+	    if (redirectStatuses.indexOf(status) === -1) {
+	      throw new RangeError('Invalid status code')
+	    }
+	
+	    return new Response(null, {status: status, headers: {location: url}})
+	  }
+	
+	  self.Headers = Headers
+	  self.Request = Request
+	  self.Response = Response
+	
+	  self.fetch = function(input, init) {
+	    return new Promise(function(resolve, reject) {
+	      var request
+	      if (Request.prototype.isPrototypeOf(input) && !init) {
+	        request = input
+	      } else {
+	        request = new Request(input, init)
+	      }
+	
+	      var xhr = new XMLHttpRequest()
+	
+	      function responseURL() {
+	        if ('responseURL' in xhr) {
+	          return xhr.responseURL
+	        }
+	
+	        // Avoid security warnings on getResponseHeader when not allowed by CORS
+	        if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+	          return xhr.getResponseHeader('X-Request-URL')
+	        }
+	
+	        return
+	      }
+	
+	      xhr.onload = function() {
+	        var options = {
+	          status: xhr.status,
+	          statusText: xhr.statusText,
+	          headers: headers(xhr),
+	          url: responseURL()
+	        }
+	        var body = 'response' in xhr ? xhr.response : xhr.responseText
+	        resolve(new Response(body, options))
+	      }
+	
+	      xhr.onerror = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.ontimeout = function() {
+	        reject(new TypeError('Network request failed'))
+	      }
+	
+	      xhr.open(request.method, request.url, true)
+	
+	      if (request.credentials === 'include') {
+	        xhr.withCredentials = true
+	      }
+	
+	      if ('responseType' in xhr && support.blob) {
+	        xhr.responseType = 'blob'
+	      }
+	
+	      request.headers.forEach(function(value, name) {
+	        xhr.setRequestHeader(name, value)
+	      })
+	
+	      xhr.send(typeof request._bodyInit === 'undefined' ? null : request._bodyInit)
+	    })
+	  }
+	  self.fetch.polyfill = true
+	})(typeof self !== 'undefined' ? self : this);
+
+
+/***/ },
+/* 404 */
+/*!********************************************************!*\
+  !*** ./~/cashay/lib/transports/defaultHandleErrors.js ***!
+  \********************************************************/
+/***/ function(module, exports) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = defaultHandleErrors;
+	var tryParse = function tryParse(str) {
+	  var obj = void 0;
+	  try {
+	    obj = JSON.parse(str);
+	  } catch (e) {
+	    return false;
+	  }
+	  return obj;
+	};
+	
+	function defaultHandleErrors(request, errors) {
+	  var duckField = arguments.length <= 2 || arguments[2] === undefined ? '_error' : arguments[2];
+	
+	  if (!errors) return;
+	  // expect a human to put an end-user-safe message in the message field
+	  var firstErrorMessage = errors[0].message;
+	  if (!firstErrorMessage) return { errors: errors };
+	  var parsedError = tryParse(firstErrorMessage);
+	  if (parsedError && parsedError.hasOwnProperty(duckField)) {
+	    return parsedError;
+	  }
+	  return { errors: errors };
+	};
+
+/***/ },
+/* 405 */
+/*!**********************************************!*\
+  !*** ./~/cashay/lib/transports/Transport.js ***!
+  \**********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ 370);
+	
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+	
+	var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ 374);
+	
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 329);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 330);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _defaultHandleErrors = __webpack_require__(/*! ./defaultHandleErrors */ 404);
+	
+	var _defaultHandleErrors2 = _interopRequireDefault(_defaultHandleErrors);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Transport = function () {
+	  function Transport(sendToServer) {
+	    var handleErrors = arguments.length <= 1 || arguments[1] === undefined ? _defaultHandleErrors2.default : arguments[1];
+	    (0, _classCallCheck3.default)(this, Transport);
+	
+	    this.sendToServer = sendToServer;
+	    this.handleErrors = handleErrors;
+	  }
+	
+	  (0, _createClass3.default)(Transport, [{
+	    key: 'handleQuery',
+	    value: function () {
+	      var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(request) {
+	        var _ref, data, errors, error;
+	
+	        return _regenerator2.default.wrap(function _callee$(_context) {
+	          while (1) {
+	            switch (_context.prev = _context.next) {
+	              case 0:
+	                _context.next = 2;
+	                return this.sendToServer(request);
+	
+	              case 2:
+	                _ref = _context.sent;
+	                data = _ref.data;
+	                errors = _ref.errors;
+	                error = this.handleErrors(request, errors);
+	                return _context.abrupt('return', error ? { data: data, error: error } : { data: data });
+	
+	              case 7:
+	              case 'end':
+	                return _context.stop();
+	            }
+	          }
+	        }, _callee, this);
+	      }));
+	
+	      function handleQuery(_x2) {
+	        return ref.apply(this, arguments);
+	      }
+	
+	      return handleQuery;
+	    }()
+	  }]);
+	  return Transport;
+	}();
+	
+	exports.default = Transport;
+
+/***/ },
+/* 406 */
+/*!************************************************!*\
+  !*** ./~/cashay/lib/schema/transformSchema.js ***!
+  \************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.makeMinimalSchema = undefined;
+	
+	var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ 208);
+	
+	var _keys2 = _interopRequireDefault(_keys);
+	
+	var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ 250);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
+	
+	var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ 299);
+	
+	var _typeof3 = _interopRequireDefault(_typeof2);
+	
+	var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ 370);
+	
+	var _regenerator2 = _interopRequireDefault(_regenerator);
+	
+	var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ 374);
+	
+	var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+	
+	var _introspectionQuery = __webpack_require__(/*! ./introspectionQuery */ 407);
+	
+	var _introspectionQuery2 = _interopRequireDefault(_introspectionQuery);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.default = function () {
+	  var ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee(rootSchema, graphql) {
+	    var initialResult;
+	    return _regenerator2.default.wrap(function _callee$(_context) {
+	      while (1) {
+	        switch (_context.prev = _context.next) {
+	          case 0:
+	            _context.next = 2;
+	            return graphql(rootSchema, _introspectionQuery2.default);
+	
+	          case 2:
+	            initialResult = _context.sent;
+	
+	            if (!initialResult.errors) {
+	              _context.next = 5;
+	              break;
+	            }
+	
+	            throw new Error('unable to parse schema: ' + initialResult.errors);
+	
+	          case 5:
+	            return _context.abrupt('return', makeMinimalSchema(initialResult.data.__schema));
+	
+	          case 6:
+	          case 'end':
+	            return _context.stop();
+	        }
+	      }
+	    }, _callee, this);
+	  }));
+	
+	  function transformSchema(_x, _x2) {
+	    return ref.apply(this, arguments);
+	  }
+	
+	  return transformSchema;
+	}();
+	
+	var isObject = function isObject(val) {
+	  return val && (typeof val === 'undefined' ? 'undefined' : (0, _typeof3.default)(val)) === 'object';
+	};
+	var removeNullsFromList = function removeNullsFromList(list) {
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+	
+	  try {
+	    for (var _iterator = (0, _getIterator3.default)(list), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var item = _step.value;
+	
+	      removeNullsFromObject(item);
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	};
+	var removeNullsFromObject = function removeNullsFromObject(obj) {
+	  var itemKeys = (0, _keys2.default)(obj);
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+	
+	  try {
+	    for (var _iterator2 = (0, _getIterator3.default)(itemKeys), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var itemKey = _step2.value;
+	
+	      var field = obj[itemKey];
+	      if (Array.isArray(field)) {
+	        removeNullsFromList(field);
+	      } else if (isObject(field)) {
+	        removeNullsFromObject(field);
+	      } else if (field === null) {
+	        delete obj[itemKey];
+	      }
+	    }
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+	};
+	
+	//TODO filter out interfaces
+	var makeMinimalSchema = exports.makeMinimalSchema = function makeMinimalSchema(schema) {
+	  removeNullsFromObject(schema);
+	  var queryName = schema.queryType && schema.queryType.name;
+	  var mutationName = schema.mutationType && schema.mutationType.name;
+	  var subscriptionName = schema.subscriptionType && schema.subscriptionType.name;
+	  var filteredTypes = schema.types.filter(function (type) {
+	    return !type.name.startsWith('__');
+	  });
+	
+	  var _iteratorNormalCompletion3 = true;
+	  var _didIteratorError3 = false;
+	  var _iteratorError3 = undefined;
+	
+	  try {
+	    for (var _iterator3 = (0, _getIterator3.default)(filteredTypes), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+	      var type = _step3.value;
+	
+	      if (type.fields) {
+	        var _iteratorNormalCompletion5 = true;
+	        var _didIteratorError5 = false;
+	        var _iteratorError5 = undefined;
+	
+	        try {
+	          for (var _iterator5 = (0, _getIterator3.default)(type.fields), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+	            var field = _step5.value;
+	
+	            if (field.args) {
+	              if (field.args.length) {
+	                field.args = objArrayToHashMap(field.args);
+	              } else {
+	                delete field.args;
+	              }
+	            }
+	          }
+	        } catch (err) {
+	          _didIteratorError5 = true;
+	          _iteratorError5 = err;
+	        } finally {
+	          try {
+	            if (!_iteratorNormalCompletion5 && _iterator5.return) {
+	              _iterator5.return();
+	            }
+	          } finally {
+	            if (_didIteratorError5) {
+	              throw _iteratorError5;
+	            }
+	          }
+	        }
+	
+	        type.fields = objArrayToHashMap(type.fields);
+	      }
+	      if (type.enumValues) {
+	        type.enumValues = objArrayToHashMap(type.enumValues);
+	      }
+	      if (type.inputFields) {
+	        type.inputFields = objArrayToHashMap(type.inputFields);
+	      }
+	      if (type.possibleTypes) {
+	        type.possibleTypes = objArrayToHashMap(type.possibleTypes);
+	      }
+	      if (type.interfaces) {
+	        if (type.interfaces.length) {
+	          type.interfaces = objArrayToHashMap(type.interfaces);
+	        } else {
+	          delete type.interfaces;
+	        }
+	      }
+	    }
+	  } catch (err) {
+	    _didIteratorError3 = true;
+	    _iteratorError3 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion3 && _iterator3.return) {
+	        _iterator3.return();
+	      }
+	    } finally {
+	      if (_didIteratorError3) {
+	        throw _iteratorError3;
+	      }
+	    }
+	  }
+	
+	  var filteredTypesMap = objArrayToHashMap(filteredTypes);
+	  var filteredDirectives = schema.directives.filter(function (directive) {
+	    return directive.name !== 'deprecated';
+	  });
+	  var _iteratorNormalCompletion4 = true;
+	  var _didIteratorError4 = false;
+	  var _iteratorError4 = undefined;
+	
+	  try {
+	    for (var _iterator4 = (0, _getIterator3.default)(filteredDirectives), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+	      var directive = _step4.value;
+	
+	      directive.args = objArrayToHashMap(directive.args);
+	    }
+	  } catch (err) {
+	    _didIteratorError4 = true;
+	    _iteratorError4 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion4 && _iterator4.return) {
+	        _iterator4.return();
+	      }
+	    } finally {
+	      if (_didIteratorError4) {
+	        throw _iteratorError4;
+	      }
+	    }
+	  }
+	
+	  var filteredDirectivesMap = objArrayToHashMap(filteredDirectives);
+	  var querySchema = filteredTypesMap[queryName];
+	  delete filteredTypesMap[queryName];
+	  var mutationSchema = filteredTypesMap[mutationName];
+	  delete filteredTypesMap[mutationName];
+	  var subscriptionSchema = filteredTypesMap[subscriptionName];
+	  delete filteredTypesMap[subscriptionName];
+	
+	  var finalResult = {
+	    querySchema: querySchema,
+	    types: filteredTypesMap,
+	    directives: filteredDirectivesMap
+	  };
+	  if (mutationSchema) {
+	    finalResult.mutationSchema = mutationSchema;
+	  }
+	  if (subscriptionSchema) {
+	    finalResult.subscriptionSchema = subscriptionSchema;
+	  }
+	  return finalResult;
+	};
+	
+	var objArrayToHashMap = function objArrayToHashMap(arr) {
+	  var hashMap = {};
+	  var _iteratorNormalCompletion6 = true;
+	  var _didIteratorError6 = false;
+	  var _iteratorError6 = undefined;
+	
+	  try {
+	    for (var _iterator6 = (0, _getIterator3.default)(arr), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+	      var field = _step6.value;
+	
+	      hashMap[field.name] = field;
+	    }
+	  } catch (err) {
+	    _didIteratorError6 = true;
+	    _iteratorError6 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion6 && _iterator6.return) {
+	        _iterator6.return();
+	      }
+	    } finally {
+	      if (_didIteratorError6) {
+	        throw _iteratorError6;
+	      }
+	    }
+	  }
+	
+	  return hashMap;
+	};
+
+/***/ },
+/* 407 */
+/*!***************************************************!*\
+  !*** ./~/cashay/lib/schema/introspectionQuery.js ***!
+  \***************************************************/
+/***/ function(module, exports) {
+
+	"use strict";
+	
+	module.exports = "\nquery {\n  __schema {\n    queryType { name }\n    mutationType { name }\n    subscriptionType { name }\n    types {\n    ...FullType\n    }\n    directives {\n      name\n      args {\n      ...InputValue\n      }\n      onOperation\n      onFragment\n      onField\n    }\n  }\n}\nfragment FullType on __Type {\n  kind\n  name\n  fields(includeDeprecated: false) {\n    name\n    args {\n    ...InputValue\n    }\n    type {\n    ...TypeRef\n    }\n  }\n  inputFields {\n  ...InputValue\n  }\n  interfaces {\n  ...TypeRef\n  }\n  enumValues(includeDeprecated: false) {\n    name\n  }\n  possibleTypes {\n  ...TypeRef\n  }\n}\nfragment InputValue on __InputValue {\n  name\n  type { ...TypeRef }\n  defaultValue\n}\nfragment TypeRef on __Type {\n  kind\n  name\n  ofType {\n    kind\n    name\n    ofType {\n      kind\n      name\n      ofType {\n        kind\n        name\n      }\n    }\n  }\n}";
 
 /***/ }
 /******/ ]);

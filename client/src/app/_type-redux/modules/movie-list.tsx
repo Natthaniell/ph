@@ -30,8 +30,7 @@ export class MovieList extends CoreComponent {
         if (this.props.store.get('movies')) {
             movie = this.props.store.get('movies').toObject();
         }
-        console.error('-- movies ----');
-        console.info(movie);
+
         return (
             <div>
                 <h1>Movie List</h1>
